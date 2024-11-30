@@ -1,6 +1,5 @@
 package com.example.AttendanceApp.repositaries;
 
-import com.example.AttendanceApp.models.Employees;
 import com.example.AttendanceApp.models.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 
