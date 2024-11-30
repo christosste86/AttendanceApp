@@ -28,7 +28,6 @@ public class EmployeesController {
         return "employees";
     }
 
-
     @GetMapping("/add-employee")
     public String getEmployeesForm(){
         return "add-employee";
@@ -38,7 +37,9 @@ public class EmployeesController {
     public String createEmployee(@RequestParam String firstName,
                                  @RequestParam String lastName){
         Employees employee = new Employees(firstName, lastName);
-        employeesService.saveEmployee(employee);
-        return "redirect:/employees/";
+        if(employeesService.isExist(firstName, lastName)){
+            employeesService.saveEmployee(employee);
+        }
+        return "redirect:/employees";
     }
 }

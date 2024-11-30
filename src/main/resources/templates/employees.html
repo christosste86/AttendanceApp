@@ -18,13 +18,13 @@
         </thead>
         <tbody>
         <tr th:each="employee : ${employees}">
-            <td th:text="${employee.getFirstName()"></td>
-            <td th:text="${employee.getLastName()"></td>
+            <td th:text="${employee.getFirstName()}"></td>
+            <td th:text="${employee.getLastName()}"></td>
         </tr>
         </tbody>
 
     </table>
-    <a href="add-employee.html">Add new employee</a>
+    <a th:href="@{/add-employee}">Add new employee</a>
 </main>
 
 </body>
