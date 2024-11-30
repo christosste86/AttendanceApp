@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta lang="en" xmlns:th="http://www.thymeleaf.org/">
+    <title>Employees</title>
+</head>
+<body>
+<header>
+    <h1>All Employees</h1>
+</header>
+<main>
+    <table th:if="${employees.size() > 0}">
+        <thead>
+        <tr>
+            <th>Firstname</th>
+            <th>Lastname</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="employee : ${employees}">
+            <td th:text="${employee.getFirstName()"></td>
+            <td th:text="${employee.getLastName()"></td>
+        </tr>
+        </tbody>
+
+    </table>
+    <a href="add-employee.html">Add new employee</a>
+</main>
+
+</body>
+</html>

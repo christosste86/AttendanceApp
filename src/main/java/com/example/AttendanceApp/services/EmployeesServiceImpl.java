@@ -2,10 +2,12 @@ package com.example.AttendanceApp.services;
 
 import com.example.AttendanceApp.models.Employees;
 import com.example.AttendanceApp.repositaries.EmployeesRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class EmployeesServiceImpl implements EmployeesService{
 
     private final EmployeesRepository employeesRepository;
