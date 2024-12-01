@@ -36,8 +36,12 @@ public class ScheduleController {
                                  @RequestParam LocalDateTime shiftEnd,
                                  @RequestParam Double workedHours,
                                  @RequestParam boolean isPresent) {
+
+        System.out.println("Received Data: " + employeeId + ", " + shiftStart + ", " + shiftEnd + ", " + workedHours + ", " + isPresent);
+
         Schedule schedule = new Schedule(employeeId, shiftStart, shiftEnd, workedHours, isPresent);
-        if (scheduleService.isExist(employeeId, shiftStart, shiftEnd, workedHours, isPresent)) {
+
+        if (!scheduleService.scheduleExists(employeeId, shiftStart, shiftEnd, workedHours, isPresent)) {
             scheduleService.saveSchedule(schedule);
         }
         return "redirect:/schedule";

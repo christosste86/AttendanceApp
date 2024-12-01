@@ -36,6 +36,7 @@ public class EmployeesController {
     @PostMapping("/add-employee")
     public String createEmployee(@RequestParam String firstName,
                                  @RequestParam String lastName){
+        System.out.println("Received Data: First Name = " + firstName + ", Last Name = " + lastName);
         Employees employee = new Employees(firstName, lastName);
         if(employeesService.isExist(firstName, lastName)){
             employeesService.saveEmployee(employee);
