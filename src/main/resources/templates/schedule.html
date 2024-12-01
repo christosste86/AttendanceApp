@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta lang="en" xmlns:th="http://www.thymeleaf.org/">
+    <title>Schedule</title>
+</head>
+<body>
+<header>
+    <h1>All schedules</h1>
+</header>
+<main>
+    <table th:if="${schedule.size() > 0}">
+        <thead>
+        <tr>
+            <th>Employee ID</th>
+            <th>Shift Start</th>
+            <th>Shift End</th>
+            <th>Worked Hours</th>
+            <th>Present</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="schedule : ${schedule}">
+            <td th:text="${schedule.getEmployeeId}"></td>
+            <td th:text="${schedule.getShiftStart}"></td>
+            <td th:text="${schedule.getShiftEnd}"></td>
+            <td th:text="${schedule.getWorkedHours}"></td>
+            <td th:text="${schedule.isPresent}"></td>
+        </tr>
+        </tbody>
+
+    </table>
+    <a th:href="@{/add-schedule}">Add a new schedule</a>
+</main>
+</body>
+</html>
