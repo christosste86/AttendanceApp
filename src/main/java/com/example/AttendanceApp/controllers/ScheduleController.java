@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Controller
@@ -30,13 +31,15 @@ public class ScheduleController {
         return "add-schedule";
     }
 
+
     @PostMapping("/add-schedule")
     public String createSchedule(@RequestParam long employeeId,
                                  @RequestParam LocalDateTime shiftStart,
                                  @RequestParam LocalDateTime shiftEnd,
-                                 @RequestParam Double workedHours,
                                  @RequestParam boolean isPresent) {
 
+        Double workedHours = scheduleService.workedHours(shiftStart,shiftEnd);
+        isPresent = scheduleService.isPresent(workedHours);
         System.out.println("Received Data: " + employeeId + ", " + shiftStart + ", " + shiftEnd + ", " + workedHours + ", " + isPresent);
 
         Schedule schedule = new Schedule(employeeId, shiftStart, shiftEnd, workedHours, isPresent);

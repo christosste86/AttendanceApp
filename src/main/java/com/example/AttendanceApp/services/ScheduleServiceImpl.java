@@ -4,6 +4,7 @@ import com.example.AttendanceApp.models.Schedule;
 import com.example.AttendanceApp.repositaries.ScheduleRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -58,5 +59,14 @@ public class ScheduleServiceImpl implements ScheduleService{
         if (schedule.isPresent()){
             Schedule s = schedule.get();
         }
+    }
+
+    public Double workedHours(LocalDateTime start, LocalDateTime end){
+        Duration duration = Duration.between(start, end);
+        return (double) duration.toMinutes() /60;
+    }
+
+    public boolean isPresent(Double workedHours){
+        return workedHours > 0;
     }
 }

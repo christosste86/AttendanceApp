@@ -17,4 +17,8 @@ public interface ScheduleService {
     void deleteSchedule(Schedule schedule);
 
     void updateScheduleById(long id);
+
+    Double workedHours(LocalDateTime start, LocalDateTime end);
+
+    boolean isPresent(Double workedHours);
 }
