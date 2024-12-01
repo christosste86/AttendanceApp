@@ -17,6 +17,7 @@ public class EmployeesServiceImpl implements EmployeesService{
         this.employeesRepository = employeesRepository;
     }
 
+
     @Override
     public List<Employees> getEmployees() {
         return employeesRepository.findAll();
@@ -45,6 +46,14 @@ public class EmployeesServiceImpl implements EmployeesService{
     @Override
     public void deleteEmployee(Employees employee) {
         employeesRepository.delete(employee);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        Optional<Employees> employees = employeesRepository.findById(id);
+        if (employees.isPresent()){
+            employeesRepository.deleteById(id);
+        }
     }
 
     @Override
