@@ -15,9 +15,9 @@ public class Schedule {
 
     @Column (name ="employee_id")
     private long employeeId;
-    private LocalDateTime start;
-    private LocalDateTime end;
-    @Column (name ="woked_hours")
+    private LocalDateTime shiftStart;
+    private LocalDateTime shiftEnd;
+    @Column (name ="worked_hours")
     private Double workedHours;
     private boolean isPresent;
 
@@ -26,9 +26,33 @@ public class Schedule {
 
     public Schedule(long employeeId, LocalDateTime start, LocalDateTime end, Double workedHours, boolean isPresent) {
         this.employeeId = employeeId;
-        this.start = start;
-        this.end = end;
+        this.shiftStart = start;
+        this.shiftEnd = end;
         this.workedHours = workedHours;
         this.isPresent = isPresent;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public long getEmployeeId() {
+        return employeeId;
+    }
+
+    public LocalDateTime getShiftStart() {
+        return shiftStart;
+    }
+
+    public LocalDateTime getShiftEnd() {
+        return shiftEnd;
+    }
+
+    public Double getWorkedHours() {
+        return workedHours;
+    }
+
+    public boolean isPresent() {
+        return isPresent;
     }
 }

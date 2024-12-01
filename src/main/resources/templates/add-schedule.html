@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta lang="en" xmlns:th="http://www.thymeleaf.org/">
+    <title>add-schedule</title>
+</head>
+<body>
+    <main>
+        <form th:action="@{/add-schedule}" method="post">
+            <div>
+                <label for="employeeId">Employee ID</label>
+                <input id="employeeId" type="text" name="employeeId">
+            </div>
+            <div>
+                <label for="shiftStart">Shift Start yyyy-MM-ddTHH:mm</label>
+                <input id="shiftStart" type="text" name="shiftStart">
+            </div>
+            <div>
+                <label for="shiftEnd">Shift End yyyy-MM-ddTHH:mm</label>
+                <input id="shiftEnd" type="text" name="shiftEnd">
+            </div>
+            <div>
+                <label for="workedHours">Worked Hours</label>
+                <input id="workedHours" type="text" name="workedHours">
+            </div>
+            <div>
+                <label for="isPresent">Present</label>
+                <input id="isPresent" type="checkbox" name="isPresent">
+            </div>
+            <button type="submit">Add Schedule</button>
+        </form>
+    </main>
+</body>
+</html>
