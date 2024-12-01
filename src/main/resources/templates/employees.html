@@ -2,44 +2,53 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <link rel="stylesheet" href="D:\Projects\AttendanceApp\src\main\resources\static\styles.css">
+    <link rel="stylesheet" href="../static/css/styles.css">
     <meta lang="en" xmlns:th="http://www.thymeleaf.org/">
     <title>Employees</title>
 </head>
 <body>
-<header>
-    <h1>All Employees</h1>
-</header>
 <main>
+    <h1>All Employees</h1>
     <div class = "leftSize">
     <table th:if="${employees.size() > 0}">
         <thead>
         <tr>
             <th>Firstname</th>
             <th>Lastname</th>
+            <th>About</th>
+            <th>Delete</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="employee : ${employees}">
             <td th:text="${employee.getFirstName()}"></td>
             <td th:text="${employee.getLastName()}"></td>
+            <td><a th:href="@{/about-employee/{employee}(employee=${employee.getId})}">About</a></td>
+            <td>
+                <form method="get" th:action="@{/delete-employee/{id}(id=${employee.getId})}">
+                    <button type = "submit">Remove</button>
+                </form>
+            </td>
         </tr>
         </tbody>
 
     </table>
     </div>
-    <div class = "rightSize">
-        <h1>Add new Employee</h1>
+    <div class = "form">
+
         <form th:action="@{/add-employee}" method="post">
-            <div>
-                <label for="firstName">Firstname: </label>
-                <input id="firstName" type="text" name="firstName">
+            <div class="title">Add new Employee</div>
+            <div class="input-container ic1">
+                <div class="cut"></div>
+                <label class = "placeholder" for="firstName">First name</label>
+                <input id="firstName" class="input" type="text" placeholder=" " name="firstName">
             </div>
-            <div>
-                <label for="lastName">Lastname: </label>
-                <input id="lastName" type="text" name="lastName">
+            <div class="input-container ic2">
+                <label class = "placeholder" for="lastName">Last name</label>
+                <input id="lastName" class="input" type="text" name="lastName" placeholder=" ">
             </div>
-            <button type="submit">Add employee</button>
+
+            <button type="submit" class="submit">Add employee</button>
         </form>
     </div>
     <a th:href="@{/add-employee}">Add new employee</a>

@@ -21,6 +21,10 @@ public class Employees {
     public Employees() {
     }
 
+    public long getId() {
+        return id;
+    }
+
     public String getFirstName() {
         return firstName;
     }
