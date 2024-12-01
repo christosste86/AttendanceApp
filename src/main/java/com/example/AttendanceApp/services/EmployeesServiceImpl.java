@@ -5,6 +5,7 @@ import com.example.AttendanceApp.repositaries.EmployeesRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -26,6 +27,14 @@ public class EmployeesServiceImpl implements EmployeesService{
        return employeesRepository.findById(id).orElseThrow(
                () -> new IllegalArgumentException(String.format("Location with id (%s) not found.", id))
        );
+    }
+
+    @Override
+    public boolean isExist(String firstName, String lastname){
+        List<Employees> employees = employeesRepository.findAll();
+        if(employees.stream().filter(e-> Objects.equals(e.getFirstName(), firstName) && Objects.equals(e.getLastName(), lastname)).toList().isEmpty()){
+            return true;
+        }return false;
     }
 
     @Override
