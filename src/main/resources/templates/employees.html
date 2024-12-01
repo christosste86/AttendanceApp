@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="D:\Projects\AttendanceApp\src\main\resources\static\styles.css">
     <meta lang="en" xmlns:th="http://www.thymeleaf.org/">
     <title>Employees</title>
 </head>
@@ -9,6 +11,7 @@
     <h1>All Employees</h1>
 </header>
 <main>
+    <div class = "leftSize">
     <table th:if="${employees.size() > 0}">
         <thead>
         <tr>
@@ -24,6 +27,21 @@
         </tbody>
 
     </table>
+    </div>
+    <div class = "rightSize">
+        <h1>Add new Employee</h1>
+        <form th:action="@{/add-employee}" method="post">
+            <div>
+                <label for="firstName">Firstname: </label>
+                <input id="firstName" type="text" name="firstName">
+            </div>
+            <div>
+                <label for="lastName">Lastname: </label>
+                <input id="lastName" type="text" name="lastName">
+            </div>
+            <button type="submit">Add employee</button>
+        </form>
+    </div>
     <a th:href="@{/add-employee}">Add new employee</a>
 </main>
 
