@@ -1,19 +1,19 @@
 package com.example.AttendanceApp.services;
 
-import com.example.AttendanceApp.models.Employees;
+import com.example.AttendanceApp.models.Employee;
 
 import java.util.List;
 
 public interface EmployeesService {
     boolean isExist(String firstName, String lastname);
 
-    List<Employees> getEmployees();
+    List<Employee> getEmployees();
 
-    Employees getEmployeeById(long id);
+    Employee getEmployeeById(long id);
 
-    void saveEmployee(Employees employee);
+    void saveEmployee(Employee employee);
 
-    void deleteEmployee(Employees employee);
+    void deleteEmployee(Employee employee);
 
     void deleteById(Long id);
 

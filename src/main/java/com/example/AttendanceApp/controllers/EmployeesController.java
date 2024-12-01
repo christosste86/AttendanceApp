@@ -1,7 +1,7 @@
 package com.example.AttendanceApp.controllers;
 
 
-import com.example.AttendanceApp.models.Employees;
+import com.example.AttendanceApp.models.Employee;
 import com.example.AttendanceApp.services.EmployeesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Objects;
-import java.util.Optional;
 
 @Controller
 public class EmployeesController {
@@ -38,8 +35,8 @@ public class EmployeesController {
     @PostMapping("/add-employee")
     public String createEmployee(@RequestParam String firstName,
                                  @RequestParam String lastName){
-        Employees employee = new Employees(firstName, lastName);
-        if(employeesService.isExist(firstName, lastName)){
+        Employee employee = new Employee(firstName, lastName);
+        if(!employeesService.isExist(firstName, lastName)){
             employeesService.saveEmployee(employee);
         }
         return "redirect:/employees";
