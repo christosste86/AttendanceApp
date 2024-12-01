@@ -1,0 +1,13 @@
+body {
+    height: 1024;
+}
+
+.leftSize {
+    float:left;
+}
+
+.rightSize {
+    height: 200px;
+    float: right;
+    width: 200px;
+}
