@@ -36,7 +36,7 @@ public class ScheduleController {
     public String createSchedule(@RequestParam long employeeId,
                                  @RequestParam LocalDateTime shiftStart,
                                  @RequestParam LocalDateTime shiftEnd,
-                                 @RequestParam boolean isPresent) {
+                                 @RequestParam (required = true, defaultValue = "true") boolean isPresent) {
 
         Double workedHours = scheduleService.workedHours(shiftStart,shiftEnd);
         isPresent = scheduleService.isPresent(workedHours);
