@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
     <meta lang="en" xmlns:th="http://www.thymeleaf.org/">
     <title>Schedule</title>
 </head>
 <body>
 <header>
-    <h1>All schedules</h1>
 </header>
 <main>
     <table th:if="${schedule.size() > 0}">
@@ -30,6 +30,20 @@
         </tbody>
     </table>
     <a th:href="@{/add-schedule}">Add a new schedule</a>
+
+    <div class = "schedule">
+        <form th:action = "@{/month-list/}" method="get">
+            <label for="daymonth">Select month:</label>
+            <input type="month" id="daymonth" name="month">
+            <input type="submit">
+        </form>
+        <div class = "left"
+             th:if="${selectedMonth != null}"
+             th:text="${selectedMonth.getMonth()}"></div>
+        <div th:each="day : ${daysOfMonth}" th:object="${day}">
+            <div class="day" th:text="${day.getDayOfMonth()}"></div>
+        </div>
+    </div>
 </main>
 </body>
 </html>
