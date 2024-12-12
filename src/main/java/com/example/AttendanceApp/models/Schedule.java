@@ -3,6 +3,7 @@ package com.example.AttendanceApp.models;
 import jakarta.persistence.*;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -54,5 +55,29 @@ public class Schedule {
 
     public boolean isPresent() {
         return isPresent;
+    }
+
+    public String getDailySchedule(){
+        DecimalFormat df = new DecimalFormat("00");
+        return String.format("%s:%s %s:%s",df.format(this.shiftStart.getHour())
+                , df.format(this.shiftStart.getMinute())
+                , df.format(this.shiftEnd.getHour())
+                , df.format(this.shiftEnd.getMinute()));
+    }
+
+    public String getEmptyDailySchedule(){
+        return "";
+    }
+
+    @Override
+    public String toString() {
+        return "Schedule{" +
+                "id=" + id +
+                ", employeeId=" + employeeId +
+                ", shiftStart=" + shiftStart +
+                ", shiftEnd=" + shiftEnd +
+                ", workedHours=" + workedHours +
+                ", isPresent=" + isPresent +
+                '}';
     }
 }

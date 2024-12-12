@@ -32,4 +32,17 @@ public class Employees {
     public String getLastName() {
         return lastName;
     }
+
+    public String getFullName() {
+        return String.format("%s %s", this.firstName, this.lastName);
+    }
+
+    @Override
+    public String toString() {
+        return "Employees{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 }

@@ -2,47 +2,47 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <meta lang="en" xmlns:th="http://www.thymeleaf.org/">
     <title>Schedule</title>
 </head>
 <body>
 <header>
 </header>
 <main>
-    <table th:if="${schedule.size() > 0}">
-        <thead>
-        <tr>
-            <th>Employee ID</th>
-            <th>Shift Start</th>
-            <th>Shift End</th>
-            <th>Worked Hours</th>
-            <th>Present</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="schedule : ${schedule}">
-            <td th:text="${schedule.getEmployeeId}"></td>
-            <td th:text="${schedule.getShiftStart}"></td>
-            <td th:text="${schedule.getShiftEnd}"></td>
-            <td th:text="${schedule.getWorkedHours}"></td>
-            <td th:text="${schedule.isPresent}"></td>
-        </tr>
-        </tbody>
-    </table>
     <a th:href="@{/add-schedule}">Add a new schedule</a>
-
     <div class = "schedule">
         <form th:action = "@{/month-list/}" method="get">
             <label for="daymonth">Select month:</label>
             <input type="month" id="daymonth" name="month">
             <input type="submit">
         </form>
-        <div class = "left"
-             th:if="${selectedMonth != null}"
-             th:text="${selectedMonth.getMonth()}"></div>
-        <div th:each="day : ${daysOfMonth}" th:object="${day}">
-            <div class="day" th:text="${day.getDayOfMonth()}"></div>
-        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th th:if="${selectedMonth != null}"
+                        th:text="${selectedMonth.getMonth()}">
+                    </th>
+                    <div th:each="day : ${daysOfMonth}" th:object="${day}">
+                        <th class="dayHeader" th:text="${day.getDayOfMonth()}"></th>
+                    </div>
+                    <th class ="detailsHeader">Hours</th>
+                    <th class ="detailsHeader">Shifts</th>
+                </tr>
+            </thead>
+            <tbody th:each = "employeeSchedule : ${monthlyEmployeesSchedule}">
+                <tr>
+                    <td th:text ="${employeeSchedule.key.fullName}"></td>
+                    <div th:each="eSchedule: ${employeeSchedule.value}" th:object="${eSchedule}">
+                        <td th:class = "${eSchedule.getShiftStart() != null} ? 'morning' : 'emptyDay'" th:if="${eSchedule.getShiftStart() == null}"></td>
+                        <td th:class = "${eSchedule.getShiftStart() != null} ? 'morning' : 'emptyDay'" th:if="${eSchedule.getShiftStart() != null}" th:text ="${eSchedule.getDailySchedule()}"></td>
+                    </div>
+                    <div th:each="hours : ${monthlyEmployeesTotalHours}"
+                         th:if="${hours.getKey() == employeeSchedule.getKey()}">
+                        <td class ="details" th:text ="${hours.getValue().getTotalHours()} + '/' + ${hours.getValue().getMonthlyFullTimeHours()}"></td>
+                        <td class ="details" th:text ="${hours.getValue().getShifts()}"></td>
+                    </div>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </main>
 </body>
