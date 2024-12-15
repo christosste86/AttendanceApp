@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link rel="stylesheet" href="../static/css/styles.css">
-    <meta lang="en" xmlns:th="http://www.thymeleaf.org/">
     <title>Employees</title>
 </head>
 <body>
@@ -37,21 +36,43 @@
     <div class = "form">
 
         <form th:action="@{/add-employee}" method="post">
-            <div class="title">Add new Employee</div>
-            <div class="input-container ic1">
-                <div class="cut"></div>
-                <label class = "placeholder" for="firstName">First name</label>
-                <input id="firstName" class="input" type="text" placeholder=" " name="firstName">
+            <div>Add new Employee</div>
+            <div>
+                <div></div>
+                <label for="firstName">First name:</label>
+                <input id="firstName" type="text" placeholder=" " name="firstName">
             </div>
-            <div class="input-container ic2">
-                <label class = "placeholder" for="lastName">Last name</label>
-                <input id="lastName" class="input" type="text" name="lastName" placeholder=" ">
+            <div>
+                <label for="lastName">Last name:</label>
+                <input id="lastName" type="text" name="lastName" placeholder=" ">
             </div>
 
-            <button type="submit" class="submit">Add employee</button>
+            <div>
+                <label for="position">Position name:</label>
+                <input id="position" list="positionsList" name="position">
+                <datalist id="positionsList">
+                    <option th:each="position :${positionsList}" th:value="${position}" th:text ="${position}">
+                </datalist>
+            </div>
+
+            <div>
+                <label for="separatedName">Seperated name:</label>
+                <input id="separatedName" list="separatedList" name="separatedName">
+                <datalist id="separatedList">
+                    <option th:each="separate :${separatedList}" th:value="${separate}" th:text ="${separate}">
+                </datalist>
+            </div>
+
+            <div>
+                <label for="assignment">Assignment:</label>
+                <input id="assignment" list="assignmentsList" name="assignment">
+            </div>
+            <datalist id="assignmentsList">
+                <option th:each="assignment :${assignmentsList}" th:value="${assignment}" th:text ="${assignment}">
+            </datalist>
+            <button type="submit">Add employee</button>
         </form>
     </div>
-    <a th:href="@{/add-employee}">Add new employee</a>
 </main>
 
 </body>

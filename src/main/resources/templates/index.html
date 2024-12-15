@@ -1,13 +1,108 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="../static/css/styles.css">
     <title>schedule</title>
 </head>
 <body>
+
+<header>
+    <nav>
+        <ul>
+            <li class="navLi"> <a th:href="@{index}">Schedule </a></li>
+            <li class="navLi"> <a th:href="@{employees}">Employees </a></li>
+            <li class="navLastLi"> <a th:href="@{login}">Login/Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
 <main>
     <h1>Employees Schedule</h1>
-    <a th:href="@{employees}">Employees List</a>
-    <a th:href="@{schedule}">Schedules</a>
+
+    <div class = "schedule">
+        <form th:action = "@{/month-list/}" method="get">
+
+
+            <label for="daymonth">Select month:</label>
+            <input type="month" id="daymonth" name="month">
+            <input type="submit">
+        </form>
+
+        <form th:action="@{/employee-filter/}" method="get">
+            <label for="filteredFirstName">First name: </label>
+            <input type="text" id="filteredFirstName" name="firstName">
+
+            <label for="filteredLastName">Last name: </label>
+            <input type="text" id="filteredLastName" name="lastName">
+
+            <label for="filteredSeperatedName">Seperated name: </label>
+            <input type="text" id="filteredSeperatedName" name="seperatedName">
+
+            <label for="filteredPosition">Position: </label>
+            <input type="text" id="filteredPosition" name="position">
+            <input type="submit">
+        </form>
+
+        <table>
+            <thead>
+            <tr>
+                <th colspan="2" th:if="${selectedMonth != null}"
+                    th:text="${selectedMonth.getMonth()}">
+                </th>
+                <div th:each="day : ${daysOfMonth}" th:object="${day}">
+                    <th class="dayHeader" th:text="${day.getDayOfMonth()}"></th>
+                </div>
+                <th class ="detailsHeader">Hours</th>
+                <th class ="detailsHeader">Shifts</th>
+            </tr>
+            </thead>
+            <tbody>
+            <div th:each = "employeeSchedule : ${monthlyEmployeesSchedule}">
+                <tr>
+                    <td th:text ="${employeeSchedule.key.fullName}"></td>
+                    <td th:text = "${employeeSchedule.key.getPosition()}"></td>
+                    <div th:each="eSchedule: ${employeeSchedule.value}" th:object="${eSchedule}">
+                        <td th:if="${eSchedule.getShiftStart() == null}" class="emptyDay"></td>
+                        <td th:if="${eSchedule.getShiftStart() != null}" th:text ="${eSchedule.getDailySchedule()}" class="emptyDay"></td>
+                    </div>
+                    <div th:each="hours : ${monthlyEmployeesTotalHours}"
+                         th:if="${hours.getKey() == employeeSchedule.getKey()}">
+                        <td class ="details" th:text ="${hours.getValue().getTotalHours()} + '/' + ${hours.getValue().getMonthlyFullTimeHours()}"></td>
+                        <td class ="details" th:text ="${hours.getValue().getShifts()}"></td>
+                    </div>
+                </tr>
+            </div>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h3>Add Schedule</h3>
+        <form th:action="@{/add-schedule}" method="post">
+            <div>
+                <label for="employeeId">Employee</label>
+                <input id="employeeId" list="employees" name="employeeId">
+                <datalist id="employees">
+                    <option th:each="employee :${employees}" th:value="${employee.getId()}" th:text ="${employee.toString()}">
+                </datalist>
+            </div>
+            <div>
+                <label for="shiftStart">Shift Start</label>
+                <input id="shiftStart" type="datetime-local" name="shiftStart">
+            </div>
+            <div>
+                <label for="shiftEnd">Shift End</label>
+                <input id="shiftEnd" type="datetime-local" name="shiftEnd">
+            </div>
+            <div ></div>
+            <div>
+                <label for="isPresent">Present</label>
+                <input id="isPresent" type="checkbox" name="isPresent">
+            </div>
+            <button type="submit">Add Schedule</button>
+        </form>
+    </div>
 </main>
 </body>
 </html>

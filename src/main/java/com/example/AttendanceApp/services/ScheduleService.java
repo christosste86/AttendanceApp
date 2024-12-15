@@ -1,7 +1,8 @@
 package com.example.AttendanceApp.services;
 
+import com.example.AttendanceApp.models.Assignment;
 import com.example.AttendanceApp.models.Details;
-import com.example.AttendanceApp.models.Employees;
+import com.example.AttendanceApp.models.Employee;
 import com.example.AttendanceApp.models.Schedule;
 
 import java.time.LocalDate;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface ScheduleService {
-    boolean scheduleExists(long employeeId, LocalDateTime shiftStart, LocalDateTime shiftEnd, Double workedHours, boolean isPresent);
+    boolean scheduleExists(Employee employee, LocalDateTime shiftStart, LocalDateTime shiftEnd);
 
     List<Schedule> getSchedule();
 
@@ -24,9 +25,10 @@ public interface ScheduleService {
 
     List<Schedule>monthlyEmployeesSchedule(LocalDate month);
 
-    HashMap<Employees, List<Schedule>> employeesScheduleHashMapPerMonth(LocalDate month, List<Employees> employees);
+    HashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth(LocalDate month, List<Employee> employees);
 
-    HashMap<Employees, Details> monthlyTotalHours(LocalDate month, HashMap<Employees, List<Schedule>> employeesScheduleHashMapPerMonth);
+    HashMap<Employee, Details> monthlyTotalHours(LocalDate month, HashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth);
 
     Double monthlyFullTimeHours(LocalDate month, int assignment);
+
 }

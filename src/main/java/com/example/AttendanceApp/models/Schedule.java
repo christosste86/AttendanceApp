@@ -1,10 +1,8 @@
 package com.example.AttendanceApp.models;
 
 import jakarta.persistence.*;
-import org.springframework.boot.autoconfigure.web.WebProperties;
 
 import java.text.DecimalFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,32 +11,36 @@ public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column (name ="employee_id")
-    private long employeeId;
     private LocalDateTime shiftStart;
     private LocalDateTime shiftEnd;
     @Column (name ="worked_hours")
     private Double workedHours;
     private boolean isPresent;
 
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    Employee employee;
+
     public Schedule() {
     }
 
-    public Schedule(long employeeId, LocalDateTime start, LocalDateTime end, Double workedHours, boolean isPresent) {
-        this.employeeId = employeeId;
+    public Schedule(LocalDateTime start, LocalDateTime end, Double workedHours, boolean isPresent) {
         this.shiftStart = start;
         this.shiftEnd = end;
         this.workedHours = workedHours;
         this.isPresent = isPresent;
     }
 
-    public long getId() {
-        return id;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public long getEmployeeId() {
-        return employeeId;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public LocalDateTime getShiftStart() {
@@ -73,7 +75,6 @@ public class Schedule {
     public String toString() {
         return "Schedule{" +
                 "id=" + id +
-                ", employeeId=" + employeeId +
                 ", shiftStart=" + shiftStart +
                 ", shiftEnd=" + shiftEnd +
                 ", workedHours=" + workedHours +
