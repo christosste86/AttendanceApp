@@ -70,6 +70,11 @@
             <datalist id="assignmentsList">
                 <option th:each="assignment :${assignmentsList}" th:value="${assignment}" th:text ="${assignment}">
             </datalist>
+
+            <div>
+                <label for="paymentPerHour">Payment: </label><span>/hour</span>
+                <input id="paymentPerHour" type="number" name="paymentPerHour" placeholder=" ">
+            </div>
             <button type="submit">Add employee</button>
         </form>
     </div>

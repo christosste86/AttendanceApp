@@ -60,7 +60,7 @@ public class EmployeesController {
         if(employeesService.isExist(firstName, lastName)){
             employeesService.saveEmployee(employee);
         }
-        return "redirect:/index";
+        return "redirect:/employees";
     }
 
     @GetMapping("/employee-filter/")
