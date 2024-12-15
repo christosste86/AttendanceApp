@@ -81,11 +81,11 @@
         <h3>Add Schedule</h3>
         <form th:action="@{/add-schedule}" method="post">
             <div>
-                <label for="employeeId">Employee</label>
-                <input id="employeeId" list="employees" name="employeeId">
-                <datalist id="employees">
-                    <option th:each="employee :${employees}" th:value="${employee.getId()}" th:text ="${employee.toString()}">
-                </datalist>
+                <label for="employeeSelect">Employee: </label>
+                <select name="employee" id="employeeSelect" required>
+                    <option value="" disabled selected>Select an Employee</option>
+                    <option th:each="employee :${employees}" th:value="${employee.getId()}" th:text ="${employee.fullName}"></option>
+                </select>
             </div>
             <div>
                 <label for="shiftStart">Shift Start</label>
