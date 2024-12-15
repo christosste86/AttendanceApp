@@ -56,16 +56,16 @@ public class ScheduleController {
     }
 
     @PostMapping("/add-schedule")
-    public String createSchedule(@RequestParam Employee employees,
+    public String createSchedule(@RequestParam Employee employee,
                                  @RequestParam LocalDateTime shiftStart,
                                  @RequestParam LocalDateTime shiftEnd,
                                  @RequestParam (defaultValue = "true") boolean isPresent) {
 
         Double workedHours = Duration.between(shiftStart, shiftEnd).toMinutes()/60.0;
 
-        Schedule schedule = new Schedule(shiftStart, shiftEnd, workedHours, isPresent);
+        Schedule schedule = new Schedule(employee, shiftStart, shiftEnd, workedHours, isPresent);
             System.out.println("Adding schedule");
-            schedule.setEmployee(employees);
+            schedule.setEmployee(employee);
             scheduleService.saveSchedule(schedule);
         return "redirect:/";
     }

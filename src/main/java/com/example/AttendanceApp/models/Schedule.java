@@ -24,7 +24,8 @@ public class Schedule {
     public Schedule() {
     }
 
-    public Schedule(LocalDateTime start, LocalDateTime end, Double workedHours, boolean isPresent) {
+    public Schedule(Employee employee, LocalDateTime start, LocalDateTime end, Double workedHours, boolean isPresent) {
+        this.employee = employee;
         this.shiftStart = start;
         this.shiftEnd = end;
         this.workedHours = workedHours;

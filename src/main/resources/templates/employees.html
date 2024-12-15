@@ -6,6 +6,9 @@
     <title>Employees</title>
 </head>
 <body>
+<header>
+    <nav th:replace="~{fragments/navbar :: bavigation-bar}"></nav>
+</header>
 <main>
     <h1>All Employees</h1>
     <div class = "leftSize">
@@ -35,10 +38,9 @@
     </div>
     <div class = "form">
 
-        <form th:action="@{/add-employee}" method="post">
+        <form class="rightSize" th:action="@{/add-employee}" method="post">
             <div>Add new Employee</div>
             <div>
-                <div></div>
                 <label for="firstName">First name:</label>
                 <input id="firstName" type="text" placeholder=" " name="firstName">
             </div>
@@ -48,29 +50,28 @@
             </div>
 
             <div>
-                <label for="position">Position name:</label>
-                <input id="position" list="positionsList" name="position">
-                <datalist id="positionsList">
-                    <option th:each="position :${positionsList}" th:value="${position}" th:text ="${position}">
-                </datalist>
+                <label for="positionSelect">Position name:</label>
+                <select name="position" id="positionSelect" required>
+                    <option value="" disabled selected>Select position</option>
+                    <option th:each="position :${positionsList}" th:value="${position.getTitle()}" th:text ="${position.getTitle()}"></option>
+                </select>
             </div>
 
             <div>
-                <label for="separatedName">Seperated name:</label>
-                <input id="separatedName" list="separatedList" name="separatedName">
-                <datalist id="separatedList">
-                    <option th:each="separate :${separatedList}" th:value="${separate}" th:text ="${separate}">
-                </datalist>
+                <label for="separateSelect">Seperated name:</label>
+                <select name="separatedName" id="separateSelect" required>
+                    <option value="" disabled selected>Select Seperated</option>
+                    <option th:each="separate :${separatedList}" th:value="${separate.getTitle()}" th:text ="${separate.getTitle()}"></option>
+                </select>
             </div>
 
             <div>
-                <label for="assignment">Assignment:</label>
-                <input id="assignment" list="assignmentsList" name="assignment">
+                <label for="assignmentSelect">Assignment:</label>
+                <select name="assignment" id="assignmentSelect" required>
+                    <option value="" disabled selected>Select Assignment</option>
+                    <option th:each="assignment :${assignmentsList}" th:value="${assignment.hoursPerWeek}" th:text ="${assignment.hoursPerWeek}"></option>
+                </select>
             </div>
-            <datalist id="assignmentsList">
-                <option th:each="assignment :${assignmentsList}" th:value="${assignment}" th:text ="${assignment}">
-            </datalist>
-
             <div>
                 <label for="paymentPerHour">Payment: </label><span>/hour</span>
                 <input id="paymentPerHour" type="number" name="paymentPerHour" placeholder=" ">

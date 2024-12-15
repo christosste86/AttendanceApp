@@ -68,11 +68,6 @@ public class ScheduleServiceImpl implements ScheduleService{
         return scheduleRepository.findAll();
     }
 
-    private List<Schedule> monthlyEmployeesSchedule(LocalDate month, Employee employee){
-        return scheduleRepository.findByMonthAndYear(month.getMonthValue(), month.getYear())
-                .stream()
-                .filter(s-> s.getEmployee() == employee).toList();
-    }
 
     private void addEmptySchedule(List<Schedule> schedule, LocalDate month){
         if(schedule.isEmpty()){
@@ -85,22 +80,17 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Override
     public HashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth(LocalDate month, List<Employee> employees){
         HashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth = new HashMap<>();
-        List<Schedule> monthlySchedule = scheduleRepository.findByMonthAndYear(month.getMonthValue(), month.getYear());
-
         for (Employee e: employees){
             List<Schedule> schedule = new ArrayList<>();
+            addEmptySchedule(schedule, month);
             for (int i = 1; i <= month.lengthOfMonth(); i++) {
-                for (Schedule s: monthlySchedule){
-                    addEmptySchedule(schedule, month);
-                    if(s.getEmployee() == e){
-                        if(s.getShiftStart().getDayOfMonth() == i) {
-                            schedule.remove(s.getShiftStart().getDayOfMonth()-1);
-                            schedule.add(s.getShiftStart().getDayOfMonth()-1, s);
-                        }
+                for(Schedule empMonthSchedule : scheduleRepository.findScheduleByEmployeeAndSelectedMonth(e, month.getYear(), month.getMonthValue())){
+                    if(empMonthSchedule.getShiftStart().getMonthValue() == i){
+                        schedule.remove(i-1);
+                        schedule.add(i-1, empMonthSchedule);
                     }
                 }
             }
-            addEmptySchedule(schedule, month);
             employeesScheduleHashMapPerMonth.put(e, schedule);
         }return employeesScheduleHashMapPerMonth;
     }
