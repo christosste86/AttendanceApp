@@ -1,8 +1,14 @@
 package com.example.AttendanceApp.controllers;
 
 
+import com.example.AttendanceApp.models.Assignment;
 import com.example.AttendanceApp.models.Employee;
+import com.example.AttendanceApp.models.Position;
+import com.example.AttendanceApp.models.Separate;
+import com.example.AttendanceApp.services.AssignmentService;
 import com.example.AttendanceApp.services.EmployeesService;
+import com.example.AttendanceApp.services.PositionService;
+import com.example.AttendanceApp.services.SeparateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +24,9 @@ import java.util.List;
 public class EmployeesController {
 
     private final EmployeesService employeesService;
+    private final SeparateService separateService;
+    private final PositionService positionService;
+    private final AssignmentService assignmentService;
     private List<Employee> employeesList = new ArrayList<>();
     private String firstName;
     private String lastName;
@@ -25,9 +34,11 @@ public class EmployeesController {
     private String position;
 
     @Autowired
-    public EmployeesController(EmployeesService employeesService) {
+    public EmployeesController(EmployeesService employeesService, SeparateService separateService, PositionService positionService, AssignmentService assignmentService) {
         this.employeesService = employeesService;
-        this.employeesList = employeesService.getEmployees();
+        this.separateService = separateService;
+        this.positionService = positionService;
+        this.assignmentService = assignmentService;
     }
 
     public List<Employee> getEmployeesList(){
@@ -36,38 +47,49 @@ public class EmployeesController {
 
     @GetMapping("/employees")
     public String employeesPage(Model model){
-        model.addAttribute("separatedList", employeesService.getSeparates());
-        model.addAttribute("positionsList", employeesService.getPositions());
-        model.addAttribute("assignmentsList", employeesService.getAssignments());
-        model.addAttribute("employees", employeesService.getEmployees());
+        model.addAttribute("separatedList", separateService.getSeparates());
+        model.addAttribute("positionsList", positionService.getPositions());
+        model.addAttribute("assignmentsList", assignmentService.getAssignments());
+        model.addAttribute("employees", employeesService.getEmployeesList(firstName, lastName, separatedName, position));
         return "employees";
     }
 
     @GetMapping("/add-employee")
-    public String getEmployeesForm(){
+    public String getEmployeesForm(Model model){
+        model.addAttribute("separates", separateService.getSeparates());
+        model.addAttribute("positions", positionService.getPositions());
+        model.addAttribute("assignments", assignmentService.getAssignments());
         return "employees";
     }
 
     @PostMapping("/add-employee")
     public String createEmployee(@RequestParam String firstName,
                                  @RequestParam String lastName,
-                                 @RequestParam String separatedName,
-                                 @RequestParam String position,
-                                 @RequestParam Integer assignment,
-                                 @RequestParam Double paymentPerHour){
+                                 @RequestParam Separate separate,
+                                 @RequestParam Position position,
+                                 @RequestParam Assignment assignment,
+                                 @RequestParam Double paymentPerHour,
+                                 @RequestParam String username,
+                                 @RequestParam String password){
         System.out.println("Received Data: First Name = " + firstName + ", Last Name = " + lastName);
-        Employee employee = new Employee(firstName, lastName, separatedName, position, assignment, paymentPerHour);
+        Employee employee = new Employee(firstName, lastName, username, password, paymentPerHour);
+        employee.setPosition(position);
+        employee.setAssignment(assignment);
+        employee.setSeparate(separate);
         if(employeesService.isExist(firstName, lastName)){
             employeesService.saveEmployee(employee);
         }
         return "redirect:/employees";
     }
 
+
+
     @GetMapping("/employee-filter/")
-    public String getEmployeeFilter(Model model, @PathVariable("firstName") String firstName,
-                                    @PathVariable("lastName") String lastName,
-                                    @PathVariable("seperatedName") String seperatedName,
-                                    @PathVariable("position") String position) {
+    public String getEmployeeFilter(Model model,
+                                    @RequestParam("firstName") String firstName,
+                                    @RequestParam("lastName") String lastName,
+                                    @RequestParam("separatedName") String seperatedName,
+                                    @RequestParam("position") String position) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.separatedName = seperatedName;

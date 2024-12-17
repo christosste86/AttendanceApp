@@ -1,31 +1,41 @@
 package com.example.AttendanceApp.services;
 
-import com.example.AttendanceApp.models.Assignment;
 import com.example.AttendanceApp.models.Employee;
 import com.example.AttendanceApp.models.Position;
 import com.example.AttendanceApp.models.Separate;
-import com.example.AttendanceApp.repositaries.EmployeesRepository;
+import com.example.AttendanceApp.repositaries.EmployeeRepository;
+import com.example.AttendanceApp.repositaries.PositionRepository;
+import com.example.AttendanceApp.repositaries.SeparateRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class EmployeesServiceImpl implements EmployeesService{
 
-    private final EmployeesRepository employeesRepository;
+    private final EmployeeRepository employeesRepository;
+    private final PositionRepository positionRepository;
+    private final SeparateRepository separateRepository;
 
-    public EmployeesServiceImpl(EmployeesRepository employeesRepository) {
+    public EmployeesServiceImpl(EmployeeRepository employeesRepository, PositionRepository positionRepository, SeparateRepository separateRepository) {
         this.employeesRepository = employeesRepository;
+        this.positionRepository = positionRepository;
+        this.separateRepository = separateRepository;
     }
 
 
     @Override
-    public List<Employee> getEmployees() {
-        return employeesRepository.findAll();
+    public List<Employee> getEmployeesList(String firstName,
+                                           String lastName,
+                                           String separate,
+                                           String position) {
+        List<Employee> filteredList = employeesRepository.filterEmployees(firstName, lastName, separate, position);
+        if(filteredList.isEmpty()){
+            return employeesRepository.findAll();
+        }
+        return filteredList;
     }
 
     @Override
@@ -37,10 +47,8 @@ public class EmployeesServiceImpl implements EmployeesService{
 
     @Override
     public boolean isExist(String firstName, String lastname){
-        List<Employee> employees = employeesRepository.findAll();
-        if(employees.stream().filter(e-> Objects.equals(e.getFirstName(), firstName) && Objects.equals(e.getLastName(), lastname)).toList().isEmpty()){
-            return true;
-        }return false;
+        List<Employee> employees = employeesRepository.findEmployeesByFirstNameAndLastName(firstName, lastname);
+        return employees.stream().filter(e-> Objects.equals(e.getFirstName(), firstName) && Objects.equals(e.getLastName(), lastname)).toList().isEmpty();
     }
 
     @Override
@@ -76,20 +84,5 @@ public class EmployeesServiceImpl implements EmployeesService{
         }else{
             return employeesRepository.filterEmployees(firstName, lastName, seperatedName, position);
         }
-    }
-
-    @Override
-    public List<Assignment> getAssignments() {
-        return Stream.of(Assignment.values()).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Position> getPositions() {
-        return Stream.of(Position.values()).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Separate> getSeparates() {
-        return Stream.of(Separate.values()).collect(Collectors.toList());
     }
 }

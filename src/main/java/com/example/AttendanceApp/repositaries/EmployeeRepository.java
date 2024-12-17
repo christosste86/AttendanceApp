@@ -6,7 +6,10 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface EmployeesRepository extends JpaRepository<Employee, Long> {
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query("select e from Employee e where e.firstName like :firstName and e.lastName like :lastName and e.separatedName = :seperatedName and e.position = :position")
     List<Employee> filterEmployees(String firstName, String lastName, String seperatedName, String position);
+
+    @Query("select e from Employee e where e.firstName = :firstName and e.lastName = :lastName")
+    List<Employee> findEmployeesByFirstNameAndLastName(String firstName, String lastName);
 }

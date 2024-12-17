@@ -1,13 +1,16 @@
 package com.example.AttendanceApp.models;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name = "employees")
-public class Employee {
+public class Employee implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -15,21 +18,31 @@ public class Employee {
     private String firstName;
     @Column(name = "lastname")
     private String lastName;
-    private String separatedName;
-    private String position;
-    private Integer assignment;
+    private String username;
+    private String password;
     private Double paymentPerHour;
+
+    @ManyToOne
+    @JoinColumn(name = "Separate_id")
+    Separate separate;
+
+    @ManyToOne
+    @JoinColumn(name = "position_id")
+    Position position;
+
+    @ManyToOne
+    @JoinColumn(name = "assignment_id")
+    Assignment assignment;
 
     @OneToMany(mappedBy = "employee")
     private List<Schedule> schedules = new ArrayList<>();
 
 
-    public Employee(String firstName, String lastName, String separatedName, String position, Integer assignment, Double paymentPerHour) {
+    public Employee(String firstName, String lastName, String username, String password, Double paymentPerHour) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.separatedName = separatedName;
-        this.position = position;
-        this.assignment = assignment;
+        this.username = username;
+        this.password = password;
         this.paymentPerHour = paymentPerHour;
     }
 
@@ -48,16 +61,28 @@ public class Employee {
         return lastName;
     }
 
-    public String getSeparatedName() {
-        return separatedName;
+    public Separate getSeparate() {
+        return separate;
     }
 
-    public String getPosition() {
+    public void setSeparate(Separate separate) {
+        this.separate = separate;
+    }
+
+    public Position getPosition() {
         return position;
     }
 
-    public int getAssignment() {
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    public Assignment getAssignment() {
         return assignment;
+    }
+
+    public void setAssignment(Assignment assignment) {
+        this.assignment = assignment;
     }
 
     public double getPaymentPerHour() {
@@ -68,10 +93,53 @@ public class Employee {
         return schedules;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public void setSchedules(Schedule schedule) {
         schedules.add(schedule);
         schedule.setEmployee(this);
     }
+
 
     public String getFullName() {
         return String.format("%s %s", this.firstName, this.lastName);

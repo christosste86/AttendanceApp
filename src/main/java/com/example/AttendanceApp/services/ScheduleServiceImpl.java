@@ -1,6 +1,5 @@
 package com.example.AttendanceApp.services;
 
-import com.example.AttendanceApp.models.Assignment;
 import com.example.AttendanceApp.models.Details;
 import com.example.AttendanceApp.models.Employee;
 import com.example.AttendanceApp.models.Schedule;
@@ -14,8 +13,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService{
@@ -84,10 +81,13 @@ public class ScheduleServiceImpl implements ScheduleService{
             List<Schedule> schedule = new ArrayList<>();
             addEmptySchedule(schedule, month);
             for (int i = 1; i <= month.lengthOfMonth(); i++) {
-                for(Schedule empMonthSchedule : scheduleRepository.findScheduleByEmployeeAndSelectedMonth(e, month.getYear(), month.getMonthValue())){
-                    if(empMonthSchedule.getShiftStart().getMonthValue() == i){
-                        schedule.remove(i-1);
-                        schedule.add(i-1, empMonthSchedule);
+                List<Schedule> employeeScheduleSelectedMonth = scheduleRepository.findScheduleByEmployeeAndSelectedMonth(e, month.getYear(), month.getMonthValue());
+                if(!employeeScheduleSelectedMonth.isEmpty()) {
+                    for (Schedule empMonthSchedule : employeeScheduleSelectedMonth) {
+                        if (empMonthSchedule.getShiftStart().getDayOfMonth() == i) {
+                            schedule.remove(i - 1);
+                            schedule.add(i - 1, empMonthSchedule);
+                        }
                     }
                 }
             }

@@ -30,6 +30,13 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.1.1.RELEASE'
+	implementation 'org.springframework.security:spring-security-core'
+	implementation 'org.springframework.security:spring-security-web:5.7.8'
+	implementation 'org.springframework.security:spring-security-config:5.7.8'
+
 }
 
 tasks.named('test') {

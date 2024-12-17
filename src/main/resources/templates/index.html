@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <link rel="stylesheet" href="../static/css/styles.css">
+<!--    <link rel="stylesheet" href="../static/css/styles.css">-->
     <title>schedule</title>
 </head>
 <body>
@@ -16,8 +16,6 @@
 
     <div class = "schedule">
         <form th:action = "@{/month-list/}" method="get">
-
-
             <label for="daymonth">Select month:</label>
             <input type="month" id="daymonth" name="month">
             <input type="submit">
@@ -30,11 +28,17 @@
             <label for="filteredLastName">Last name: </label>
             <input type="text" id="filteredLastName" name="lastName">
 
-            <label for="filteredSeperatedName">Seperated name: </label>
-            <input type="text" id="filteredSeperatedName" name="seperatedName">
+            <label for="separateSelect">Seperated name:</label>
+            <select name="separatedName" id="separateSelect" required>
+                <option value="" disabled selected>Select Seperated</option>
+                <option th:each="separate :${separatedList}" th:value="${separate.getTitle()}" th:text ="${separate.getTitle()}"></option>
+            </select>
 
-            <label for="filteredPosition">Position: </label>
-            <input type="text" id="filteredPosition" name="position">
+            <label for="positionSelect">Position name:</label>
+            <select name="position" id="positionSelect" required>
+                <option value="" disabled selected>Select position</option>
+                <option th:each="position :${positionsList}" th:value="${position.getTitle() + '%'}" th:text ="${position.getTitle()}"></option>
+            </select>
             <input type="submit">
         </form>
 
@@ -57,7 +61,9 @@
                     <td th:text ="${employeeSchedule.key.fullName}"></td>
                     <td th:text = "${employeeSchedule.key.getPosition()}"></td>
                     <div th:each="eSchedule: ${employeeSchedule.value}" th:object="${eSchedule}">
-                        <td th:if="${eSchedule.getShiftStart() == null}" class="emptyDay"></td>
+                        <td th:if="${eSchedule.getShiftStart() == null}" class="emptyDay">
+                            <a onclick="myFunction()"></a>
+                        </td>
                         <td th:if="${eSchedule.getShiftStart() != null}" th:text ="${eSchedule.getDailySchedule()}" class="emptyDay"></td>
                     </div>
                     <div th:each="hours : ${monthlyEmployeesTotalHours}"
@@ -71,7 +77,7 @@
         </table>
     </div>
 
-    <div>
+    <div id="addSchedule">
         <h3>Add Schedule</h3>
         <form th:action="@{/add-schedule}" method="post">
             <div>
@@ -98,5 +104,11 @@
         </form>
     </div>
 </main>
+<script>
+    function myFunction() {
+        var element = document.getElementById("addSchedule");
+        element.classList.toggle("openAddSchedule");
+    }
+</script>
 </body>
 </html>
