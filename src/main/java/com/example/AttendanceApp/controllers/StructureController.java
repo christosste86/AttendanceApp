@@ -6,10 +6,10 @@ import com.example.AttendanceApp.models.Separate;
 import com.example.AttendanceApp.services.AssignmentService;
 import com.example.AttendanceApp.services.PositionService;
 import com.example.AttendanceApp.services.SeparateService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -19,10 +19,19 @@ public class StructureController {
     private final PositionService positionService;
     private final SeparateService separateService;
 
+    @Autowired
     public StructureController(AssignmentService assignmentService, PositionService positionService, SeparateService separateService) {
         this.assignmentService = assignmentService;
         this.positionService = positionService;
         this.separateService = separateService;
+    }
+
+    @GetMapping("structure")
+    public String structure(Model model) {
+        model.addAttribute("assignments", assignmentService.getAssignments());
+        model.addAttribute("positions", positionService.getPositions());
+        model.addAttribute("separates", separateService.getSeparates());
+        return "structure";
     }
 
     @GetMapping("/add-assignment/")
