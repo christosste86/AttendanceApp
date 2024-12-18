@@ -35,7 +35,8 @@ public class StructureController {
     }
 
     @GetMapping("/add-assignment/")
-    public String getAssignmentForm(){
+    public String getAssignmentForm(Model model) {
+        model.addAttribute("separateList", separateService.getSeparates());
         return "structure";
     }
 
@@ -48,7 +49,8 @@ public class StructureController {
     }
 
     @GetMapping("/add-position/")
-    public String getPositionForm(){
+    public String getPositionForm(Model model){
+        model.addAttribute("positionList", positionService.getPositions());
         return "structure";
     }
 

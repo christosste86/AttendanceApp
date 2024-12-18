@@ -24,7 +24,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="assignment : ${assignmentList}" th:object="assignment">
+                <tr th:each="assignment : ${assignmentList}" th:object="${assignment}">
                     <td th:text="${assignment.getAssignmentTitle()}"></td>
                     <td th:text="${assignment.getHoursPerWeek()}"></td>
                 </tr>
@@ -39,7 +39,7 @@
                 </div>
                 <div>
                     <label for="assignmentHours">Assignment: </label>
-                    <input type = "text" id="assignmentHours" name="assignment">
+                    <input type = "number" id="assignmentHours" name="assignment">
                 </div>
                 <button type="submit">Add assignment</button>
             </form>
@@ -51,12 +51,12 @@
         <h3>Positions</h3>
         <table>
             <thead>
-            <tr>
-                <th>Title</th>
-            </tr>
+                <tr>
+                    <th>Title</th>
+                </tr>
             </thead>
             <tbody>
-                <tr th:each="position : ${positionList}" th:object="position">
+                <tr th:each="position : ${positionList}" th:object="${position}">
                     <td th:text="${position.getTitle()}"></td>
                 </tr>
             </tbody>
