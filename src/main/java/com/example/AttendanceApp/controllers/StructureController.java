@@ -28,15 +28,14 @@ public class StructureController {
 
     @GetMapping("structure")
     public String structure(Model model) {
-        model.addAttribute("assignments", assignmentService.getAssignments());
-        model.addAttribute("positions", positionService.getPositions());
-        model.addAttribute("separates", separateService.getSeparates());
+        model.addAttribute("assignmentList", assignmentService.getAssignments());
+        model.addAttribute("positionList", positionService.getPositions());
+        model.addAttribute("separateList", separateService.getSeparates());
         return "structure";
     }
 
     @GetMapping("/add-assignment/")
-    public String getAssignmentForm(Model model){
-        model.addAttribute("assignmentsList", assignmentService.getAssignments());
+    public String getAssignmentForm(){
         return "structure";
     }
 
@@ -47,21 +46,19 @@ public class StructureController {
         return "redirect:/structure/";
     }
 
-    @GetMapping("/add-Possition/")
-    public String getPossitionForm(Model model){
-        model.addAttribute("possitionList", positionService.getPositions());
+    @GetMapping("/add-Position/")
+    public String getPositionForm(){
         return "structure";
     }
 
-    @PostMapping("/add-Possition/")
-    public String createPossition(@RequestParam String title){
-        Position newPossition = new Position(title);
+    @PostMapping("/add-Position/")
+    public String createPosition(@RequestParam String title){
+        Position newPosition = new Position(title);
         return "redirect:/structure/";
     }
 
     @GetMapping("/add-separate/")
-    public String getSeparateForm(Model model){
-        model.addAttribute("separateList", separateService.getSeparates());
+    public String getSeparateForm(){
         return "structure";
     }
 

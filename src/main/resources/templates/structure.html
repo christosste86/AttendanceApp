@@ -11,26 +11,102 @@
 </header>
 <main>
     <h1> Structure Schedule</h1>
-    <h2>Logistics</h2>
-    <h3>Assignments</h3>
-    <table>
-        <thead>
+    <!--    Assignments-->
+    <div>
+        <h2>Logistics</h2>
+        <h3>Assignments</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Assignment</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="assignment : ${assignmentList}" th:object="assignment">
+                    <td th:text="${assignment.getAssignmentTitle()}"></td>
+                    <td th:text="${assignment.getHoursPerWeek()}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div>
+            <form th:action="@{/add-assignment/}" method="post">
+                <div>
+                    <label for="assignment_title">Title: </label>
+                    <input type ="text" id="assignment_title" name="title">
+                </div>
+                <div>
+                    <label for="assignmentHours">Assignment: </label>
+                    <input type = "text" id="assignmentHours" name="assignment">
+                </div>
+                <button type="submit">Add assignment</button>
+            </form>
+        </div>
+    </div>
+<!--    Position-->
+    <div>
+        <h2>Logistics</h2>
+        <h3>Positions</h3>
+        <table>
+            <thead>
             <tr>
                 <th>Title</th>
-                <th>Assignment</th>
             </tr>
-        </thead>
-        <body>
-            <tr th:each="assignment : ${assignments}">
-                <td th:text="${assignment.getAssignmentTitle()}"></td>
-                <td th:text="${assignment.getHoursPerWeek()}"></td>
-            </tr>
-        </body>
-    </table>
+            </thead>
+            <tbody>
+                <tr th:each="position : ${positionList}" th:object="position">
+                    <td th:text="${position.getTitle()}"></td>
+                </tr>
+            </tbody>
+        </table>
 
-    <div>
-        <form></form>
+        <div>
+            <form th:action="@{/add-Position/}" method="post">
+                <div>
+                    <label for="position_title">Title: </label>
+                    <input type ="text" id="position_title" name="title">
+                </div>
+                <button type="submit">Add position</button>
+            </form>
+        </div>
     </div>
+    <!--    Separate-->
+    <div>
+        <h2>Logistics</h2>
+        <h3>Separates</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="separate : ${separateList}" th:object="${separate}">
+                    <td th:text="${separate.getTitle()}"></td>
+                    <td th:text="${separate.getDescription()}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div>
+            <form th:action="@{/add-separate/}" method="post">
+                <div>
+                    <label for="separate_title">Title: </label>
+                    <input type ="text" id="separate_title" name="title">
+                </div>
+                <div>
+                    <label for="separate_description">Assignment: </label>
+                    <input type = "text" id="separate_description" name="description">
+                </div>
+                <button type="submit">Add separate</button>
+            </form>
+        </div>
+    </div>
+
+
+
 </main>
 </body>
 </html>

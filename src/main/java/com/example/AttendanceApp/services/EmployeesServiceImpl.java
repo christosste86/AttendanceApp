@@ -1,11 +1,7 @@
 package com.example.AttendanceApp.services;
 
 import com.example.AttendanceApp.models.Employee;
-import com.example.AttendanceApp.models.Position;
-import com.example.AttendanceApp.models.Separate;
 import com.example.AttendanceApp.repositaries.EmployeeRepository;
-import com.example.AttendanceApp.repositaries.PositionRepository;
-import com.example.AttendanceApp.repositaries.SeparateRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,13 +12,9 @@ import java.util.Optional;
 public class EmployeesServiceImpl implements EmployeesService{
 
     private final EmployeeRepository employeesRepository;
-    private final PositionRepository positionRepository;
-    private final SeparateRepository separateRepository;
 
-    public EmployeesServiceImpl(EmployeeRepository employeesRepository, PositionRepository positionRepository, SeparateRepository separateRepository) {
+    public EmployeesServiceImpl(EmployeeRepository employeesRepository) {
         this.employeesRepository = employeesRepository;
-        this.positionRepository = positionRepository;
-        this.separateRepository = separateRepository;
     }
 
 

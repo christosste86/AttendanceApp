@@ -2,7 +2,6 @@ package com.example.AttendanceApp.controllers;
 
 import com.example.AttendanceApp.models.Employee;
 import com.example.AttendanceApp.models.Schedule;
-import com.example.AttendanceApp.repositaries.EmployeeRepository;
 import com.example.AttendanceApp.services.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +24,7 @@ public class ScheduleController {
     private final SeparateService separateService;
     private final EmployeesController employeesController;
     private LocalDate selectedMonth = LocalDate.now().withDayOfMonth(1);
-    private List<LocalDate> days = new ArrayList<>();
+    private final List<LocalDate> days = new ArrayList<>();
     private List<Employee> employeesList = new ArrayList<>();
 
     public ScheduleController(ScheduleService scheduleService, PositionService positionService, SeparateService separateService, EmployeesController employeesController) {
@@ -80,10 +79,8 @@ public class ScheduleController {
     private void setMothDaysList(){
         this.days.clear();
         for(int day = 0; day < this.selectedMonth.lengthOfMonth(); day++){
-            if(this.selectedMonth != null){
-                this.days.add(this.selectedMonth.plusDays(day));
-                System.out.println(this.selectedMonth.plusDays(day));
-            }
+            this.days.add(this.selectedMonth.plusDays(day));
+            System.out.println(this.selectedMonth.plusDays(day));
         }
     }
 
