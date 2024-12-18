@@ -1,6 +1,8 @@
 package com.example.AttendanceApp.services;
 
 import com.example.AttendanceApp.models.Employee;
+import com.example.AttendanceApp.models.Position;
+import com.example.AttendanceApp.models.Separate;
 import com.example.AttendanceApp.repositaries.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +23,8 @@ public class EmployeesServiceImpl implements EmployeesService{
     @Override
     public List<Employee> getEmployeesList(String firstName,
                                            String lastName,
-                                           String separate,
-                                           String position) {
+                                           Separate separate,
+                                           Position position) {
         List<Employee> filteredList = employeesRepository.filterEmployees(firstName, lastName, separate, position);
         if(filteredList.isEmpty()){
             return employeesRepository.findAll();
@@ -70,11 +72,11 @@ public class EmployeesServiceImpl implements EmployeesService{
     }
 
     @Override
-    public List<Employee> filteredEmployees(String firstName, String lastName, String seperatedName, String position){
-        if(employeesRepository.filterEmployees(firstName, lastName, seperatedName, position).isEmpty()){
+    public List<Employee> filteredEmployees(String firstName, String lastName, Separate separate, Position position){
+        if(employeesRepository.filterEmployees(firstName, lastName, separate, position).isEmpty()){
             return employeesRepository.findAll();
         }else{
-            return employeesRepository.filterEmployees(firstName, lastName, seperatedName, position);
+            return employeesRepository.filterEmployees(firstName, lastName, separate, position);
         }
     }
 }

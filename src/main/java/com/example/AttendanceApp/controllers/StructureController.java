@@ -43,17 +43,19 @@ public class StructureController {
     public String createAssignment(@RequestParam String title,
                                    @RequestParam int assignment){
         Assignment newAssignment = new Assignment(title, assignment);
+        assignmentService.createAssignment(newAssignment);
         return "redirect:/structure/";
     }
 
-    @GetMapping("/add-Position/")
+    @GetMapping("/add-position/")
     public String getPositionForm(){
         return "structure";
     }
 
-    @PostMapping("/add-Position/")
+    @PostMapping("/add-position/")
     public String createPosition(@RequestParam String title){
         Position newPosition = new Position(title);
+        positionService.createPosition(newPosition);
         return "redirect:/structure/";
     }
 
@@ -62,10 +64,11 @@ public class StructureController {
         return "structure";
     }
 
-    @GetMapping("/add-separate/")
-    public String createSeparateForm(@RequestParam String title,
+    @PostMapping("/add-separate/")
+    public String createSeparate(@RequestParam String title,
                                      @RequestParam String description){
         Separate newSeparate = new Separate(title, description);
+        separateService.createSeparate(newSeparate);
         return "redirect:/structure/";
     }
 

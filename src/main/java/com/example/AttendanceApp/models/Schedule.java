@@ -5,12 +5,8 @@ import jakarta.persistence.*;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name ="Schedule")
-public class Schedule {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+@Entity(name ="Schedules")
+public class Schedule extends BaseEntity{
     private LocalDateTime shiftStart;
     private LocalDateTime shiftEnd;
     @Column (name ="worked_hours")
@@ -38,10 +34,6 @@ public class Schedule {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
-    }
-
-    public long getId() {
-        return id;
     }
 
     public LocalDateTime getShiftStart() {
@@ -75,7 +67,6 @@ public class Schedule {
     @Override
     public String toString() {
         return "Schedule{" +
-                "id=" + id +
                 ", shiftStart=" + shiftStart +
                 ", shiftEnd=" + shiftEnd +
                 ", workedHours=" + workedHours +

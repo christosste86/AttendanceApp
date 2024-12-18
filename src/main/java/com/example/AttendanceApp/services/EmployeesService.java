@@ -12,8 +12,8 @@ public interface EmployeesService {
 
     List<Employee> getEmployeesList(String firstName,
                                                    String lastName,
-                                                   String separate,
-                                                   String position);
+                                                   Separate separate,
+                                                   Position position);
 
     Employee getEmployeeById(long id);
 
@@ -25,5 +25,5 @@ public interface EmployeesService {
 
     void updateEmployeeById(long id);
 
-    List<Employee> filteredEmployees(String firstName, String lastName, String seperatedName, String position);
+    List<Employee> filteredEmployees(String firstName, String lastName, Separate separate, Position position);
 }

@@ -30,8 +30,8 @@ public class EmployeesController {
     private List<Employee> employeesList = new ArrayList<>();
     private String firstName;
     private String lastName;
-    private String separatedName;
-    private String position;
+    private Separate separate;
+    private Position position;
 
     @Autowired
     public EmployeesController(EmployeesService employeesService, SeparateService separateService, PositionService positionService, AssignmentService assignmentService) {
@@ -50,7 +50,7 @@ public class EmployeesController {
         model.addAttribute("separatedList", separateService.getSeparates());
         model.addAttribute("positionsList", positionService.getPositions());
         model.addAttribute("assignmentsList", assignmentService.getAssignments());
-        model.addAttribute("employees", employeesService.getEmployeesList(firstName, lastName, separatedName, position));
+        model.addAttribute("employees", employeesService.getEmployeesList(firstName, lastName, separate, position));
         return "employees";
     }
 
@@ -88,13 +88,13 @@ public class EmployeesController {
     public String getEmployeeFilter(Model model,
                                     @RequestParam("firstName") String firstName,
                                     @RequestParam("lastName") String lastName,
-                                    @RequestParam("separatedName") String seperatedName,
-                                    @RequestParam("position") String position) {
+                                    @RequestParam("separatedName") Separate separate,
+                                    @RequestParam("position") Position position) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.separatedName = seperatedName;
+        this.separate = separate;
         this.position = position;
-        this.employeesList = employeesService.filteredEmployees(this.firstName, this.lastName, this.separatedName, this.position);
+        this.employeesList = employeesService.filteredEmployees(this.firstName, this.lastName, this.separate, this.position);
         model.addAttribute("filteredEmployees", this.employeesList);
         return "redirect:/";
     }

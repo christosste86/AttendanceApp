@@ -5,16 +5,12 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "separate")
-public class Separate {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+@Entity(name = "separates")
+public class Separate extends BaseEntity{
     private String title;
     private String description;
 
-    @OneToMany
+    @OneToMany(mappedBy = "separate")
     private List<Employee> employees = new ArrayList<>();
 
     public Separate() {
@@ -41,15 +37,9 @@ public class Separate {
         this.description = description;
     }
 
-    public void setEmployees(Employee employee) {
-        employees.add(employee);
-        employee.setSeparate(this);
-    }
-
     @Override
     public String toString() {
         return "Separate{" +
-                "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 '}';

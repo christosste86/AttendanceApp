@@ -5,6 +5,7 @@ import com.example.AttendanceApp.repositaries.SeparateRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SeparateServicelmpl implements SeparateService {
@@ -18,5 +19,26 @@ public class SeparateServicelmpl implements SeparateService {
     @Override
     public List<Separate> getSeparates() {
         return separateRepository.findAll();
+    }
+
+    @Override
+    public void createSeparate(Separate separate) {
+        separateRepository.save(separate);
+    }
+
+    @Override
+    public void updateSeparate(long id) {
+        Optional<Separate> separate = separateRepository.findById(id);
+        if (separate.isPresent()) {
+            Separate s = separate.get();
+        }
+    }
+
+    @Override
+    public void deleteSeparate(long id) {
+        Optional<Separate> separate = separateRepository.findById(id);
+        if (separate.isPresent()) {
+            separateRepository.delete(separate.get());
+        }
     }
 }

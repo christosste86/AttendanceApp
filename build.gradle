@@ -23,7 +23,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.apache.httpcomponents:httpclient:4.5.14'
-	implementation 'org.json:json:20230618'
+	implementation 'org.json:json:20231013'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
@@ -31,11 +31,11 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.1.1.RELEASE'
-	implementation 'org.springframework.security:spring-security-core'
-	implementation 'org.springframework.security:spring-security-web:5.7.8'
-	implementation 'org.springframework.security:spring-security-config:5.7.8'
+	//implementation 'org.springframework.boot:spring-boot-starter-security'
+	//implementation 'org.thymeleaf.extras:thymeleaf-extras-spring security5:3.1.1.RELEASE'
+	//implementation 'org.springframework.security:spring-security-core'
+	//implementation 'org.springframework.security:spring-security-web:6.3.4'
+	//implementation 'org.springframework.security:spring-security-config:6.1.4'
 
 }
 

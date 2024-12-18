@@ -1,37 +1,28 @@
 package com.example.AttendanceApp.models;
 
 import jakarta.persistence.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name = "employees")
-public class Employee implements UserDetails {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    @Column(name = "firstname")
+public class Employee extends BaseEntity{
     private String firstName;
-    @Column(name = "lastname")
     private String lastName;
     private String username;
     private String password;
     private Double paymentPerHour;
 
     @ManyToOne
-    @JoinColumn(name = "Separate_id")
+    @JoinColumn(name = "Separate_id", referencedColumnName = "id")
     Separate separate;
 
     @ManyToOne
-    @JoinColumn(name = "position_id")
+    @JoinColumn(name = "position_id", referencedColumnName = "id")
     Position position;
 
     @ManyToOne
-    @JoinColumn(name = "assignment_id")
+    @JoinColumn(name = "assignment_id", referencedColumnName = "id")
     Assignment assignment;
 
     @OneToMany(mappedBy = "employee")
@@ -49,10 +40,6 @@ public class Employee implements UserDetails {
     public Employee() {
     }
 
-    public long getId() {
-        return id;
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -61,85 +48,65 @@ public class Employee implements UserDetails {
         return lastName;
     }
 
-    public Separate getSeparate() {
-        return separate;
-    }
-
-    public void setSeparate(Separate separate) {
-        this.separate = separate;
-    }
-
-    public Position getPosition() {
-        return position;
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
-    }
-
-    public Assignment getAssignment() {
-        return assignment;
-    }
-
-    public void setAssignment(Assignment assignment) {
-        this.assignment = assignment;
-    }
-
-    public double getPaymentPerHour() {
-        return paymentPerHour;
-    }
-
-    public List<Schedule> getSchedules() {
-        return schedules;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+    public String getUsername() {
+        return username;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public Double getPaymentPerHour() {
+        return paymentPerHour;
     }
 
-    @Override
-    public String getUsername() {
-        return username;
+    public Separate getSeparate() {
+        return separate;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
+    public Position getPosition() {
+        return position;
     }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
+    public Assignment getAssignment() {
+        return assignment;
     }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
+    public List<Schedule> getSchedules() {
+        return schedules;
     }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
-    public void setSchedules(Schedule schedule) {
-        schedules.add(schedule);
-        schedule.setEmployee(this);
+    public void setPassword(String password) {
+        this.password = password;
     }
 
+    public void setPaymentPerHour(Double paymentPerHour) {
+        this.paymentPerHour = paymentPerHour;
+    }
+
+    public void setSeparate(Separate separate) {
+        this.separate = separate;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    public void setAssignment(Assignment assignment) {
+        this.assignment = assignment;
+    }
 
     public String getFullName() {
         return String.format("%s %s", this.firstName, this.lastName);
@@ -148,7 +115,6 @@ public class Employee implements UserDetails {
     @Override
     public String toString() {
         return "Employees{" +
-                "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 '}';

@@ -5,16 +5,12 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "employees")
-public class Position {
+@Entity (name = "positions")
+public class Position extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
     private String title;
 
-    @OneToMany
+    @OneToMany(mappedBy = "position")
     private List<Employee> employees = new ArrayList<>();
 
     public Position() {
@@ -40,7 +36,6 @@ public class Position {
     @Override
     public String toString() {
         return "Position{" +
-                "id=" + id +
                 ", title='" + title + '\'' +
                 '}';
     }
