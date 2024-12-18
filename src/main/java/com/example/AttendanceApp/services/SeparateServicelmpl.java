@@ -27,10 +27,11 @@ public class SeparateServicelmpl implements SeparateService {
     }
 
     @Override
-    public void updateSeparate(long id) {
+    public void updateSeparateTitle(long id, String title) {
         Optional<Separate> separate = separateRepository.findById(id);
         if (separate.isPresent()) {
             Separate s = separate.get();
+            s.setTitle(title);
         }
     }
 

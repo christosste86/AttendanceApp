@@ -11,7 +11,9 @@ public interface AssignmentService {
 
     void createAssignment(Assignment assignment);
 
-    void updateAssignment(long id);
+    void updateAssignmentTitle(long id, String title);
+
+    void updateAssignmentHours(long id, int hoursPerWeek);
 
     void deleteAssignment(long id);
 

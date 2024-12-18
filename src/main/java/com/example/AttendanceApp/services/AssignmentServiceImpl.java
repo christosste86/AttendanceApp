@@ -27,10 +27,20 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
-    public void updateAssignment(long id) {
+    public void updateAssignmentTitle(long id, String title) {
         Optional<Assignment> assignment = assignmentRepository.findById(id);
         if (assignment.isPresent()) {
             Assignment a = assignment.get();
+            a.setAssignmentTitle(title);
+        }
+    }
+
+    @Override
+    public void updateAssignmentHours(long id, int hoursPerWeek) {
+        Optional<Assignment> assignment = assignmentRepository.findById(id);
+        if (assignment.isPresent()) {
+            Assignment a = assignment.get();
+            a.setHoursPerWeek(hoursPerWeek);
         }
     }
 

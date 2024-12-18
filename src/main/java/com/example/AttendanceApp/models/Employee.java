@@ -28,6 +28,10 @@ public class Employee extends BaseEntity{
     @OneToMany(mappedBy = "employee")
     private List<Schedule> schedules = new ArrayList<>();
 
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name= "benefid_card_id")
+    private BenefitCard benefitCard;
+
 
     public Employee(String firstName, String lastName, String username, String password, Double paymentPerHour) {
         this.firstName = firstName;
@@ -106,6 +110,14 @@ public class Employee extends BaseEntity{
 
     public void setAssignment(Assignment assignment) {
         this.assignment = assignment;
+    }
+
+    public BenefitCard getBenefitCard() {
+        return benefitCard;
+    }
+
+    public void setBenefitCard(BenefitCard benefitCard) {
+        this.benefitCard = benefitCard;
     }
 
     public String getFullName() {

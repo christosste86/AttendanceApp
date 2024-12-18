@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <meta charset="UTF-8">
+    <title>Benefits</title>
+</head>
+<body>
+<header>
+    <nav th:replace="~{fragments/navbar :: bavigation-bar}"></nav>
+</header>
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>Serial Number</th>
+                <th>points</th>
+                <th>Employee</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="benefitCard : ${benefitCardsList}" th:object="benefitCard">
+               <td th:text ="${benefitCard.getSerialNumber()}"></td>
+               <td th:text ="${benefitCard.getPoints()}"></td>
+               <td th:text ="${benefitCard.getEmployee().getFullName()}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

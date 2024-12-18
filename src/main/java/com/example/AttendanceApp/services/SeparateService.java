@@ -10,7 +10,7 @@ public interface SeparateService {
 
     void createSeparate(Separate separate);
 
-    void updateSeparate(long id);
+    void updateSeparateTitle(long id, String title);
 
     void deleteSeparate(long id);
 
