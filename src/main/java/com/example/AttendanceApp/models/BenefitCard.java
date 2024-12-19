@@ -15,6 +15,11 @@ public class BenefitCard extends BaseEntity{
     public BenefitCard() {
     }
 
+    public BenefitCard(String serialNumber, int points) {
+        this.serialNumber = serialNumber;
+        this.points = points;
+    }
+
     public String getSerialNumber() {
         return serialNumber;
     }

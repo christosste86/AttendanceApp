@@ -8,7 +8,7 @@ import com.example.AttendanceApp.models.Separate;
 import java.util.List;
 
 public interface EmployeesService {
-    boolean isExist(String firstName, String lastname);
+    boolean isExist(String username);
 
     List<Employee> getEmployeesList(String firstName,
                                                    String lastName,

@@ -6,6 +6,7 @@ import com.example.AttendanceApp.services.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -54,18 +55,23 @@ public class ScheduleController {
     }
 
 
-    @GetMapping("/add-schedule")
+    @GetMapping("/add-schedule/{employee}/month-date/{monthDay}")
     public String getScheduleForm(Model model) {
         model.addAttribute("employees", this.employeesList);
         return "redirect:/";
     }
 
-    @PostMapping("/add-schedule")
-    public String createSchedule(@RequestParam Employee employee,
-                                 @RequestParam LocalDateTime shiftStart,
-                                 @RequestParam LocalDateTime shiftEnd,
+    @PostMapping("/add-schedule/{employee}/month-date/{monthDay}")
+    public String createSchedule(Model model,
+                                 @PathVariable("employee") Employee employee,
+                                 @PathVariable("monthDay") int monthDay,
+                                 @RequestParam int shiftStartHour,
+                                 @RequestParam int shiftStartMinutes,
+                                 @RequestParam int shiftEndHour,
+                                 @RequestParam int shiftEndMinutes,
                                  @RequestParam (defaultValue = "true") boolean isPresent) {
-
+        LocalDateTime shiftStart = this.selectedMonth.withDayOfMonth(monthDay).atTime(shiftStartHour, shiftStartMinutes);
+        LocalDateTime shiftEnd = this.selectedMonth.withDayOfMonth(monthDay).atTime(shiftEndHour, shiftEndMinutes);
         double workedHours = Duration.between(shiftStart, shiftEnd).toMinutes()/60.0;
         if(workedHours > 0 && workedHours <= 12){
             Schedule schedule = new Schedule(employee, shiftStart, shiftEnd, workedHours, isPresent);

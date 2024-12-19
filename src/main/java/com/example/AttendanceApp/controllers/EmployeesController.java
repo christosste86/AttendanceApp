@@ -76,7 +76,7 @@ public class EmployeesController {
         employee.setPosition(position);
         employee.setAssignment(assignment);
         employee.setSeparate(separate);
-        if(employeesService.isExist(firstName, lastName)){
+        if(!employeesService.isExist(username)){
             employeesService.saveEmployee(employee);
         }
         return "redirect:/employees";

@@ -31,13 +31,13 @@
             <label for="separateSelect">Seperated name:</label>
             <select name="separatedName" id="separateSelect" required>
                 <option value="" disabled selected>Select Seperated</option>
-                <option th:each="separate :${separatedList}" th:value="${separate.getTitle()}" th:text ="${separate.getTitle()}"></option>
+                <option th:each="separate :${separatedList}" th:value="${separate.getId()}" th:text ="${separate.getTitle()}"></option>
             </select>
 
             <label for="positionSelect">Position name:</label>
             <select name="position" id="positionSelect" required>
                 <option value="" disabled selected>Select position</option>
-                <option th:each="position :${positionsList}" th:value="${position.getTitle() + '%'}" th:text ="${position.getTitle()}"></option>
+                <option th:each="position :${positionsList}" th:value="${position.getId()}" th:text ="${position.getTitle()}"></option>
             </select>
             <input type="submit">
         </form>
@@ -57,12 +57,42 @@
             </thead>
             <tbody>
             <div th:each = "employeeSchedule : ${monthlyEmployeesSchedule}">
-                <tr>
+                <tr th:if="${employeeSchedule.key.getFirstName() != null && employeeSchedule.key.getLastName() != null}">
                     <td th:text ="${employeeSchedule.key.fullName}"></td>
-                    <td th:text = "${employeeSchedule.key.getPosition()}"></td>
-                    <div th:each="eSchedule: ${employeeSchedule.value}" th:object="${eSchedule}">
+                    <td th:if ="${employeeSchedule.key.getPosition() != null}"
+                        th:text = "${employeeSchedule.key.getPosition().getTitle()}"></td>
+                    <td th:if ="${employeeSchedule.key.getPosition() == null}"
+                        th:text = "${'No Set'}"></td>
+                    <div th:each="eSchedule, index : ${employeeSchedule.value}" th:object="${eSchedule}">
                         <td th:if="${eSchedule.getShiftStart() == null}" class="emptyDay">
-                            <a onclick="myFunction()"></a>
+                            <button onclick="openAddSchedule()" th:action="@{/add-schedule/{employee}/month-date/{monthDay}(employee =${employeeSchedule.getKey()}) (monthDay = ${index+1})}"></button>
+<!--                            add Schedule-->
+                            <div id="addSchedule" class="closeAddSchedule">
+                                <button onclick="closeAddSchedule()">X</button>
+                                <h3>Add Schedule</h3>
+                                <form th:action="@{/add-schedule}" method="post">
+                                    <h2 th:text ="${employeeSchedule.getKey().fullName}"></h2>
+                                    <h2 th:text ="${selectedMonth.withDayOfMonth(index+1)}"></h2>
+                                    <div>
+                                        <label for="shiftStartHours"></label>
+                                        <input id="shiftStartHours" type="number" name="shiftStartHour">
+                                        <label for="shiftStartMinutes"></label>
+                                        <input id="shiftStartMinutes" type="number" name="shiftStartMinutes">
+                                    </div>
+                                    <div>
+                                        <label for="shiftEndHour"></label>
+                                        <input id="shiftEndHour" type="number" name="shiftEndHour">
+                                        <label for="shiftEndMinutes"></label>
+                                        <input id="shiftEndMinutes" type="number" name="shiftEndMinutes">
+                                    </div>
+                                    <div>
+                                        <label for="isPresent">Present</label>
+                                        <input id="isPresent" type="checkbox" name="isPresent">
+                                    </div>
+                                    <button type="submit">Add Schedule</button>
+                                </form>
+                            </div>
+<!--                            End Add Schedule-->
                         </td>
                         <td th:if="${eSchedule.getShiftStart() != null}" th:text ="${eSchedule.getDailySchedule()}" class="emptyDay"></td>
                     </div>
@@ -76,38 +106,18 @@
             </tbody>
         </table>
     </div>
-
-    <div id="addSchedule">
-        <h3>Add Schedule</h3>
-        <form th:action="@{/add-schedule}" method="post">
-            <div>
-                <label for="employeeSelect">Employee: </label>
-                <select name="employee" id="employeeSelect" required>
-                    <option value="" disabled selected>Select an Employee</option>
-                    <option th:each="employee :${employees}" th:value="${employee.getId()}" th:text ="${employee.fullName}"></option>
-                </select>
-            </div>
-            <div>
-                <label for="shiftStart">Shift Start</label>
-                <input id="shiftStart" type="datetime-local" name="shiftStart">
-            </div>
-            <div>
-                <label for="shiftEnd">Shift End</label>
-                <input id="shiftEnd" type="datetime-local" name="shiftEnd">
-            </div>
-            <div ></div>
-            <div>
-                <label for="isPresent">Present</label>
-                <input id="isPresent" type="checkbox" name="isPresent">
-            </div>
-            <button type="submit">Add Schedule</button>
-        </form>
-    </div>
 </main>
 <script>
-    function myFunction() {
+    function openAddSchedule() {
         var element = document.getElementById("addSchedule");
-        element.classList.toggle("openAddSchedule");
+        if (element.classList.contains("closeAddSchedule")) {
+            element.classList.remove("closeAddSchedule");
+            element.classList.add("openAddSchedule");
+        }
+    }
+    function closeAddSchedule() {
+        var element = document.getElementById("addSchedule");
+        element.classList.toggle("closeAddSchedule");
     }
 </script>
 </body>

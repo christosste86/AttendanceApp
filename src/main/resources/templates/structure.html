@@ -21,12 +21,18 @@
                 <tr>
                     <th>Title</th>
                     <th>Assignment</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="assignment : ${assignmentList}" th:object="${assignment}">
                     <td th:text="${assignment.getAssignmentTitle()}"></td>
                     <td th:text="${assignment.getHoursPerWeek()}"></td>
+                    <td>
+                        <form th:action="@{/delete-separate/{id}(id=${assignment.getId()})}">
+                            <button type = "submit">Remove</button>
+                        </form>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -53,11 +59,17 @@
             <thead>
                 <tr>
                     <th>Title</th>
+                    <th>Remove</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="position : ${positionList}" th:object="${position}">
                     <td th:text="${position.getTitle()}"></td>
+                    <td>
+                        <form th:action="@{/delete-position/{id}(id=${position.getId()})}">
+                            <button type="submit">Remove</button>
+                        </form>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -81,12 +93,18 @@
                 <tr>
                     <th>Title</th>
                     <th>Description</th>
+                    <th>Remove</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="separate : ${separateList}" th:object="${separate}">
                     <td th:text="${separate.getTitle()}"></td>
                     <td th:text="${separate.getDescription()}"></td>
+                    <td>
+                        <form th:action="@{/delete-separate/{id}(id = ${separate.getId()})}">
+                            <button type="submit">Remove</button>
+                        </form>
+                    </td>
                 </tr>
             </tbody>
         </table>

@@ -15,16 +15,27 @@
     <table th:if="${employees.size() > 0}">
         <thead>
         <tr>
+            <th>Username</th>
             <th>Firstname</th>
             <th>Lastname</th>
+            <th>Position</th>
+            <th>Separate</th>
+            <th>Assignment</th>
+            <th>BenefitCard S/N</th>
             <th>About</th>
             <th>Delete</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="employee : ${employees}">
+            <td th:text="${employee.getUsername()}"></td>
             <td th:text="${employee.getFirstName()}"></td>
             <td th:text="${employee.getLastName()}"></td>
+            <td th:if="${employee.getPosition() != null}" th:text="${employee.getPosition().getTitle()}"></td>
+            <td th:if="${employee.getPosition() == null}"></td>
+            <td th:if="${employee.getSeparate() != null}" th:text="${employee.getSeparate().getTitle()}"></td>
+            <td th:if="${employee.getAssignment() != null}" th:text="${employee.getAssignment().getHoursPerWeek()}"></td>
+            <td th:if="${employee.getBenefitCard() != null}" th:text="${employee.getBenefitCard().getSerialNumber()}"></td>
             <td><a th:href="@{/about-employee/{employee}(employee=${employee.getId})}">About</a></td>
             <td>
                 <form method="get" th:action="@{/delete-employee/{id}(id=${employee.getId})}">
@@ -33,48 +44,47 @@
             </td>
         </tr>
         </tbody>
-
     </table>
     </div>
-    <div class = "form">
+    <div class="rightSize">
+        <div>Add new Employee</div>
+        <form th:action="@{/add-employee}" method="post">
+            <div>
+                <label for="username">Username: </label><br>
+                <input id="username" type="text" name ="username"><br>
 
-        <form class="rightSize" th:action="@{/add-employee}" method="post">
-            <div>Add new Employee</div>
-            <div>
-                <label for="firstName">First name:</label>
-                <input id="firstName" type="text" placeholder=" " name="firstName">
-            </div>
-            <div>
-                <label for="lastName">Last name:</label>
-                <input id="lastName" type="text" name="lastName" placeholder=" ">
+                <label for="password">Password: </label><br>
+                <input id="password" type="password" name ="password"><br>
             </div>
 
             <div>
-                <label for="positionSelect">Position name:</label>
-                <select name="position" id="positionSelect" required>
+                <label for="firstName">First name:</label><br>
+                <input id="firstName" type="text" placeholder=" " name="firstName"><br>
+
+
+                <label for="lastName">Last name:</label><br>
+                <input id="lastName" type="text" name="lastName" placeholder=" "><br>
+
+                <label for="positionSelect">Position name:</label><br>
+                <select name="position" id="positionSelect" required><br>
                     <option value="" disabled selected>Select position</option>
-                    <option th:each="position :${positionsList}" th:value="${position.getTitle()}" th:text ="${position.getTitle()}"></option>
+                    <option th:each="position :${positionsList}" th:value="${position.id}" th:text ="${position.getTitle()}"></option>
                 </select>
-            </div>
-
-            <div>
-                <label for="separateSelect">Seperated name:</label>
-                <select name="separatedName" id="separateSelect" required>
+                <br>
+                <label for="separateSelect">Seperated name:</label><br>
+                <select name="separate" id="separateSelect" required><br>
                     <option value="" disabled selected>Select Seperated</option>
-                    <option th:each="separate :${separatedList}" th:value="${separate.getTitle()}" th:text ="${separate.getTitle()}"></option>
+                    <option th:each="separate :${separatedList}" th:value="${separate.id}" th:text ="${separate.getTitle()}"></option>
                 </select>
-            </div>
-
-            <div>
-                <label for="assignmentSelect">Assignment:</label>
-                <select name="assignment" id="assignmentSelect" required>
+                <br>
+                <label for="assignmentSelect">Assignment:</label><br>
+                <select name="assignment" id="assignmentSelect" required><br>
                     <option value="" disabled selected>Select Assignment</option>
-                    <option th:each="assignment :${assignmentsList}" th:value="${assignment.hoursPerWeek}" th:text ="${assignment.hoursPerWeek}"></option>
+                    <option th:each="assignment :${assignmentsList}" th:value="${assignment.id}" th:text ="${assignment.hoursPerWeek}"></option>
                 </select>
-            </div>
-            <div>
-                <label for="paymentPerHour">Payment: </label><span>/hour</span>
-                <input id="paymentPerHour" type="number" name="paymentPerHour" placeholder=" ">
+                <br>
+                <label for="paymentPerHour">Payment: </label><br>
+                <input id="paymentPerHour" type="number" name="paymentPerHour" placeholder=" "><span>/hour</span><br>
             </div>
             <button type="submit">Add employee</button>
         </form>

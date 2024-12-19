@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -48,6 +49,12 @@ public class StructureController {
         return "redirect:/structure";
     }
 
+    @GetMapping("/delete-assignment/{id}")
+    public String deleteAssignment(@PathVariable("id") Long assignmentOrder){
+        assignmentService.deleteAssignment(assignmentOrder);
+        return "redirect:/structure";
+    }
+
     @GetMapping("/add-position/")
     public String getPositionForm(Model model){
         model.addAttribute("positionList", positionService.getPositions());
@@ -61,6 +68,12 @@ public class StructureController {
         return "redirect:/structure";
     }
 
+    @GetMapping("/delete-position/{id}")
+    public String deletePosition(@PathVariable("id") Long positionOrder){
+        positionService.deletePosition(positionOrder);
+        return "redirect:/structure";
+    }
+
     @GetMapping("/add-separate/")
     public String getSeparateForm(){
         return "structure";
@@ -71,6 +84,12 @@ public class StructureController {
                                      @RequestParam String description){
         Separate newSeparate = new Separate(title, description);
         separateService.createSeparate(newSeparate);
+        return "redirect:/structure";
+    }
+
+    @GetMapping("/delete-separate/{id}")
+    public String deleteSeparate(@PathVariable("id") Long separateOrder){
+        separateService.deleteSeparate(separateOrder);
         return "redirect:/structure";
     }
 

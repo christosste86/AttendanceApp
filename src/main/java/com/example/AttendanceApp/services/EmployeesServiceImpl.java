@@ -40,9 +40,8 @@ public class EmployeesServiceImpl implements EmployeesService{
     }
 
     @Override
-    public boolean isExist(String firstName, String lastname){
-        List<Employee> employees = employeesRepository.findEmployeesByFirstNameAndLastName(firstName, lastname);
-        return employees.stream().filter(e-> Objects.equals(e.getFirstName(), firstName) && Objects.equals(e.getLastName(), lastname)).toList().isEmpty();
+    public boolean isExist(String username){
+        return !employeesRepository.findEmployeesByUsername(username).isEmpty();
     }
 
     @Override

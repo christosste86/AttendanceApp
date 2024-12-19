@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class SeparateServicelmpl implements SeparateService {
+public class SeparateServiceImpl implements SeparateService {
 
     private final SeparateRepository separateRepository;
 
-    public SeparateServicelmpl(SeparateRepository separateRepository) {
+    public SeparateServiceImpl(SeparateRepository separateRepository) {
         this.separateRepository = separateRepository;
     }
 

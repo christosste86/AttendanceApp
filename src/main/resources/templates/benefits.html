@@ -28,5 +28,18 @@
         </tbody>
     </table>
 </div>
+
+<div>
+    <h2>Add new Benefit Card</h2>
+    <form th:action="@{/add-benefit-card/}">
+        <label for="serialNumber">Serial number:</label><br>
+        <input id="serialNumber" type ="text" name ="serialNumber"><br>
+
+        <label for="points">Points</label><br>
+        <input id="points" type="number" name="points"><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
 </body>
 </html>
