@@ -45,7 +45,7 @@ public class StructureController {
                                    @RequestParam int assignment){
         Assignment newAssignment = new Assignment(title, assignment);
         assignmentService.createAssignment(newAssignment);
-        return "redirect:/structure/";
+        return "redirect:/structure";
     }
 
     @GetMapping("/add-position/")
@@ -58,7 +58,7 @@ public class StructureController {
     public String createPosition(@RequestParam String title){
         Position newPosition = new Position(title);
         positionService.createPosition(newPosition);
-        return "redirect:/structure/";
+        return "redirect:/structure";
     }
 
     @GetMapping("/add-separate/")
@@ -71,7 +71,7 @@ public class StructureController {
                                      @RequestParam String description){
         Separate newSeparate = new Separate(title, description);
         separateService.createSeparate(newSeparate);
-        return "redirect:/structure/";
+        return "redirect:/structure";
     }
 
 }
