@@ -1,5 +1,6 @@
 package com.example.AttendanceApp.services;
 
+import com.example.AttendanceApp.models.Assignment;
 import com.example.AttendanceApp.models.Employee;
 import com.example.AttendanceApp.models.Position;
 import com.example.AttendanceApp.models.Separate;
@@ -64,10 +65,27 @@ public class EmployeesServiceImpl implements EmployeesService{
     }
 
     @Override
-    public void updateEmployeeById(long id) {
+    public void updateEmployeeById(long id,
+                                   String firstName,
+                                   String lastName,
+                                   Separate separate,
+                                   Position position,
+                                   Assignment assignment,
+                                   Double paymentPerHour,
+                                   String username,
+                                   String password) {
         Optional<Employee> employees = employeesRepository.findById(id);
         if (employees.isPresent()){
             Employee e = employees.get();
+            e.setFirstName(firstName);
+            e.setLastName(lastName);
+            e.setSeparate(separate);
+            e.setPosition(position);
+            e.setAssignment(assignment);
+            e.setPaymentPerHour(paymentPerHour);
+            e.setUsername(username);
+            e.setPassword(password);
+            employeesRepository.save(e);
         }
     }
 

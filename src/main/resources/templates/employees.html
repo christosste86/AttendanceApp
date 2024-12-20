@@ -42,7 +42,7 @@
             <td th:if="${employee.getBenefitCard() == null}">Not set</td>
             <td><a th:href="@{/about-employee/{employee}(employee=${employee.getId})}">About</a></td>
             <td>
-                <form method="post" th:action="@{/update-employee/{id}(id = ${employee.getId()})}">
+                <form th:action="@{/get-employee-id/{id}(id = ${employee.getId()})}">
                     <button type="submit">Update</button>
                 </form>
             </td>
@@ -56,49 +56,113 @@
     </table>
     </div>
     <div class="rightSize">
-        <div>Add new Employee</div>
-        <form th:action="@{/add-employee}" method="post">
-            <div>
-                <label for="username">Username: </label><br>
-                <input id="username" type="text" name ="username"><br>
+<!--        >Add new Employee-->
+        <div id="addEmployee">
+            <div>Add new Employee</div>
+            <form th:action="@{/add-employee}" method="post">
+                <div>
+                    <label for="username">Username: </label><br>
+                    <input id="username" type="text" name ="username"><br>
 
-                <label for="password">Password: </label><br>
-                <input id="password" type="password" name ="password"><br>
-            </div>
+                    <label for="password">Password: </label><br>
+                    <input id="password" type="password" name ="password"><br>
+                </div>
 
-            <div>
-                <label for="firstName">First name:</label><br>
-                <input id="firstName" type="text" placeholder=" " name="firstName"><br>
+                <div>
+                    <label for="firstName">First name:</label><br>
+                    <input id="firstName" type="text" placeholder=" " name="firstName"><br>
 
 
-                <label for="lastName">Last name:</label><br>
-                <input id="lastName" type="text" name="lastName" placeholder=" "><br>
+                    <label for="lastName">Last name:</label><br>
+                    <input id="lastName" type="text" name="lastName" placeholder=" "><br>
 
-                <label for="positionSelect">Position name:</label><br>
-                <select name="position" id="positionSelect" required><br>
-                    <option value="" disabled selected>Select position</option>
-                    <option th:each="position :${positionsList}" th:value="${position.id}" th:text ="${position.getTitle()}"></option>
-                </select>
-                <br>
-                <label for="separateSelect">Seperated name:</label><br>
-                <select name="separate" id="separateSelect" required><br>
-                    <option value="" disabled selected>Select Seperated</option>
-                    <option th:each="separate :${separatedList}" th:value="${separate.id}" th:text ="${separate.getTitle()}"></option>
-                </select>
-                <br>
-                <label for="assignmentSelect">Assignment:</label><br>
-                <select name="assignment" id="assignmentSelect" required><br>
-                    <option value="" disabled selected>Select Assignment</option>
-                    <option th:each="assignment :${assignmentsList}" th:value="${assignment.id}" th:text ="${assignment.hoursPerWeek}"></option>
-                </select>
-                <br>
-                <label for="paymentPerHour">Payment: </label><br>
-                <input id="paymentPerHour" type="number" name="paymentPerHour" placeholder=" "><span>/hour</span><br>
-            </div>
-            <button type="submit">Add employee</button>
-        </form>
+                    <label for="positionSelect">Position name:</label><br>
+                    <select name="position" id="positionSelect" required><br>
+                        <option value="" disabled selected>Select position</option>
+                        <option th:each="position :${positionsList}" th:value="${position.id}" th:text ="${position.getTitle()}"></option>
+                    </select>
+                    <br>
+                    <label for="separateSelect">Seperated name:</label><br>
+                    <select name="separate" id="separateSelect" required><br>
+                        <option value="" disabled selected>Select Seperated</option>
+                        <option th:each="separate :${separatedList}" th:value="${separate.id}" th:text ="${separate.getTitle()}"></option>
+                    </select>
+                    <br>
+                    <label for="assignmentSelect">Assignment:</label><br>
+                    <select name="assignment" id="assignmentSelect" required><br>
+                        <option value="" disabled selected>Select Assignment</option>
+                        <option th:each="assignment :${assignmentsList}" th:value="${assignment.id}" th:text ="${assignment.hoursPerWeek}"></option>
+                    </select>
+                    <br>
+                    <label for="paymentPerHour">Payment: </label><br>
+                    <input id="paymentPerHour" type="number" name="paymentPerHour" placeholder=" "><span>/hour</span><br>
+                </div>
+                <button type="submit">Add employee</button>
+            </form>
+        </div>
+
+        <!--        >update new Employee-->
+        <div id="updateEmployee">
+            <div>Update Employee</div>
+            <form th:action="@{/update-employee/{id}}" method="post">
+                <div>
+                    <label for="update-username">Username: </label><br>
+                    <input id="update-username" type="text" name ="username" th:value="${username}"><br>
+
+                    <label for="update-password">Password: </label><br>
+                    <input id="update-password" type="password" name ="password"><br>
+                </div>
+
+                <div>
+                    <label for="update-firstName">First name:</label><br>
+                    <input id="update-firstName" type="text" placeholder=" " name="firstName" th:value="${firstName}"><br>
+
+
+                    <label for="update-lastName">Last name:</label><br>
+                    <input id="update-lastName" type="text" name="lastName" th:value="${lastName}"><br>
+
+                    <label for="update-positionSelect">Position name:</label><br>
+                    <select name="position" id="update-positionSelect" required><br>
+                        <option th:value="${position}">Select position</option>
+                        <option th:each="position :${positionsList}" th:value="${position.id}" th:text ="${position.getTitle()}"></option>
+                    </select>
+                    <br>
+                    <label for="update-separateSelect">Seperated name:</label><br>
+                    <select name="separate" id="update-separateSelect" required><br>
+                        <option th:value="${separate}">Select Seperated</option>
+                        <option th:each="separate :${separatedList}" th:value="${separate.id}" th:text ="${separate.getTitle()}"></option>
+                    </select>
+                    <br>
+                    <label for="update-assignmentSelect">Assignment:</label><br>
+                    <select name="assignment" id="update-assignmentSelect" required><br>
+                        <option th:value="${assignment}" disabled selected>Select Assignment</option>
+                        <option th:each="assignment :${assignmentsList}" th:value="${assignment.id}" th:text ="${assignment.hoursPerWeek}"></option>
+                    </select>
+                    <br>
+                    <label for="update-paymentPerHour">Payment: </label><br>
+                    <input id="update-paymentPerHour" type="number" name="paymentPerHour" placeholder=" "><span>/hour</span><br>
+                </div>
+                <button type="submit">Update employee</button>
+            </form>
+        </div>
     </div>
 </main>
-
+<script>
+    function openUpdateEmployee() {
+        var updateElement = document.getElementById("updateEmployee");
+        var addElement = document.getElementById("addEmployee");
+        if (updateElement.classList.contains("hide")) {
+            updateElement.classList.remove("hide");
+            addElement.classList.remove("openEmployee");
+            addElement.classList.add("hide");
+            updateElement.classList.add("openEmployee");
+        }
+    }
+    function hide() {
+        var updateElement = document.getElementById("updateEmployee");
+        var addElement = document.getElementById("addEmployee");
+        element.classList.toggle("hide");
+    }
+</script>
 </body>
 </html>

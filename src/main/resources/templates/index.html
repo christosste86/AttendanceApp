@@ -80,7 +80,9 @@
                             </form>
 
                         </td>
-                        <td th:if="${eSchedule.getShiftStart() != null}" th:text ="${eSchedule.getDailySchedule()}" class="emptyDay"></td>
+                        <td th:if="${eSchedule.getShiftStart() != null}"
+                            th:text ="${eSchedule.getDailySchedule()}"
+                            th:class="${eSchedule.getShiftEnd().getHour() > 16}?'afternoon':'morning'"></td>
                     </div>
                     <div th:each="hours : ${monthlyEmployeesTotalHours}"
                          th:if="${hours.getKey() == employeeSchedule.getKey()}">
@@ -95,26 +97,55 @@
 
     <!--                            add Schedule-->
     <div id="addSchedule" class="openAddSchedule">
-        <button onclick="closeAddSchedule()">X</button>
-        <h3>Add Schedule</h3>
+        <button class="closeButton" onclick="closeAddSchedule()">X</button>
+        <div class = "addScheduleTitle">Add Schedule</div>
         <form th:action="@{/add-schedule}" method="post">
-            <h2 th:if="${selectedEmployee != null}" th:text ="${selectedEmployee.getFullName()}"></h2>
-            <h2 th:if="${selectedDay != null}" th:text = "${selectedMonth.withDayOfMonth(selectedDay)}"></h2>
-            <div>
-                <label for="shiftStartHours">Hours:</label>
-                <input id="shiftStartHours" type="number" name="shiftStartHour" value="00">
-                <label for="shiftStartMinutes">Minutes:</label>
-                <input id="shiftStartMinutes" type="number" name="shiftStartMinutes" value="00">
+            <div class="addScheduleTextContent">
+                <div class = "addScheduleEmployee" th:if="${selectedEmployee != null}" th:text ="${selectedEmployee.getFullName()}">Firstname Lastname</div>
+                <div class="addScheduleDate" th:if="${selectedDay != null}" th:text = "${selectedMonth.withDayOfMonth(selectedDay)}">2024-12-26</div>
             </div>
             <div>
-                <label for="shiftEndHour">Hours:</label>
-                <input id="shiftEndHour" type="number" name="shiftEndHour" value="00">
-                <label for="shiftEndMinutes">Minutes:</label>
-                <input id="shiftEndMinutes" type="number" name="shiftEndMinutes" value="00">
+                <div>Start Shift</div>
+                <div class="time">
+                    <label for="shiftStartHours"></label>
+                    <input class="timeHours"
+                           id="shiftStartHours"
+                           type="number"
+                           name="shiftStartHour"
+                           value="00"
+                           min="0" max="23" step="1">
+                    <label for="shiftStartMinutes">:</label>
+                    <input class="timeMinutes"
+                           id="shiftStartMinutes"
+                           type="number"
+                           name="shiftStartMinutes"
+                           value="00"
+                           min="0" max="59" step="1">
+                </div>
+                <div>End Shift</div>
+                <div class="time">
+                    <label for="shiftEndHour"></label>
+                    <input class="timeHours"
+                           id="shiftEndHour"
+                           type="number"
+                           name="shiftEndHour"
+                           value="00"
+                           min="0" max="23" step="1">
+                    <label for="shiftEndMinutes">:</label>
+                    <input class="timeMinutes"
+                           id="shiftEndMinutes"
+                           type="number"
+                           name="shiftEndMinutes"
+                           value="00"
+                           min="0" max="59" step="1">
+                </div>
             </div>
             <div>
                 <label for="isPresent">Present</label>
-                <input id="isPresent" type="checkbox" name="isPresent">
+                <input id="isPresent"
+                       type="checkbox"
+                       name="isPresent"
+                       th:value="true">
             </div>
             <button type="submit">Add Schedule</button>
         </form>
@@ -124,14 +155,14 @@
 <script>
     function openAddSchedule() {
         var element = document.getElementById("addSchedule");
-        if (element.classList.contains("closeAddSchedule")) {
-            element.classList.remove("closeAddSchedule");
+        if (element.classList.contains("hide")) {
+            element.classList.remove("hide");
             element.classList.add("openAddSchedule");
         }
     }
-    function closeAddSchedule() {
+    function hide() {
         var element = document.getElementById("addSchedule");
-        element.classList.toggle("closeAddSchedule");
+        element.classList.toggle("hide");
     }
 
     // Get the current date

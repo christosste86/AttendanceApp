@@ -28,10 +28,14 @@ public class EmployeesController {
     private final PositionService positionService;
     private final AssignmentService assignmentService;
     private List<Employee> employeesList = new ArrayList<>();
+    private long employeeId;
     private String firstName;
     private String lastName;
     private Separate separate;
     private Position position;
+    Assignment assignment;
+    Double paymentPerHour;
+    String username;
 
     @Autowired
     public EmployeesController(EmployeesService employeesService, SeparateService separateService, PositionService positionService, AssignmentService assignmentService) {
@@ -51,6 +55,13 @@ public class EmployeesController {
         model.addAttribute("positionsList", positionService.getPositions());
         model.addAttribute("assignmentsList", assignmentService.getAssignments());
         model.addAttribute("employees", employeesService.getEmployeesList());
+        model.addAttribute("firstName" , this.firstName);
+        model.addAttribute("lastName" , this.lastName);
+        model.addAttribute("separate" , this.separate);
+        model.addAttribute("position" , this.position);
+        model.addAttribute("assignment" , this.assignment);
+        model.addAttribute("paymentPerHour" , this.paymentPerHour);
+        model.addAttribute("username" , this.username);
         return "employees";
     }
 
@@ -105,15 +116,46 @@ public class EmployeesController {
         return "redirect:/employees";
     }
 
+    @GetMapping("/get-employee-id/{id}")
+    public String getEmployeeId(@PathVariable("id") Long employeeOrder){
+        this.employeeId = employeeOrder;
+        Employee employee = employeesService.getEmployeeById(employeeOrder);
+        this.firstName = employee.getFirstName();
+        this.lastName = employee.getLastName();
+        this.separate = employee.getSeparate();
+        this.position = employee.getPosition();
+        this.assignment = employee.getAssignment();
+        this.paymentPerHour = employee.getPaymentPerHour();
+        this.username = employee.getUsername();
+        return "redirect:/employees";
+    }
+
     @GetMapping("/delete-employee/{id}")
     public String deleteEmployee(@PathVariable("id") Long employeeOrder){
         employeesService.deleteById(employeeOrder);
         return "redirect:/employees";
     }
 
-    @GetMapping("/update-employee/{id}")
-    public String updateEmployee(@PathVariable("id") Long employeeOrder){
-        employeesService.updateEmployeeById(employeeOrder);
+    @PostMapping("/update-employee/")
+    public String updateEmployee(
+                                 @RequestParam String firstName,
+                                 @RequestParam String lastName,
+                                 @RequestParam Separate separate,
+                                 @RequestParam Position position,
+                                 @RequestParam Assignment assignment,
+                                 @RequestParam Double paymentPerHour,
+                                 @RequestParam String username,
+                                 @RequestParam String password){
+        employeesService.updateEmployeeById(
+                this.employeeId,
+                firstName,
+                lastName,
+                separate,
+                position,
+                assignment,
+                paymentPerHour,
+                username,
+                password);
         return "redirect:/employees";
     }
 }
