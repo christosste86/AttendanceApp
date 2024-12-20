@@ -10,10 +10,11 @@ import java.util.List;
 public interface EmployeesService {
     boolean isExist(String username);
 
-    List<Employee> getEmployeesList(String firstName,
-                                                   String lastName,
-                                                   Separate separate,
-                                                   Position position);
+    List<Employee> getEmployeesList();
+
+    List<Employee> getFilteredEmployeesList(String firstName, String lastName, Separate separate, Position position);
+
+    Employee getEmployeeByUsername(String username);
 
     Employee getEmployeeById(long id);
 
@@ -24,6 +25,4 @@ public interface EmployeesService {
     void deleteById(Long id);
 
     void updateEmployeeById(long id);
-
-    List<Employee> filteredEmployees(String firstName, String lastName, Separate separate, Position position);
 }

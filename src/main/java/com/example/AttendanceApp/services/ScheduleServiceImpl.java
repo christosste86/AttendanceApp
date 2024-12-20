@@ -44,7 +44,6 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Override
     public void saveSchedule(Schedule schedule) {
         scheduleRepository.save(schedule);
-        System.out.println("Schedule saved: " + schedule);
     }
 
     @Override

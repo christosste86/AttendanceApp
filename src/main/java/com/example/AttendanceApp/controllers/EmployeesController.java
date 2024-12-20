@@ -50,7 +50,7 @@ public class EmployeesController {
         model.addAttribute("separatedList", separateService.getSeparates());
         model.addAttribute("positionsList", positionService.getPositions());
         model.addAttribute("assignmentsList", assignmentService.getAssignments());
-        model.addAttribute("employees", employeesService.getEmployeesList(firstName, lastName, separate, position));
+        model.addAttribute("employees", employeesService.getEmployeesList());
         return "employees";
     }
 
@@ -94,7 +94,7 @@ public class EmployeesController {
         this.lastName = lastName;
         this.separate = separate;
         this.position = position;
-        this.employeesList = employeesService.filteredEmployees(this.firstName, this.lastName, this.separate, this.position);
+        this.employeesList = employeesService.getFilteredEmployeesList(this.firstName, this.lastName, this.separate, this.position);
         model.addAttribute("filteredEmployees", this.employeesList);
         return "redirect:/";
     }
@@ -108,6 +108,12 @@ public class EmployeesController {
     @GetMapping("/delete-employee/{id}")
     public String deleteEmployee(@PathVariable("id") Long employeeOrder){
         employeesService.deleteById(employeeOrder);
+        return "redirect:/employees";
+    }
+
+    @GetMapping("/update-employee/{id}")
+    public String updateEmployee(@PathVariable("id") Long employeeOrder){
+        employeesService.updateEmployeeById(employeeOrder);
         return "redirect:/employees";
     }
 }

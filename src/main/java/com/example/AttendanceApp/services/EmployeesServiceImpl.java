@@ -21,15 +21,16 @@ public class EmployeesServiceImpl implements EmployeesService{
 
 
     @Override
-    public List<Employee> getEmployeesList(String firstName,
-                                           String lastName,
-                                           Separate separate,
-                                           Position position) {
-        List<Employee> filteredList = employeesRepository.filterEmployees(firstName, lastName, separate, position);
-        if(filteredList.isEmpty()){
+    public List<Employee> getEmployeesList() {
             return employeesRepository.findAll();
+    }
+
+    @Override
+    public Employee getEmployeeByUsername(String username) {
+        if(employeesRepository.findEmployeesByUsername(username).isEmpty()){
+            return null;
         }
-        return filteredList;
+        return employeesRepository.findEmployeesByUsername(username).getFirst();
     }
 
     @Override
@@ -71,7 +72,7 @@ public class EmployeesServiceImpl implements EmployeesService{
     }
 
     @Override
-    public List<Employee> filteredEmployees(String firstName, String lastName, Separate separate, Position position){
+    public List<Employee> getFilteredEmployeesList(String firstName, String lastName, Separate separate, Position position){
         if(employeesRepository.filterEmployees(firstName, lastName, separate, position).isEmpty()){
             return employeesRepository.findAll();
         }else{

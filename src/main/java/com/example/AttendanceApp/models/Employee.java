@@ -124,11 +124,4 @@ public class Employee extends BaseEntity{
         return String.format("%s %s", this.firstName, this.lastName);
     }
 
-    @Override
-    public String toString() {
-        return "Employees{" +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
-    }
 }

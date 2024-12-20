@@ -23,6 +23,7 @@
             <th>Assignment</th>
             <th>BenefitCard S/N</th>
             <th>About</th>
+            <th>Update</th>
             <th>Delete</th>
         </tr>
         </thead>
@@ -32,11 +33,19 @@
             <td th:text="${employee.getFirstName()}"></td>
             <td th:text="${employee.getLastName()}"></td>
             <td th:if="${employee.getPosition() != null}" th:text="${employee.getPosition().getTitle()}"></td>
-            <td th:if="${employee.getPosition() == null}"></td>
+            <td th:if="${employee.getPosition() == null}">Not set</td>
             <td th:if="${employee.getSeparate() != null}" th:text="${employee.getSeparate().getTitle()}"></td>
+            <td th:if="${employee.getSeparate() == null}" >Not set</td>
             <td th:if="${employee.getAssignment() != null}" th:text="${employee.getAssignment().getHoursPerWeek()}"></td>
+            <td th:if="${employee.getAssignment() == null}">Not set</td>
             <td th:if="${employee.getBenefitCard() != null}" th:text="${employee.getBenefitCard().getSerialNumber()}"></td>
+            <td th:if="${employee.getBenefitCard() == null}">Not set</td>
             <td><a th:href="@{/about-employee/{employee}(employee=${employee.getId})}">About</a></td>
+            <td>
+                <form method="post" th:action="@{/update-employee/{id}(id = ${employee.getId()})}">
+                    <button type="submit">Update</button>
+                </form>
+            </td>
             <td>
                 <form method="get" th:action="@{/delete-employee/{id}(id=${employee.getId})}">
                     <button type = "submit">Remove</button>

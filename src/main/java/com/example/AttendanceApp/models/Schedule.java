@@ -20,8 +20,7 @@ public class Schedule extends BaseEntity{
     public Schedule() {
     }
 
-    public Schedule(Employee employee, LocalDateTime start, LocalDateTime end, Double workedHours, boolean isPresent) {
-        this.employee = employee;
+    public Schedule(LocalDateTime start, LocalDateTime end, Double workedHours, boolean isPresent) {
         this.shiftStart = start;
         this.shiftEnd = end;
         this.workedHours = workedHours;
