@@ -104,13 +104,13 @@
         <!--        >update new Employee-->
         <div id="updateEmployee">
             <div>Update Employee</div>
-            <form th:action="@{/update-employee/{id}}" method="post">
+            <form th:action="@{/update-employee}" method="post">
                 <div>
                     <label for="update-username">Username: </label><br>
                     <input id="update-username" type="text" name ="username" th:value="${username}"><br>
 
                     <label for="update-password">Password: </label><br>
-                    <input id="update-password" type="password" name ="password"><br>
+                    <input id="update-password" type="password" name ="password" th:value="${password}"><br>
                 </div>
 
                 <div>
@@ -123,24 +123,33 @@
 
                     <label for="update-positionSelect">Position name:</label><br>
                     <select name="position" id="update-positionSelect" required><br>
-                        <option th:value="${position}">Select position</option>
+                        <option th:if="${employeeId != null}"
+                                th:value="${position.id}"
+                                th:text ="${position.getTitle()}">
+                        </option>
                         <option th:each="position :${positionsList}" th:value="${position.id}" th:text ="${position.getTitle()}"></option>
                     </select>
                     <br>
                     <label for="update-separateSelect">Seperated name:</label><br>
                     <select name="separate" id="update-separateSelect" required><br>
-                        <option th:value="${separate}">Select Seperated</option>
+                        <option th:if="${employeeId != null}"
+                                th:value="${separate.id}"
+                                th:text="${separate.title}">
+                        </option>
                         <option th:each="separate :${separatedList}" th:value="${separate.id}" th:text ="${separate.getTitle()}"></option>
                     </select>
                     <br>
                     <label for="update-assignmentSelect">Assignment:</label><br>
                     <select name="assignment" id="update-assignmentSelect" required><br>
-                        <option th:value="${assignment}" disabled selected>Select Assignment</option>
+                        <option th:if="${employeeId != null}"
+                                th:value="${assignment.id}"
+                                th:text="${assignment.hoursPerWeek}">
+                        </option>
                         <option th:each="assignment :${assignmentsList}" th:value="${assignment.id}" th:text ="${assignment.hoursPerWeek}"></option>
                     </select>
                     <br>
                     <label for="update-paymentPerHour">Payment: </label><br>
-                    <input id="update-paymentPerHour" type="number" name="paymentPerHour" placeholder=" "><span>/hour</span><br>
+                    <input id="update-paymentPerHour" type="number" name="paymentPerHour" th:value="${paymentPerHour}"><span>/hour</span><br>
                 </div>
                 <button type="submit">Update employee</button>
             </form>

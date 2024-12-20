@@ -28,7 +28,7 @@ public class EmployeesController {
     private final PositionService positionService;
     private final AssignmentService assignmentService;
     private List<Employee> employeesList = new ArrayList<>();
-    private long employeeId;
+    private Long employeeId;
     private String firstName;
     private String lastName;
     private Separate separate;
@@ -36,6 +36,7 @@ public class EmployeesController {
     Assignment assignment;
     Double paymentPerHour;
     String username;
+    String password;
 
     @Autowired
     public EmployeesController(EmployeesService employeesService, SeparateService separateService, PositionService positionService, AssignmentService assignmentService) {
@@ -55,6 +56,7 @@ public class EmployeesController {
         model.addAttribute("positionsList", positionService.getPositions());
         model.addAttribute("assignmentsList", assignmentService.getAssignments());
         model.addAttribute("employees", employeesService.getEmployeesList());
+        model.addAttribute("employeeId", this.employeeId);
         model.addAttribute("firstName" , this.firstName);
         model.addAttribute("lastName" , this.lastName);
         model.addAttribute("separate" , this.separate);
@@ -62,6 +64,7 @@ public class EmployeesController {
         model.addAttribute("assignment" , this.assignment);
         model.addAttribute("paymentPerHour" , this.paymentPerHour);
         model.addAttribute("username" , this.username);
+        model.addAttribute("password" , this.password);
         return "employees";
     }
 
@@ -127,6 +130,7 @@ public class EmployeesController {
         this.assignment = employee.getAssignment();
         this.paymentPerHour = employee.getPaymentPerHour();
         this.username = employee.getUsername();
+        this.password = employee.getPassword();
         return "redirect:/employees";
     }
 
@@ -136,7 +140,7 @@ public class EmployeesController {
         return "redirect:/employees";
     }
 
-    @PostMapping("/update-employee/")
+    @PostMapping("/update-employee")
     public String updateEmployee(
                                  @RequestParam String firstName,
                                  @RequestParam String lastName,
