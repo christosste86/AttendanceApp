@@ -27,10 +27,11 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
-    public void updatePosition(long id) {
+    public void updatePosition(long id, String title) {
         Optional<Position> position = positionRepository.findById(id);
         if (position.isPresent()) {
             Position p = position.get();
+            p.setTitle(title);
         }
     }
 

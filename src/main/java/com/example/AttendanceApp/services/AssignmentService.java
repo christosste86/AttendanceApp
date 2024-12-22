@@ -13,7 +13,7 @@ public interface AssignmentService {
 
     void updateAssignmentTitle(long id, String title);
 
-    void updateAssignmentHours(long id, int hoursPerWeek);
+    void updateAssignment(long id, String title, int hoursPerWeek);
 
     void deleteAssignment(long id);
 

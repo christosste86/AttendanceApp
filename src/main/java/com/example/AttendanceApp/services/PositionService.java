@@ -10,7 +10,7 @@ public interface PositionService {
 
     void createPosition(Position position);
 
-    void updatePosition(long id);
+    void updatePosition(long id, String title);
 
     void deletePosition(long id);
 }

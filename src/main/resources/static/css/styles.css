@@ -59,6 +59,43 @@ li a:hover:not(.active) {
     float: left;
   }
 
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: hsl(20, 50%, 70%);
+}
+
+.structure {
+  display: grid;
+}
+
+.structureBox{
+  width:590px;
+  padding: 10px;
+  border: 1px solid black;
+  margin:10px;
+  display: grid;
+}
+
+.structureTitle{
+  float:left;
+}
+
+.structureOptions{
+  display:flex;
+}
+
+.optionTable{
+  float:left;
+  padding-right:10px;
+  padding-left: 10px;
+
+}
+
+.optionForum{
+  float:right;
+}
 
 
   .schedule .dayHeader{

@@ -93,4 +93,22 @@ public class StructureController {
         return "redirect:/structure";
     }
 
+    @PostMapping("/update-assignment/{id}")
+    public String updateAssignment(@PathVariable("id") Long assignmentOrder,
+                                   @RequestParam("assignmentTitle") String assignmentTitle,
+                                   @RequestParam("assignment") int assignment
+    ){
+        assignmentService.updateAssignment(assignmentOrder, assignmentTitle, assignment);
+        return "redirect:/structure";
+    }
+
+    @PostMapping("/update-position/{id}")
+    public String updatePosition(@PathVariable("id") Long positionOrder){
+        return "redirect:/structure";
+    }
+
+    @PostMapping("/update-separate/{id}")
+    public String updateSeparate(@PathVariable("id") Long separateOrder){
+        return "redirect:/structure";
+    }
 }
