@@ -48,6 +48,7 @@ public class BenefitCardServiceImpl implements BenefitCardService {
         if (benefitCard.isPresent()){
             BenefitCard b = benefitCard.get();
             b.setSerialNumber(SerialNumber);
+            benefitCardRepository.save(b);
         }
     }
 
@@ -55,7 +56,7 @@ public class BenefitCardServiceImpl implements BenefitCardService {
     public void deleteBenefitCard(long id) {
         Optional<BenefitCard> benefitCard = benefitCardRepository.findById(id);
         if (benefitCard.isPresent()){
-            benefitCardRepository.delete(benefitCard.get());
+            benefitCardRepository.deleteById(id);
         }
     }
 }

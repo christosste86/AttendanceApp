@@ -39,6 +39,7 @@ public class PositionServiceImpl implements PositionService {
         if (position.isPresent()) {
             Position p = position.get();
             p.setTitle(title);
+            positionRepository.save(p);
         }
     }
 
@@ -46,7 +47,7 @@ public class PositionServiceImpl implements PositionService {
     public void deletePosition(long id) {
         Optional<Position> position = positionRepository.findById(id);
         if (position.isPresent()) {
-            positionRepository.delete(position.get());
+            positionRepository.deleteById(id);
         }
     }
 

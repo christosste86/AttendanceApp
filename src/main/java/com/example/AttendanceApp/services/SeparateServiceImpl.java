@@ -40,6 +40,7 @@ public class SeparateServiceImpl implements SeparateService {
             Separate s = separate.get();
             s.setTitle(title);
             s.setDescription(description);
+            separateRepository.save(s);
         }
     }
 
@@ -47,7 +48,7 @@ public class SeparateServiceImpl implements SeparateService {
     public void deleteSeparate(long id) {
         Optional<Separate> separate = separateRepository.findById(id);
         if (separate.isPresent()) {
-            separateRepository.delete(separate.get());
+            separateRepository.deleteById(id);
         }
     }
 }

@@ -49,6 +49,7 @@ public class AssignmentServiceImpl implements AssignmentService {
             Assignment a = assignment.get();
             a.setHoursPerWeek(hoursPerWeek);
             a.setAssignmentTitle(title);
+            assignmentRepository.save(a);
         }
     }
 
@@ -56,7 +57,7 @@ public class AssignmentServiceImpl implements AssignmentService {
     public void deleteAssignment(long id) {
         Optional<Assignment> assignment = assignmentRepository.findById(id);
         if(assignment.isPresent()) {
-            assignmentRepository.delete(assignment.get());
+            assignmentRepository.deleteById(id);
         }
 
     }
