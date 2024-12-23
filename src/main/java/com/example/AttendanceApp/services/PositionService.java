@@ -8,6 +8,8 @@ import java.util.List;
 public interface PositionService {
     List<Position> getPositions();
 
+    Position getPositionById(long id);
+
     void createPosition(Position position);
 
     void updatePosition(long id, String title);

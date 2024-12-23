@@ -8,9 +8,11 @@ public interface SeparateService {
 
     List<Separate> getSeparates();
 
+    Separate getSeparateById(long id);
+
     void createSeparate(Separate separate);
 
-    void updateSeparateTitle(long id, String title);
+    void updateSeparateTitle(long id, String title, String description);
 
     void deleteSeparate(long id);
 

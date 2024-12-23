@@ -9,6 +9,8 @@ public interface AssignmentService {
 
     List<Assignment> getAssignments();
 
+    Assignment getAssignmentById(long id);
+
     void createAssignment(Assignment assignment);
 
     void updateAssignmentTitle(long id, String title);

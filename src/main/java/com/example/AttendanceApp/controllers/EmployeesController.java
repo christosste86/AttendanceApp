@@ -27,6 +27,7 @@ public class EmployeesController {
     private final SeparateService separateService;
     private final PositionService positionService;
     private final AssignmentService assignmentService;
+    private boolean isUpdate = false;
     private List<Employee> employeesList = new ArrayList<>();
     private Long employeeId;
     private String firstName;
@@ -65,6 +66,7 @@ public class EmployeesController {
         model.addAttribute("paymentPerHour" , this.paymentPerHour);
         model.addAttribute("username" , this.username);
         model.addAttribute("password" , this.password);
+        model.addAttribute("isUpdate" , this.isUpdate);
         return "employees";
     }
 
@@ -76,7 +78,7 @@ public class EmployeesController {
         return "employees";
     }
 
-    @PostMapping("/add-employee")
+    @PostMapping("/add-update-employee")
     public String createEmployee(@RequestParam String firstName,
                                  @RequestParam String lastName,
                                  @RequestParam Separate separate,
@@ -85,13 +87,25 @@ public class EmployeesController {
                                  @RequestParam Double paymentPerHour,
                                  @RequestParam String username,
                                  @RequestParam String password){
-        System.out.println("Received Data: First Name = " + firstName + ", Last Name = " + lastName);
-        Employee employee = new Employee(firstName, lastName, username, password, paymentPerHour);
-        employee.setPosition(position);
-        employee.setAssignment(assignment);
-        employee.setSeparate(separate);
-        if(!employeesService.isExist(username)){
-            employeesService.saveEmployee(employee);
+        if(!isUpdate){
+            Employee employee = new Employee(firstName, lastName, username, password, paymentPerHour);
+            employee.setPosition(position);
+            employee.setAssignment(assignment);
+            employee.setSeparate(separate);
+            if(!employeesService.isExist(username)){
+                employeesService.saveEmployee(employee);
+            }
+        }else{
+            employeesService.updateEmployeeById(
+                    this.employeeId,
+                    firstName,
+                    lastName,
+                    separate,
+                    position,
+                    assignment,
+                    paymentPerHour,
+                    username,
+                    password);
         }
         return "redirect:/employees";
     }
@@ -119,7 +133,7 @@ public class EmployeesController {
         return "redirect:/employees";
     }
 
-    @GetMapping("/get-employee-id/{id}")
+    @GetMapping("/get-employee-id-set-isUpdate-as-true/{id}")
     public String getEmployeeId(@PathVariable("id") Long employeeOrder){
         this.employeeId = employeeOrder;
         Employee employee = employeesService.getEmployeeById(employeeOrder);
@@ -131,35 +145,19 @@ public class EmployeesController {
         this.paymentPerHour = employee.getPaymentPerHour();
         this.username = employee.getUsername();
         this.password = employee.getPassword();
+        this.isUpdate = true;
+        return "redirect:/employees";
+    }
+
+    @GetMapping("/set-isUpdate-as-False")
+    public String setIsUpdateAsFalse(){
+        this.isUpdate = false;
         return "redirect:/employees";
     }
 
     @GetMapping("/delete-employee/{id}")
     public String deleteEmployee(@PathVariable("id") Long employeeOrder){
         employeesService.deleteById(employeeOrder);
-        return "redirect:/employees";
-    }
-
-    @PostMapping("/update-employee")
-    public String updateEmployee(
-                                 @RequestParam String firstName,
-                                 @RequestParam String lastName,
-                                 @RequestParam Separate separate,
-                                 @RequestParam Position position,
-                                 @RequestParam Assignment assignment,
-                                 @RequestParam Double paymentPerHour,
-                                 @RequestParam String username,
-                                 @RequestParam String password){
-        employeesService.updateEmployeeById(
-                this.employeeId,
-                firstName,
-                lastName,
-                separate,
-                position,
-                assignment,
-                paymentPerHour,
-                username,
-                password);
         return "redirect:/employees";
     }
 }

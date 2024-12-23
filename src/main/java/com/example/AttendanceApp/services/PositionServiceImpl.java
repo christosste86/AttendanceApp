@@ -22,6 +22,13 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
+    public Position getPositionById(long id) {
+        return positionRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException(String.format("Position with id (%s) not found.", id))
+        );
+    }
+
+    @Override
     public void createPosition(Position position) {
         positionRepository.save(position);
     }

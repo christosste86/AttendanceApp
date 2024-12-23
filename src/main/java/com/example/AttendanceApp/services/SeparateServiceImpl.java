@@ -22,16 +22,24 @@ public class SeparateServiceImpl implements SeparateService {
     }
 
     @Override
+    public Separate getSeparateById(long id) {
+        return separateRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException(String.format("Separate with id (%s) not found.", id))
+        );
+    }
+
+    @Override
     public void createSeparate(Separate separate) {
         separateRepository.save(separate);
     }
 
     @Override
-    public void updateSeparateTitle(long id, String title) {
+    public void updateSeparateTitle(long id, String title, String description) {
         Optional<Separate> separate = separateRepository.findById(id);
         if (separate.isPresent()) {
             Separate s = separate.get();
             s.setTitle(title);
+            s.setDescription(description);
         }
     }
 

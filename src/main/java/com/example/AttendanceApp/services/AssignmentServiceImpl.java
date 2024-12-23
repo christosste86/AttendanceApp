@@ -22,6 +22,13 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
+    public Assignment getAssignmentById(long id) {
+        return assignmentRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException(String.format("Assignment with id (%s) not found.", id))
+        );
+    }
+
+    @Override
     public void createAssignment(Assignment assignment) {
         assignmentRepository.save(assignment);
     }

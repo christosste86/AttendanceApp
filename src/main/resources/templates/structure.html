@@ -31,7 +31,7 @@
                             <td th:text="${assignment.getAssignmentTitle()}">Title</td>
                             <td th:text="${assignment.getHoursPerWeek()}">Assignment</td>
                             <td>
-                                <form th:action="@{/update-assignment/{id} (id = ${assignment.getId()})}">
+                                <form th:action="@{/get-assignment-id/{id} (id = ${assignment.getId()})}">
                                     <button type = "submit">Update</button>
                                 </form>
                             </td>
@@ -45,16 +45,27 @@
                 </table>
 
                 <div class ="optionForum">
-                    <form th:action="@{/add-assignment/}" method="post">
+                    <form th:action="@{/add-update-assignment}" method="post">
                         <div>
                             <label for="assignment_title">Title: </label>
-                            <input type ="text" id="assignment_title" name="title">
+                            <input type ="text" id="assignment_title" name="assignmentTitle"
+                                   th:value ="${isAssignmentUpdate}? ${assignment.getAssignmentTitle()} : ''">
                         </div>
                         <div>
                             <label for="assignmentHours">Assignment: </label>
-                            <input type = "number" id="assignmentHours" name="assignment">
+                            <input type = "number" id="assignmentHours" name="assignment"
+                                   th:value ="${isAssignmentUpdate}? ${assignment.getHoursPerWeek()} : ''">
                         </div>
-                        <button type="submit">Add assignment</button>
+                        <button type="submit"
+                                th:text="${isAssignmentUpdate}? 'Update Assignment' : 'Add Assignment'">Add Update assignment
+                        </button>
+                        <div th:if="${isAssignmentUpdate}">
+                            <form th:action="@{/is-assignment-update-false}">
+                                <button type ="submit">
+                                    Add
+                                </button>
+                            </form>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -72,10 +83,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="position : ${positionList}" th:object="${position}">
+                        <tr th:each="position : ${positionList}"
+                            th:object="${position}">
                             <td th:text="${position.getTitle()}">Title</td>
                             <td>
-                                <form th:action="@{/update-position/{id} (id =${position.getId()})}">
+                                <form th:action="@{/get-position-id/{id} (id =${position.id})}">
                                     <button type="submit">Update</button>
                                 </form>
                             </td>
@@ -89,12 +101,22 @@
                 </table>
 
                 <div class ="optionForum">
-                    <form th:action="@{/add-position/}" method="post">
+                    <form th:action="@{/add-update-position}" method="post">
                         <div>
                             <label for="position_title">Title: </label>
-                            <input type ="text" id="position_title" name="title">
+                            <input type ="text" id="position_title" name="title"
+                                   th:value ="${isPositionUpdate}? ${position.getTitle()} : ''">
                         </div>
-                        <button type="submit">Add position</button>
+                        <button type="submit"
+                                th:text="${isPositionUpdate}? 'Update Position' : 'Add Position'">Add Update position
+                        </button>
+                        <div th:if="${isPositionUpdate}">
+                            <form th:action ="@{/is-position-update-false}">
+                                <button type ="submit">
+                                    Add
+                                </button>
+                            </form>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -117,7 +139,7 @@
                             <td th:text="${separate.getTitle()}">Title</td>
                             <td th:text="${separate.getDescription()}">Description</td>
                             <td>
-                                <form th:action="@{/update-separate/{id}(id=${separate.getId()})}">
+                                <form th:action="@{/get-separate-id/{id}(id = ${separate.getId()})}">
                                     <button type="submit">Update</button>
                                 </form>
                             </td>
@@ -131,16 +153,27 @@
                 </table>
 
                 <div class ="optionForum">
-                    <form th:action="@{/add-separate/}" method="post">
+                    <form th:action="@{/add-update-separate}" method="post">
                         <div>
                             <label for="separate_title">Title: </label>
-                            <input type ="text" id="separate_title" name="title">
+                            <input type ="text" id="separate_title" name="title"
+                                   th:value ="${isSeparateUpdate}? ${separate.getTitle()} : ''">
                         </div>
                         <div>
-                            <label for="separate_description">Assignment: </label>
-                            <input type = "text" id="separate_description" name="description">
+                            <label for="separate_description">Description: </label>
+                            <input type = "text" id="separate_description" name="description"
+                                   th:value ="${isSeparateUpdate}? ${separate.getDescription()} : ''">
                         </div>
-                        <button type="submit">Add separate</button>
+                        <button type="submit"
+                                th:text="${isSeparateUpdate}? 'Update Separate' : 'Add Separate'">Add Update Separate
+                        </button>
+                        <div th:if="${isSeparateUpdate}">
+                            <form th:action="@{/is-separate-update-false}">
+                                <button type ="submit">
+                                    Add
+                                </button>
+                            </form>
+                        </div>
                     </form>
                 </div>
             </div>
