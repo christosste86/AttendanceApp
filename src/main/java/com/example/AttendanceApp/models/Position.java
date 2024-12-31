@@ -11,6 +11,8 @@ public class Position extends BaseEntity{
 
     private String title;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToMany(mappedBy = "position")
     private List<Employee> employees = new ArrayList<>();
@@ -18,8 +20,9 @@ public class Position extends BaseEntity{
     public Position() {
     }
 
-    public Position(String title) {
+    public Position(String title, Role role) {
         this.title = title;
+        this.role = role;
     }
 
     public String getTitle() {
@@ -28,6 +31,14 @@ public class Position extends BaseEntity{
 
     public void setTitle(String position) {
         this.title = position;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public void setEmployees(Employee employee) {

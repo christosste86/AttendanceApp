@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -17,11 +18,6 @@ public class Employee extends BaseEntity implements UserDetails {
     private String username;
     private String password;
     private Double paymentPerHour;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "employee_roles", joinColumns = {@JoinColumn(name = "employee_id")})
-    @Column(name = "role")
-    private List<String> roles;
 
     @ManyToOne
     @JoinColumn(name = "Separate_id", referencedColumnName = "id")
@@ -89,16 +85,9 @@ public class Employee extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> userRoles = new ArrayList<>();
-        for (String role : roles) {
-            userRoles.add(new SimpleGrantedAuthority(role));
-        }
-        return userRoles;
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_"+ ""));
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
-    }
 
     public String getPassword() {
         return password;

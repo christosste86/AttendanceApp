@@ -78,6 +78,7 @@
                     <thead>
                         <tr>
                             <th>Title</th>
+                            <th>Role</th>
                             <th>Update</th>
                             <th>Remove</th>
                         </tr>
@@ -86,6 +87,7 @@
                         <tr th:each="position : ${positionList}"
                             th:object="${position}">
                             <td th:text="${position.getTitle()}">Title</td>
+                            <td th:text="${position.getRole()}">Role</td>
                             <td>
                                 <form th:action="@{/get-position-id/{id} (id =${position.id})}">
                                     <button type="submit">Update</button>
@@ -107,6 +109,20 @@
                             <input type ="text" id="position_title" name="title"
                                    th:value ="${isPositionUpdate}? ${position.getTitle()} : ''">
                         </div>
+                        <br>
+                        <label for="position_role">Position Role:</label><br>
+                        <select name="position_role" id="position_role" required><br>
+                            <option
+                                    th:value="${''}"
+                                    th:disabled="${false}"
+                                    th:text="${'disabled selected'}"
+                                    th:selected="true">
+                                Select Seperated
+                            </option>
+                            <option th:each="role :${roles}"
+                                    th:value="${role}" th:text ="${role}"></option>
+                        </select>
+                        <br>
                         <button type="submit"
                                 th:text="${isPositionUpdate}? 'Update Position' : 'Add Position'">Add Update position
                         </button>

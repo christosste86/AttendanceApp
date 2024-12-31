@@ -5,6 +5,10 @@ import com.example.AttendanceApp.models.Employee;
 import com.example.AttendanceApp.models.Position;
 import com.example.AttendanceApp.models.Separate;
 import com.example.AttendanceApp.repositaries.EmployeeRepository;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +16,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class EmployeesServiceImpl implements EmployeesService{
+public class EmployeesServiceImpl implements EmployeesService, UserDetailsService {
 
     private final EmployeeRepository employeesRepository;
 
@@ -96,5 +100,14 @@ public class EmployeesServiceImpl implements EmployeesService{
         }else{
             return employeesRepository.filterEmployees(firstName, lastName, separate, position);
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<Employee> employee = employeesRepository.findEmployeeByUsername(username);
+        if (employee.isEmpty()) {
+            throw new UsernameNotFoundException(username);
+        }
+        return employee.get();
     }
 }

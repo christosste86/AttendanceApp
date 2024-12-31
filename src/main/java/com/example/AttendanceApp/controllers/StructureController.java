@@ -2,6 +2,7 @@ package com.example.AttendanceApp.controllers;
 
 import com.example.AttendanceApp.models.Assignment;
 import com.example.AttendanceApp.models.Position;
+import com.example.AttendanceApp.models.Role;
 import com.example.AttendanceApp.models.Separate;
 import com.example.AttendanceApp.services.AssignmentService;
 import com.example.AttendanceApp.services.PositionService;
@@ -47,6 +48,7 @@ public class StructureController {
         model.addAttribute("assignment", this.assignment);
         model.addAttribute("position", this.position);
         model.addAttribute("separate", this.separate);
+        model.addAttribute("roles", positionService.getRoles());
         return "structure";
     }
 
@@ -98,12 +100,13 @@ public class StructureController {
     }
 
     @PostMapping("/add-update-position")
-    public String createUpdatePosition(@RequestParam String title){
+    public String createUpdatePosition(@RequestParam String title,
+                                       @RequestParam Role position_role){
         if(isPositionUpdate){
-            positionService.updatePosition(this.positionId, title);
+            positionService.updatePosition(this.positionId, title, position_role);;
             this.isPositionUpdate = false;
         }else{
-            Position newPosition = new Position(title);
+            Position newPosition = new Position(title,position_role);
             positionService.createPosition(newPosition);
         }
         return "redirect:/structure";

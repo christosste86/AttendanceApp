@@ -12,4 +12,7 @@ import java.util.List;
 public interface PositionRepository extends JpaRepository<Position, Long> {
     @Query("select p from positions p where p.id = :id")
     List<Position> findByPositionId(@Param("id") Long id);
+
+    @Query("select p from positions p where p.title = :title")
+    List<Position> findByTitle(@Param("title") String title);
 }

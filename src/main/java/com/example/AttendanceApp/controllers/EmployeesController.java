@@ -10,6 +10,7 @@ import com.example.AttendanceApp.services.EmployeesService;
 import com.example.AttendanceApp.services.PositionService;
 import com.example.AttendanceApp.services.SeparateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,7 @@ public class EmployeesController {
     private final SeparateService separateService;
     private final PositionService positionService;
     private final AssignmentService assignmentService;
+    private final PasswordEncoder passwordEncoder;
     private boolean isUpdate = false;
     private List<Employee> employeesList = new ArrayList<>();
     private Long employeeId;
@@ -40,11 +42,12 @@ public class EmployeesController {
     String password;
 
     @Autowired
-    public EmployeesController(EmployeesService employeesService, SeparateService separateService, PositionService positionService, AssignmentService assignmentService) {
+    public EmployeesController(EmployeesService employeesService, SeparateService separateService, PositionService positionService, AssignmentService assignmentService, PasswordEncoder passwordEncoder) {
         this.employeesService = employeesService;
         this.separateService = separateService;
         this.positionService = positionService;
         this.assignmentService = assignmentService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<Employee> getEmployeesList(){
@@ -88,7 +91,7 @@ public class EmployeesController {
                                  @RequestParam String username,
                                  @RequestParam String password){
         if(!isUpdate){
-            Employee employee = new Employee(firstName, lastName, username, password, paymentPerHour);
+            Employee employee = new Employee(firstName, lastName, username, passwordEncoder.encode(password), paymentPerHour);
             employee.setPosition(position);
             employee.setAssignment(assignment);
             employee.setSeparate(separate);
@@ -105,7 +108,7 @@ public class EmployeesController {
                     assignment,
                     paymentPerHour,
                     username,
-                    password);
+                    passwordEncoder.encode(password));
         }
         return "redirect:/employees";
     }
