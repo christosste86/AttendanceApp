@@ -8,7 +8,9 @@ import java.util.List;
 @Entity (name = "positions")
 public class Position extends BaseEntity{
 
+
     private String title;
+
 
     @OneToMany(mappedBy = "position")
     private List<Employee> employees = new ArrayList<>();

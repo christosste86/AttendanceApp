@@ -1,17 +1,27 @@
 package com.example.AttendanceApp.models;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name = "employees")
-public class Employee extends BaseEntity{
+public class Employee extends BaseEntity implements UserDetails {
     private String firstName;
     private String lastName;
     private String username;
     private String password;
     private Double paymentPerHour;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "employee_roles", joinColumns = {@JoinColumn(name = "employee_id")})
+    @Column(name = "role")
+    private List<String> roles;
 
     @ManyToOne
     @JoinColumn(name = "Separate_id", referencedColumnName = "id")
@@ -52,8 +62,42 @@ public class Employee extends BaseEntity{
         return lastName;
     }
 
+    @Override
     public String getUsername() {
         return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<SimpleGrantedAuthority> userRoles = new ArrayList<>();
+        for (String role : roles) {
+            userRoles.add(new SimpleGrantedAuthority(role));
+        }
+        return userRoles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 
     public String getPassword() {
