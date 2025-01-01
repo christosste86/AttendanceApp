@@ -59,8 +59,8 @@ public class ScheduleController {
         model.addAttribute("selectedDay", this.selectedDay);
         model.addAttribute("selectedEmployee", employeesService.getEmployeeByUsername(this.selectedEmployeeUsername));
         List<Employee> filteredEmpolyeeList = employeesService.getFilteredEmployeesList(this.firstname,this.lastname,this.separate,this.position);
-        this.employeesList = filteredEmpolyeeList.isEmpty()?employeesService.getEmployeesList():filteredEmpolyeeList;
-        model.addAttribute("employees",  this.employeesList);
+        this.employeesList = employeesService.getEmployeesList();
+        model.addAttribute("employees", this.employeesList);
         model.addAttribute("separatedList", separateService.getSeparates());
         model.addAttribute("positionsList", positionService.getPositions());
         HashMap<Employee, List<Schedule>> employeesMonthlySchedule = scheduleService.employeesScheduleHashMapPerMonth(this.selectedMonth, this.employeesList);
@@ -72,6 +72,7 @@ public class ScheduleController {
         });
         model.addAttribute("selectedMonthDayWeekShort", dayOfWeeks);
         model.addAttribute("monthlyEmployeesTotalHours", scheduleService.monthlyTotalHours(this.selectedMonth, employeesMonthlySchedule));
+        model.addAttribute("loginUser", employeesService.getLoginEmployee());
         employeesMonthlySchedule.forEach((k,v) -> System.out.println(k + ": " + v.size()));
         return "index";
     }

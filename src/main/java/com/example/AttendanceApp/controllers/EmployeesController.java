@@ -1,10 +1,7 @@
 package com.example.AttendanceApp.controllers;
 
 
-import com.example.AttendanceApp.models.Assignment;
-import com.example.AttendanceApp.models.Employee;
-import com.example.AttendanceApp.models.Position;
-import com.example.AttendanceApp.models.Separate;
+import com.example.AttendanceApp.models.*;
 import com.example.AttendanceApp.services.AssignmentService;
 import com.example.AttendanceApp.services.EmployeesService;
 import com.example.AttendanceApp.services.PositionService;
@@ -71,6 +68,8 @@ public class EmployeesController {
         model.addAttribute("username" , this.username);
         model.addAttribute("password" , this.password);
         model.addAttribute("isUpdate" , this.isUpdate);
+        model.addAttribute("loginUserRole", employeesService.getLoginEmployee().getRoles().stream().toList().getFirst().toString());
+        model.addAttribute("loginUserUsername", employeesService.getLoginEmployee().getUsername());
         return "employees";
     }
 
@@ -94,7 +93,7 @@ public class EmployeesController {
         if(!isUpdate){
             Employee employee = new Employee(firstName, lastName, username, passwordEncoder.encode(password), paymentPerHour);
             employee.setPosition(position);
-            employee.addRole(positionService.getRoleByName(position.getRole()));
+            employee.addRole(new Role(position.getRole()));
             employee.setAssignment(assignment);
             employee.setSeparate(separate);
             if(!employeesService.isExist(username)){

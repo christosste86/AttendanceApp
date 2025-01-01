@@ -6,6 +6,8 @@ import com.example.AttendanceApp.models.Position;
 import com.example.AttendanceApp.models.Separate;
 import com.example.AttendanceApp.repositaries.EmployeeRepository;
 import com.example.AttendanceApp.security.util.SecurityUtil;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,7 +23,7 @@ import java.util.Optional;
 public class EmployeesServiceImpl implements EmployeesService, UserDetailsService {
 
     private final EmployeeRepository employeesRepository;
-    private SecurityUtil securityUtil;
+    private Employee logintEmployee;
 
     public EmployeesServiceImpl(EmployeeRepository employeesRepository) {
         this.employeesRepository = employeesRepository;
@@ -30,15 +32,18 @@ public class EmployeesServiceImpl implements EmployeesService, UserDetailsServic
 
     @Override
     public List<Employee> getEmployeesList() {
-        if(!getLoginEmployee().getRoles().stream().filter(role -> role.equals("ROLE_LEVEL3")).toList().isEmpty()){
+        String role = getLoginEmployee().getRoles().stream().toList().getFirst().toString();
+        System.out.println("Role name: " + role);
+        if(role.equals("ROLE_LEVEL3")){
+            System.out.println("Role Level3");
             return employeesRepository.findEmployeesByUsername(getLoginEmployee().getUsername());
         }
-        if(!getLoginEmployee().getRoles().stream().filter(role -> role.equals("ROLE_LEVEL2")).toList().isEmpty()){
+        if(role.equals("ROLE_LEVEL2")){
             return employeesRepository.findEmployeesBySeparate(getLoginEmployee().getSeparate());
         }
-        if(!getLoginEmployee().getRoles().stream().filter(role -> role.equals("ROLE_ADMIN") || role.equals("ROLE_LEVEL1")).toList().isEmpty()){
+        if(role.equals("ROLE_ADMIN") || role.equals("ROLE_LEVEL1")){
             return employeesRepository.findAll();
-        }return null;
+        }return new ArrayList<>();
     }
 
     @Override
@@ -58,7 +63,7 @@ public class EmployeesServiceImpl implements EmployeesService, UserDetailsServic
 
     @Override
     public Employee getLoginEmployee() {
-        return securityUtil.getLoginUser();
+        return this.logintEmployee;
     }
 
     @Override
@@ -124,6 +129,7 @@ public class EmployeesServiceImpl implements EmployeesService, UserDetailsServic
         if (employee.isEmpty()) {
             throw new UsernameNotFoundException(username);
         }
-        return employee.get();
+        this.logintEmployee = employee.get();
+        return this.logintEmployee;
     }
 }

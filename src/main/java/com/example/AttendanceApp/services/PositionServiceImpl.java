@@ -48,7 +48,7 @@ public class PositionServiceImpl implements PositionService {
     @Override
     public Role getRoleByName(String roleName) {
         if(roleRepository.findByPositionRoleName(roleName).isEmpty()) {
-            throw new IllegalArgumentException("Role with name " + roleName + " not found.");
+            return new Role();
         }return roleRepository.findByPositionRoleName(roleName).getFirst();
     }
 

@@ -87,7 +87,10 @@
                         <tr th:each="position : ${positionList}"
                             th:object="${position}">
                             <td th:text="${position.getTitle()}">Title</td>
-                            <td th:text="${position.getRole()}">Role</td>
+                            <td th:if="${position.getRole() != null}"
+                                th:text="${position.getRole().toString()}">Role</td>
+                            <td th:if="${position.getRole() == null}"
+                                th:text="${'Not Set'}">Not Set</td>
                             <td>
                                 <form th:action="@{/get-position-id/{id} (id =${position.id})}">
                                     <button type="submit">Update</button>

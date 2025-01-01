@@ -24,7 +24,7 @@
             <th>BenefitCard S/N</th>
             <th>About</th>
             <th>Update</th>
-            <th>Delete</th>
+            <th th:if="${!loginUserRole.equals('ROLE_LEVEL1')}">Delete</th>
         </tr>
         </thead>
         <tbody>
@@ -46,11 +46,13 @@
                     <button type="submit">Update</button>
                 </form>
             </td>
-            <td>
+            <td th:if="${!loginUserUsername.equals(employee.getUsername())}">
                 <form method="get" th:action="@{/delete-employee/{id}(id=${employee.getId})}">
                     <button type = "submit">Remove</button>
                 </form>
             </td>
+            <td th:if="${loginUserRole.equals(employee.getUsername())}"
+                th:text="${'No Permission'}">No permission</td>
         </tr>
         </tbody>
     </table>
@@ -60,21 +62,21 @@
         <div id="updateEmployee">
             <div th:text="${isUpdate} ? 'Update Employee' : 'Add Employee'">Add/Update Employee</div>
             <form th:action="@{/add-update-employee}" method="post">
-                <div>
+                <div th:if="${!loginUserUsername.equals(username)}">
                     <label for="update-username">Username: </label><br>
                     <input id="update-username" type="text" name ="username"
-                           th:value="${username} ? ${username} : ''" ><br>
-
+                           th:value="${username} ? ${username} : ''" >
+                </div>
+                <div>
                     <label for="update-password">Password: </label><br>
                     <input id="update-password" type="password" name ="password"
                            th:value="${isUpdate} ? ${password} : ''"><br>
                 </div>
 
-                <div>
+                <div th:if="${!loginUserUsername.equals(username)}">
                     <label for="update-firstName">First name:</label><br>
                     <input id="update-firstName" type="text" placeholder=" " name="firstName"
-                           th:value="${isUpdate} ? ${firstName} : ''"><br>
-
+                           th:value="${isUpdate} ? ${firstName} : ''">
 
                     <label for="update-lastName">Last name:</label><br>
                     <input id="update-lastName" type="text" name="lastName"

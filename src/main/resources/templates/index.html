@@ -14,6 +14,11 @@
 <main>
     <h1>Employees Schedule</h1>
 
+    <h2 th:if="${loginUser != null}"
+        th:text="${loginUser.fullName}"></h2>
+    <h2 th:if="${loginUser != null}"
+        th:text="${loginUser.getPosition().getRole().toString()}"></h2>
+
     <div class = "schedule">
         <form th:action = "@{/month-list/}" method="get">
             <label for="daymonth">Select month:</label>
