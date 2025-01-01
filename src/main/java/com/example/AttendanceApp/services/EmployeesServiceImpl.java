@@ -5,12 +5,14 @@ import com.example.AttendanceApp.models.Employee;
 import com.example.AttendanceApp.models.Position;
 import com.example.AttendanceApp.models.Separate;
 import com.example.AttendanceApp.repositaries.EmployeeRepository;
+import com.example.AttendanceApp.security.util.SecurityUtil;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -19,6 +21,7 @@ import java.util.Optional;
 public class EmployeesServiceImpl implements EmployeesService, UserDetailsService {
 
     private final EmployeeRepository employeesRepository;
+    private SecurityUtil securityUtil;
 
     public EmployeesServiceImpl(EmployeeRepository employeesRepository) {
         this.employeesRepository = employeesRepository;
@@ -27,7 +30,15 @@ public class EmployeesServiceImpl implements EmployeesService, UserDetailsServic
 
     @Override
     public List<Employee> getEmployeesList() {
+        if(!getLoginEmployee().getRoles().stream().filter(role -> role.equals("ROLE_LEVEL3")).toList().isEmpty()){
+            return employeesRepository.findEmployeesByUsername(getLoginEmployee().getUsername());
+        }
+        if(!getLoginEmployee().getRoles().stream().filter(role -> role.equals("ROLE_LEVEL2")).toList().isEmpty()){
+            return employeesRepository.findEmployeesBySeparate(getLoginEmployee().getSeparate());
+        }
+        if(!getLoginEmployee().getRoles().stream().filter(role -> role.equals("ROLE_ADMIN") || role.equals("ROLE_LEVEL1")).toList().isEmpty()){
             return employeesRepository.findAll();
+        }return null;
     }
 
     @Override
@@ -43,6 +54,11 @@ public class EmployeesServiceImpl implements EmployeesService, UserDetailsServic
        return employeesRepository.findById(id).orElseThrow(
                () -> new IllegalArgumentException(String.format("Location with id (%s) not found.", id))
        );
+    }
+
+    @Override
+    public Employee getLoginEmployee() {
+        return securityUtil.getLoginUser();
     }
 
     @Override

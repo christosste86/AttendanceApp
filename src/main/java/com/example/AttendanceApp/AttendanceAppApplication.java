@@ -30,19 +30,25 @@ public class AttendanceAppApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
+		Role adminRole = new Role();
+		adminRole.setName("ROLE_ADMIN");
+
+		Position adminPosition = new Position();
+		adminPosition.setTitle("Administrator");
+		adminPosition.setRole("ADMIN");
+		if(positionRepository.findByTitle(adminPosition.getTitle()).isEmpty()) {
+			positionRepository.save(adminPosition);
+		}
 
 		Employee administrator = new Employee();
 		administrator.setFirstName("Christos");
 		administrator.setLastName("Stefanakis");
 		administrator.setUsername("admin");
 		administrator.setPassword(passwordEncoder.encode("admin"));
+		adminPosition.setEmployees(administrator);
+		administrator.addRole(adminRole);
 		if(employeeRepository.findEmployeesByUsername(administrator.getUsername()).isEmpty()) {
 			employeeRepository.save(administrator);
-			Position admin = new Position();
-			admin.setTitle("Administrator");
-			admin.setRole(Role.ADMIN);
-			admin.setEmployees(administrator);
-			positionRepository.save(admin);
 		}
 	}
 }

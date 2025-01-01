@@ -115,12 +115,11 @@
                             <option
                                     th:value="${''}"
                                     th:disabled="${false}"
-                                    th:text="${'disabled selected'}"
                                     th:selected="true">
-                                Select Seperated
+                                Select Role
                             </option>
                             <option th:each="role :${roles}"
-                                    th:value="${role}" th:text ="${role}"></option>
+                                    th:value="${role}" th:text ="${role.getName()}"></option>
                         </select>
                         <br>
                         <button type="submit"

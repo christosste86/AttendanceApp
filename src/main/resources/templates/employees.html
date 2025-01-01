@@ -85,7 +85,7 @@
                         <option
                                 th:value="${isUpdate && employeeId != null}? ${position.id} :''"
                                 th:disabled="${isUpdate == false} ? ${true} : ${false}"
-                                th:text="${isUpdate && employeeId != null}? ${position.getTitle()} : 'disabled selected'"
+                                th:text="${isUpdate && employeeId != null}? ${position.getTitle()} : 'Select Position'"
                                 th:selected="true">
                             Select Seperated
                         </option>
@@ -98,7 +98,7 @@
                         <option
                                 th:value="${isUpdate && employeeId != null}? ${separate.id} :''"
                                 th:disabled="${isUpdate == false} ? ${true} : ${false}"
-                                th:text="${isUpdate && employeeId != null}? ${separate.getTitle()} : 'disabled selected'"
+                                th:text="${isUpdate && employeeId != null}? ${separate.getTitle()} : 'Select Seperated'"
                                 th:selected="true">
                             Select Seperated
                         </option>
@@ -110,7 +110,7 @@
                         <option
                                 th:value="${isUpdate && employeeId != null}? ${assignment.id} :''"
                                 th:disabled="${isUpdate == false} ? ${true} : ${false}"
-                                th:text="${isUpdate && employeeId != null} ? ${assignment.hoursPerWeek} : 'Select Seperated'"
+                                th:text="${isUpdate && employeeId != null} ? ${assignment.hoursPerWeek} : 'Select Assignment'"
                                 th:selected="true">
                             Select Seperated
                         </option>

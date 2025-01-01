@@ -101,7 +101,7 @@ public class StructureController {
 
     @PostMapping("/add-update-position")
     public String createUpdatePosition(@RequestParam String title,
-                                       @RequestParam Role position_role){
+                                       @RequestParam String position_role){
         if(isPositionUpdate){
             positionService.updatePosition(this.positionId, title, position_role);;
             this.isPositionUpdate = false;

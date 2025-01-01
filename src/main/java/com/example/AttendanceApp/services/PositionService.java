@@ -13,9 +13,11 @@ public interface PositionService {
 
     Position getPositionById(long id);
 
+    Role getRoleByName(String roleName);
+
     void createPosition(Position position);
 
-    void updatePosition(long id, String title, Role role);
+    void updatePosition(long id, String title, String role);
 
     void deletePosition(long id);
 }

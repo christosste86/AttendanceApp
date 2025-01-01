@@ -9,6 +9,7 @@ import com.example.AttendanceApp.services.AssignmentService;
 import com.example.AttendanceApp.services.EmployeesService;
 import com.example.AttendanceApp.services.PositionService;
 import com.example.AttendanceApp.services.SeparateService;
+import org.apache.catalina.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -93,6 +94,7 @@ public class EmployeesController {
         if(!isUpdate){
             Employee employee = new Employee(firstName, lastName, username, passwordEncoder.encode(password), paymentPerHour);
             employee.setPosition(position);
+            employee.addRole(positionService.getRoleByName(position.getRole()));
             employee.setAssignment(assignment);
             employee.setSeparate(separate);
             if(!employeesService.isExist(username)){

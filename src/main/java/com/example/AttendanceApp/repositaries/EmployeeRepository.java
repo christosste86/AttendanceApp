@@ -21,4 +21,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     Optional<Employee> findEmployeeByUsername(String username);
 
+    @Query("select e from Employee e where e.separate = :separate")
+    List<Employee> findEmployeesBySeparate(Separate separate);
+
 }

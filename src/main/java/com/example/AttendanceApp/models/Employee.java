@@ -5,10 +5,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "employees")
@@ -38,6 +36,13 @@ public class Employee extends BaseEntity implements UserDetails {
     @JoinColumn(name= "benefid_card_id")
     private BenefitCard benefitCard;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "employees_roles",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 
     public Employee(String firstName, String lastName, String username, String password, Double paymentPerHour) {
         this.firstName = firstName;
@@ -49,6 +54,7 @@ public class Employee extends BaseEntity implements UserDetails {
 
     public Employee() {
     }
+
 
     public String getFirstName() {
         return firstName;
@@ -85,9 +91,14 @@ public class Employee extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("ROLE_"+ ""));
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
 
     public String getPassword() {
         return password;
@@ -155,6 +166,10 @@ public class Employee extends BaseEntity implements UserDetails {
 
     public String getFullName() {
         return String.format("%s %s", this.firstName, this.lastName);
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
     }
 
 }

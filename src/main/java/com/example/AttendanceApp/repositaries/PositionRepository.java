@@ -15,4 +15,5 @@ public interface PositionRepository extends JpaRepository<Position, Long> {
 
     @Query("select p from positions p where p.title = :title")
     List<Position> findByTitle(@Param("title") String title);
+
 }

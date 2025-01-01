@@ -3,6 +3,7 @@ package com.example.AttendanceApp.services;
 import com.example.AttendanceApp.models.Position;
 import com.example.AttendanceApp.models.Role;
 import com.example.AttendanceApp.repositaries.PositionRepository;
+import com.example.AttendanceApp.repositaries.RoleRepository;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Array;
@@ -16,9 +17,11 @@ import java.util.stream.Collectors;
 public class PositionServiceImpl implements PositionService {
 
     private final PositionRepository positionRepository;
+    private final RoleRepository roleRepository;
 
-    public PositionServiceImpl(PositionRepository positionRepository) {
+    public PositionServiceImpl(PositionRepository positionRepository, RoleRepository roleRepository) {
         this.positionRepository = positionRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -28,10 +31,11 @@ public class PositionServiceImpl implements PositionService {
 
     @Override
     public List<Role> getRoles() {
-        List<Role> roles = new ArrayList<>();
-        for(Role role: Role.values()){
-            roles.add(role);
-        }return roles;
+        return List.of(
+                new Role("ROLE_ADMIN"),
+                new Role("ROLE_LEVEL1"),
+                new Role("ROLE_LEVEL2"),
+                new Role("ROLE_LEVEL3"));
     }
 
     @Override
@@ -42,12 +46,19 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
+    public Role getRoleByName(String roleName) {
+        if(roleRepository.findByPositionRoleName(roleName).isEmpty()) {
+            throw new IllegalArgumentException("Role with name " + roleName + " not found.");
+        }return roleRepository.findByPositionRoleName(roleName).getFirst();
+    }
+
+    @Override
     public void createPosition(Position position) {
         positionRepository.save(position);
     }
 
     @Override
-    public void updatePosition(long id, String title, Role role) {
+    public void updatePosition(long id, String title, String role) {
         Optional<Position> position = positionRepository.findById(id);
         if (position.isPresent()) {
             Position p = position.get();
