@@ -23,8 +23,6 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/**").permitAll()
                         .anyRequest().hasRole("ADMIN")
-
-
                 )
                 .formLogin(form ->form
                         .defaultSuccessUrl("/", true))
