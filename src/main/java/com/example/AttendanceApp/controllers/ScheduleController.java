@@ -48,7 +48,7 @@ public class ScheduleController {
     }
 
 
-    @GetMapping("/")
+    @GetMapping("/schedule")
     public String getMainPage(Model model){
         setMothDaysList();
 
@@ -74,13 +74,13 @@ public class ScheduleController {
         model.addAttribute("monthlyEmployeesTotalHours", scheduleService.monthlyTotalHours(this.selectedMonth, employeesMonthlySchedule));
         model.addAttribute("loginUser", employeesService.getLoginEmployee());
         employeesMonthlySchedule.forEach((k,v) -> System.out.println(k + ": " + v.size()));
-        return "index";
+        return "schedule";
     }
 
 
     @GetMapping("/add-schedule")
     public String getScheduleForm() {
-        return "redirect:/";
+        return "redirect:/schedule";
     }
 
     @PostMapping("/add-schedule")
@@ -104,10 +104,7 @@ public class ScheduleController {
         System.out.println("Adding schedule");
         schedule.setEmployee(employee);
         scheduleService.saveSchedule(schedule);
-//        if(workedHours > 0 && workedHours <= 12){
-//
-//        }
-        return "redirect:/";
+        return "redirect:/schedule";
     }
 
     @GetMapping ("/select-employee/{employeeUsername}/select-day/{dayOfMonth}")
@@ -116,13 +113,13 @@ public class ScheduleController {
         this.selectedEmployeeUsername = employeeUsername;
         this.selectedDay = dayOfMonth;
         System.out.println(this.selectedEmployeeUsername + " " + this.selectedDay);
-        return "redirect:/";
+        return "redirect:/schedule";
     }
 
     @GetMapping ("/select-day/{dayOfMonth}")
     public String selectDayOfMonth(@PathVariable("dayOfMonth") int dayOfMonth){
         this.selectedDay = dayOfMonth;
-        return "redirect:/";
+        return "redirect:/schedule";
     }
 
     private void setMothDaysList(){
@@ -139,6 +136,6 @@ public class ScheduleController {
         System.out.println("Received LocalDate: " + this.selectedMonth);
         this.days.clear();
         setMothDaysList();
-        return "redirect:/";
+        return "redirect:/schedule";
     }
 }

@@ -39,7 +39,15 @@ public class EmployeesServiceImpl implements EmployeesService, UserDetailsServic
             return employeesRepository.findEmployeesByUsername(getLoginEmployee().getUsername());
         }
         if(role.equals("ROLE_LEVEL2")){
-            return employeesRepository.findEmployeesBySeparate(getLoginEmployee().getSeparate());
+            List<Employee> employees = new ArrayList<>();
+            employeesRepository.findEmployeesBySeparate(getLoginEmployee().getSeparate()).forEach(employee -> {
+                employee.getRoles().forEach(r->{
+                    if(r.getName().equals("ROLE_LEVEL3") || r.getName().equals("ROLE_LEVEL2")){
+                        employees.add(employee);
+                    }
+                });
+            });
+            return employees;
         }
         if(role.equals("ROLE_ADMIN") || role.equals("ROLE_LEVEL1")){
             return employeesRepository.findAll();

@@ -1,4 +1,6 @@
 body {
+  background-color: #008585;
+  color: #fbf2c4;
   margin-top: 0;
   margin-left: auto;
   margin-right: auto;
@@ -31,11 +33,15 @@ li a {
 }
 
 li a:hover:not(.active) {
-  background-color: #111;
+  background-color: #c7522a;
 }
 
 .active {
-  background-color: #04AA6D;
+  background-color: #e5c185;
+}
+
+.navProfile{
+  width: 10px;
 }
 
 .leftSize {
@@ -61,10 +67,29 @@ li a:hover:not(.active) {
 
 thead th {
   position: sticky;
+  width:3px;
+  padding: 2px;
+  color: #bbbbbb;
   top: 0;
   z-index: 2;
-  background: hsl(20, 50%, 70%);
+  background: #c7522a;
 }
+
+.thDays {
+  background: #c7522a;
+  color: #303245;
+  width: 26px;
+  height: 26px;
+  padding: 2px;
+}
+
+.thMonth {
+  background: #c7522a;
+  color: #303245;
+  width: 200px;
+  padding: 2px;
+}
+
 
 .structure {
   display: grid;
@@ -287,4 +312,24 @@ thead th {
 
 .hide {
   display: none;
+}
+
+.profile{
+  display: inline;
+  float: left;
+  text-align: left;
+  font-size: 20px;
+}
+
+.profileCard{
+  float: left;
+  width: 500px;
+  height: 200px;
+  margin: 25px;
+}
+
+.profileImage{
+  width: 150px;
+  float: left;
+  margin: 10px;
 }

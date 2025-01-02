@@ -62,7 +62,8 @@
         <div id="updateEmployee">
             <div th:text="${isUpdate} ? 'Update Employee' : 'Add Employee'">Add/Update Employee</div>
             <form th:action="@{/add-update-employee}" method="post">
-                <div th:if="${!loginUserUsername.equals(username)}">
+                <div th:if="${!isUpdate ||
+                            !loginUserUsername.equals(username)}">
                     <label for="update-username">Username: </label><br>
                     <input id="update-username" type="text" name ="username"
                            th:value="${username} ? ${username} : ''" >
@@ -73,7 +74,7 @@
                            th:value="${isUpdate} ? ${password} : ''"><br>
                 </div>
 
-                <div th:if="${!loginUserUsername.equals(username)}">
+                <div th:if="${!isUpdate || !loginUserUsername.equals(username)}">
                     <label for="update-firstName">First name:</label><br>
                     <input id="update-firstName" type="text" placeholder=" " name="firstName"
                            th:value="${isUpdate} ? ${firstName} : ''">
