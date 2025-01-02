@@ -41,7 +41,7 @@ li a:hover:not(.active) {
 }
 
 .navProfile{
-  width: 10px;
+  width: 50px;
 }
 
 .leftSize {
@@ -54,11 +54,6 @@ li a:hover:not(.active) {
     width: 200px;
 }
 
-  .schedule{
-    margin-top: 5px;
-    margin-left: auto;
-    margin-right: auto;
-  }
 
   .left{
     width: 100px;
@@ -75,6 +70,23 @@ thead th {
   background: #c7522a;
 }
 
+/* Schedule */
+
+.schedule{
+  margin-top: 5px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/*Header*/
+
+.scheduleHeader{
+  font-size: 15px;
+  text-align: center;
+  padding: 2px;
+  display: flex;
+}
+
 .thDays {
   background: #c7522a;
   color: #303245;
@@ -87,54 +99,55 @@ thead th {
   background: #c7522a;
   color: #303245;
   width: 200px;
-  padding: 2px;
 }
 
-
-.structure {
-  display: grid;
+.thDetails{
+  width: 50px;
+  height: 26px;
+  color: #303245;
+  justify-content: center;
+  margin: 1px;
 }
 
-.structureBox{
-  width:590px;
-  padding: 10px;
+.thDaysOfWeek {
+  background: #bbbbbb;
+  width: 26px;
+  height: 26px;
+  font-size: 10px;
+  text-align: center;
+  color: #333333;
+}
+
+/*Body*/
+
+.tdFulName{
+  width:149px;
+  margin: 1px;
+}
+
+.tdPosition{
+  width: 49px;
+  margin:1px;
+}
+
+.tdDays{
+  width:26px;
+  height:26px;
   border: 1px solid black;
-  margin:10px;
-  display: grid;
 }
 
-.structureTitle{
+.dayHeader{
+  width: 20px;
+  height: 20px;
+  border: 1px solid black;
   float:left;
+  margin-right: 1px;
+  font-size: 15px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
-.structureOptions{
-  display:flex;
-}
-
-.optionTable{
-  float:left;
-  padding-right:10px;
-  padding-left: 10px;
-
-}
-
-.optionForum{
-  float:right;
-}
-
-
-  .schedule .dayHeader{
-    width: 20px;
-    height: 20px;
-    border: 1px solid black;
-    float:left;
-    margin-right: 1px;
-    font-size: 15px;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 
 .emptyDay {
   width: 20px;
@@ -213,19 +226,6 @@ thead th {
   align-items: center;
 }
 
-.schedule .detailsHeader{
-  width: 40px;
-  height: 20px;
-  border: 1px solid black;
-  float:left;
-  margin-right: 1px;
-  font-size: 15px;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .schedule .details{
   width: 40px;
   height: 20px;
@@ -271,6 +271,38 @@ thead th {
   margin-left: auto;
   padding:10px;
   font-size: 15px;
+}
+
+/*And of Schedule*/
+.structure {
+  display: grid;
+}
+
+.structureBox{
+  width:590px;
+  padding: 10px;
+  border: 1px solid black;
+  margin:10px;
+  display: grid;
+}
+
+.structureTitle{
+  float:left;
+}
+
+.structureOptions{
+  display:flex;
+}
+
+.optionTable{
+  float:left;
+  padding-right:10px;
+  padding-left: 10px;
+
+}
+
+.optionForum{
+  float:right;
 }
 
 .time{
