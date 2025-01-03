@@ -43,7 +43,7 @@
         </form>
 
         <table>
-            <thead class="schedule">
+            <thead class="scheduleHeader">
             <tr>
                 <th class= "thMonth" colspan="2" th:if="${selectedMonth != null}"
                     th:text="${selectedMonth.getMonth()}">
@@ -54,49 +54,60 @@
                         1
                     </th>
                 </div>
+                <th colspan="2"></th>
+            </tr>
+
+            <tr>
+                <th class="thFulName">Employee</th>
+                <th class="thPosition">Position</th>
+                <div th:each ="dayOfWeek: ${selectedMonthDayWeekShort}" th:object="${dayOfWeek}">
+                    <th th:classappend="${dayOfWeek.equals('Sat') || dayOfWeek.equals('Sun')?'weekDay' : 'thDaysOfWeek'}"
+                        th:text="${dayOfWeek}">
+                        1
+                    </th>
+                </div>
                 <th class ="thDetails">Hours</th>
                 <th class ="thDetails">Shifts</th>
             </tr>
-            <tr>
-                <th colspan="2"></th>
 
-                <div th:each ="dayOfWeek: ${selectedMonthDayWeekShort}" th:object="${day}">
-                    <th class ="thDaysOfWeek" th:classappend="${dayOfWeek.equals('Sat') || dayOfWeek.equals('Sun')?'weekDay' : 'emptyDay'}"
-                        th:text="${dayOfWeek}">Mon</th>
-                </div>
-                <th class="thDetails"></th>
-                <th class="thDetails"></th>
-            </tr>
             </thead>
-            <tbody>
+            <tbody class="scheduleBody">
+
 
             <div th:each = "employeeSchedule : ${monthlyEmployeesSchedule}">
+
                 <tr th:if="${employeeSchedule.key.getFirstName() != null && employeeSchedule.key.getLastName() != null}">
 
                     <td class="tdFulName" th:text ="${employeeSchedule.key.fullName}">Leonardo Dicabrio</td>
 
-                    <td th:if ="${employeeSchedule.key.getPosition() != null}"
+                    <td class="tdPosition" th:if ="${employeeSchedule.key.getPosition() != null}"
                         th:text = "${employeeSchedule.key.getPosition().getTitle()}">Manager</td>
 
                     <td th:if ="${employeeSchedule.key.getPosition() == null}"
                         th:text = "${'No Set'}"></td>
 
                     <div th:each="eSchedule, status : ${employeeSchedule.value}" th:object="${eSchedule}">
-                        <td th:if="${eSchedule.getShiftStart() == null}" class="tdDays">
+                        <td th:if="${eSchedule.getShiftStart() == null}">
 
                             <form method="get" th:action="@{/select-employee/{employeeUsername}/select-day/{dayOfMonth} (dayOfMonth = ${status.index+1}, employeeUsername =${employeeSchedule.key.getUsername()})}">
-                                <button class="dayButton" type="submit"></button>
+                                <button class="tdButtonEmpty" type="submit">15</button>
                             </form>
 
                         </td>
-                        <td th:if="${eSchedule.getShiftStart() != null}"
-                            th:text ="${eSchedule.getDailySchedule()}"
-                            th:class="${eSchedule.getShiftEnd().getHour() > 16}?'afternoon':'morning'"></td>
+                        <td th:if="${eSchedule.getShiftStart() != null}">
+                            <form method="get"
+                                  th:action="@{/select-employee/{employeeUsername}/select-day/{dayOfMonth} (dayOfMonth = ${status.index+1}, employeeUsername =${employeeSchedule.key.getUsername()})}"
+                                  th:classappend="${eSchedule.getShiftEnd().getHour() > 16}?'tdButtonAfternoon':'tdButtonMorning'">
+                                <button class="tdButtonMorning"
+                                        type="submit"
+                                        th:text ="${eSchedule.getDailySchedule()}">14:00 20:00</button>
+                            </form>
+                        </td>
                     </div>
                     <div th:each="hours : ${monthlyEmployeesTotalHours}"
                          th:if="${hours.getKey() == employeeSchedule.getKey()}">
-                        <td class ="details" th:text ="${hours.getValue().getTotalHours()} + '/' + ${hours.getValue().getMonthlyFullTimeHours()}"></td>
-                        <td class ="details" th:text ="${hours.getValue().getShifts()}"></td>
+                        <td class ="tdDetails" th:text ="${hours.getValue().getTotalHours()} + '/' + ${hours.getValue().getMonthlyFullTimeHours()}"></td>
+                        <td class ="tdDetails" th:text ="${hours.getValue().getShifts()}"></td>
                     </div>
                 </tr>
             </div>
@@ -106,13 +117,30 @@
 
     <!--                            add Schedule-->
     <div id="addSchedule" class="openAddSchedule">
-        <button class="closeButton" onclick="closeAddSchedule()">X</button>
-        <div class = "addScheduleTitle">Add Schedule</div>
-        <form th:action="@{/add-schedule}" method="post">
-            <div class="addScheduleTextContent">
-                <div class = "addScheduleEmployee" th:if="${selectedEmployee != null}" th:text ="${selectedEmployee.getFullName()}">Firstname Lastname</div>
-                <div class="addScheduleDate" th:if="${selectedDay != null}" th:text = "${selectedMonth.withDayOfMonth(selectedDay)}">2024-12-26</div>
+
+        <div class = "topLine">
+            <div class = "scheduleTitle">Add Schedule</div>
+<!--            <button class="closeButton" onclick="closeAddSchedule()">X</button>-->
+        </div>
+
+        <div class="employeeDateSchedule">
+            <div class = "addScheduleEmployee"
+                 th:if="${selectedEmployee != null}"
+                 th:text ="${selectedEmployee.getFullName()}">
+                Firstname Lastname
             </div>
+
+            <div class="addScheduleDate"
+                 th:if="${selectedDay != null}"
+                 th:text = "${selectedMonth.withDayOfMonth(selectedDay)}">
+                2024-12-26
+            </div>
+
+        </div>
+
+        <div class="formSchedule">
+
+            <form th:action="@{/add-schedule}" method="post">
             <div>
                 <div>Start Shift</div>
                 <div class="time">
@@ -158,6 +186,7 @@
             </div>
             <button type="submit">Add Schedule</button>
         </form>
+        </div>
     </div>
     <!--                            End Add Schedule-->
 </main>

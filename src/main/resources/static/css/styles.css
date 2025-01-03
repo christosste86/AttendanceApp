@@ -1,12 +1,18 @@
 body {
-  background-color: #008585;
-  color: #fbf2c4;
+  background-image: url("../images/background.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  font-family: 'Trebuchet MS', sans-serif;
+  color: #333333;
   margin-top: 0;
   margin-left: auto;
   margin-right: auto;
   width: 1200px;
   }
 
+/*navbar*/
 ul {
   list-style-type: none;
   margin: 0;
@@ -33,16 +39,33 @@ li a {
 }
 
 li a:hover:not(.active) {
-  background-color: #c7522a;
+  background-color: #3a8ae3;
 }
+
+
 
 .active {
   background-color: #e5c185;
 }
 
-.navProfile{
-  width: 50px;
+.navLastLi{
+  float: right;
 }
+
+.navProfile{
+  font-size: 12px;
+  float:left;
+  width: 200px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.imgNavProfile{
+  width: 30px;
+  margin:5px;
+}
+
+/*end navbar*/
 
 .leftSize {
     float:left;
@@ -53,8 +76,6 @@ li a:hover:not(.active) {
     float: right;
     width: 200px;
 }
-
-
   .left{
     width: 100px;
     float: left;
@@ -64,10 +85,10 @@ thead th {
   position: sticky;
   width:3px;
   padding: 2px;
-  color: #bbbbbb;
+  color: #d7e9f7;
   top: 0;
   z-index: 2;
-  background: #c7522a;
+  background: #3a8ae3;
 }
 
 /* Schedule */
@@ -81,188 +102,180 @@ thead th {
 /*Header*/
 
 .scheduleHeader{
-  font-size: 15px;
+  font-size: 13px;
   text-align: center;
+  background: #3a8ae3;
+  color: #d7e9f7;
   padding: 2px;
-  display: flex;
 }
 
 .thDays {
-  background: #c7522a;
-  color: #303245;
-  width: 26px;
-  height: 26px;
+  width: 25px;
+  height: 25px;
   padding: 2px;
 }
 
 .thMonth {
-  background: #c7522a;
-  color: #303245;
-  width: 200px;
+  width: 250px;
 }
 
 .thDetails{
-  width: 50px;
+  width: 55px;
   height: 26px;
-  color: #303245;
   justify-content: center;
   margin: 1px;
 }
 
+.trDays{
+  float: left;
+  display: inline;
+}
+
 .thDaysOfWeek {
-  background: #bbbbbb;
-  width: 26px;
-  height: 26px;
+  text-align: center;
+}
+
+.weekDay{
+  width: 27px;
+  height: 27px;
+  background: #d7e9f7;
+  color: #3a8ae3;
   font-size: 10px;
   text-align: center;
-  color: #333333;
+}
+
+.thFulName{
+  width:149px;
+  margin: 1px;
+}
+
+.thPosition{
+  width: 49px;
+  margin:1px;
 }
 
 /*Body*/
+.scheduleBody{
+  background: #efe2e2;
+  color: #333333;
+  font-size: 13px;
+  height: 25px;
+}
 
 .tdFulName{
   width:149px;
   margin: 1px;
+  padding-left: 5px;
+
 }
 
 .tdPosition{
   width: 49px;
   margin:1px;
+  padding-left: 5px;
 }
 
-.tdDays{
-  width:26px;
-  height:26px;
-  border: 1px solid black;
-}
-
-.dayHeader{
-  width: 20px;
-  height: 20px;
-  border: 1px solid black;
-  float:left;
-  margin-right: 1px;
-  font-size: 15px;
-  font-weight: bold;
-  display: flex;
+.tdDetails{
+  width: 55px;
+  height: 25px;
   justify-content: center;
-  align-items: center;
-}
-
-.emptyDay {
-  width: 20px;
-  height: 20px;
-  border: 1px solid black;
-  float:left;
-  margin-right: 1px;
-  font-size: 8px;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.weekDay{
-  width: 20px;
-  height: 20px;
-  border: 1px solid black;
-  background-color: cadetblue;
-  float:left;
-  margin-right: 1px;
-  font-size: 8px;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.dayButton{
-  width: 20px;
-  height: 20px;
-  margin: 0;
-}
-
-.morning{
-  background-color: bisque;
-  width: 20px;
-  height: 20px;
-  border: 1px solid black;
-  float:left;
-  margin-right: 1px;
-  font-size: 8px;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.afternoon{
-  background-color: #1b5874;
-  color: #f4ecec;
-  width: 20px;
-  height: 20px;
-  border: 1px solid black;
-  float:left;
-  margin-right: 1px;
-  font-size: 8px;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.night{
-  background-color: #303245;
-  width: 20px;
-  height: 20px;
-  border: 1px solid black;
-  float:left;
-  margin-right: 1px;
-  font-size: 8px;
-  font-weight: bold;
-  color: aliceblue;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.schedule .details{
-  width: 40px;
-  height: 20px;
-  border: 1px solid black;
-  float:left;
-  margin-right: 1px;
+  margin: 1px;
   font-size: 12px;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
+  text-align: center;
 }
 
+/*Buttons*/
+.tdButtonEmpty{
+  width:27px;
+  height:27px;
+  text-align: center;
+  font-size: 8px;
+  font-weight: bold;
+  padding: 0;
+  border: 0;
+}
+
+.tdButtonEmpty:hover{
+  background: #333333;
+  color: #efe2e2;
+}
+
+.tdButtonMorning{
+  width:27px;
+  height:27px;
+  text-align: center;
+  font-size: 8px;
+  font-weight: bold;
+  padding: 0;
+  border: 0;
+}
+
+.tdButtonMorning:hover{
+  background: #333333;
+  color: #efe2e2;
+}
+
+.tdButtonAfternoon{
+  width:27px;
+  height:27px;
+  background: #333333;
+  color: #efe2e2;
+  text-align: center;
+  font-size: 8px;
+  font-weight: bold;
+  padding: 0;
+  border: 0;
+}
+.tdButtonAfternoon:hover{
+  background: #efe2e2;
+  color: #333333;
+}
+
+/**/
+
+
+/*End of Schedule*/
+
+/*Add Schedule form*/
 .openAddSchedule {
+  background: #efe2e2;
   width:200px;
   height: 270px;
-  padding:5px;
   margin:auto;
-  border: 1px solid black;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+
 }
 
-.addScheduleTitle{
+.topLine{
+  background: #333333;
+  width: 200px;
+  height:50px;
+  color: #bbbbbb;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  float: left;
+}
+
+.scheduleTitle{
   text-align: center;
-  margin-top:20px;
+  margin:15px;
   font-weight: bold;
   font-size: 20px;
 }
 
-.addScheduleTextContent{
-  display: grid;
+.formSchedule{
+  padding: 10px;
+}
+
+.employeeDateSchedule{
+  height: 100px;
 }
 
 .addScheduleEmployee{
-  float:left;
+  text-align: center;
   font-size:17px;
-  padding-top:10px;
-  padding-right: 10px;
-  padding-left: 10px;
+  padding-top:15px;
   font-weight: bold;
 }
 
@@ -329,22 +342,11 @@ thead th {
   padding: 0;
 }
 
-.closeButton{
-  background-color: darkred;
-  font-size: 10px;
-  width:20px;
-  height:20px;
-  float:right;
-  border: 1px solid black;
-}
-
 .openEmployee{
   font-size: 10px;
 }
 
-.hide {
-  display: none;
-}
+/* index profile */
 
 .profile{
   display: inline;
@@ -354,14 +356,57 @@ thead th {
 }
 
 .profileCard{
+  background: #f4f4f4;
   float: left;
-  width: 500px;
-  height: 200px;
+  width: 300px;
   margin: 25px;
+  border: 20px #020d13;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  box-shadow: 5px 5px 5px grey;
+}
+
+.profileTitle{
+  background: #2c3a47;
+  color: #f4f6f7;
+  height: 150px;
+  text-align: center;
+  font-size: 25px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding: 20px;
+}
+
+.profileTable{
+  padding:20px;
+  font-size: 15px;
+  height: 110px;
 }
 
 .profileImage{
-  width: 150px;
-  float: left;
+  width: 100px;
   margin: 10px;
+}
+
+/*general*/
+.inputPass{
+  width:100px;
+}
+.hide{
+  display: none;
+}
+
+/*Employees*/
+.employeeFromCard{
+  margin-left: auto;
+  margin-right: auto;
+  border: 5px #020d13;
+}
+
+.changeToAddEmployee{
+  background: #020d13;
+  width: 40px;
+  color: #bbbbbb;
+  float:right;
+  clip-path: polygon(45% 0, 100% 0, 100% 100%, 0% 100%);
 }

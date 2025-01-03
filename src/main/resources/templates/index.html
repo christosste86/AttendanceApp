@@ -16,13 +16,16 @@
 
     <div class="profile" th:if="${loginUser != null}">
         <div class="profileCard">
-            <h2>My Profile</h2>
-            <img class="profileImage" th:src="@{'/images/profile.png'}" alt="profile picture">
-            <table>
-                <tr>
-                    <th>Fullname: </th>
-                    <td th:text="${loginUser.fullName}">Firstname Lastname</td>
-                </tr>
+
+            <div class="profileTitle">
+                <img class="profileImage"
+                     src="../static/images/profile.png"
+                     th:src="@{'/images/profile.png'}" alt="profile picture">
+                <div th:text="${loginUser.fullName}">Leonardo Dikabrio</div>
+            </div>
+
+
+            <table class="profileTable">
                 <tr>
                     <th>Position: </th>
                     <td th:text="${loginUser.getPosition().getTitle()}">Position name</td>
@@ -39,9 +42,14 @@
             </table>
         </div>
         <div class="profileCard">
-            <h2>Login</h2>
-            <img class="profileImage" th:src="@{'/images/login.png'}" alt="security image">
-            <table>
+            <div class="profileTitle">
+            <img class="profileImage"
+                 src="../static/images/login.png"
+                 th:src="@{'/images/login.png'}" alt="security image">
+            <div>Login</div>
+            </div>
+
+            <table class="profileTable">
                 <tr>
                     <th>Username: </th>
                     <td th:if="${loginUser != null }"
@@ -53,8 +61,8 @@
                     <th>Password: </th>
                     <td th:if="${loginUser != null}">
                         <form th:action="@{/update-password}" method="post">
-                            <label for="update-password"></label><br>
-                            <input id="update-password" type="password" name ="password">
+                            <label class="hide" for="update-password"></label>
+                            <input class ="inputPass" id="update-password" type="password" name ="password">
                             <button type="submit">Update</button>
                         </form>
                     </td>
@@ -62,10 +70,14 @@
             </table>
         </div>
         <div class="profileCard" th:if="${loginUser != null}">
-            <h2>Benefit Card</h2>
+            <div class="profileTitle">
+                <img class="profileImage"
+                     src="../static/images/benefit-card.png"
+                     th:src="@{'/images/benefit-card.png'}" alt="benefit card">
+                <div>Benefit Card</div>
+            </div>
 
-            <img class="profileImage" th:src="@{'/images/benefit-card.png'}" alt="benefit card">
-            <table>
+            <table class = "profileTable">
                 <tr>
                     <th>Benefit Card: </th>
                     <td th:if="${loginUser.benefitCard != null }"
