@@ -14,66 +14,133 @@
     <h1> Structure Schedule</h1>
     <div class="structure">
         <!--    Assignments-->
-        <div class="structureBox">
-            <h3 class="structureTitle">Assignments</h3>
-            <div class ="structureOptions">
-                <table class="optionTable">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Assignment</th>
-                            <th>Update</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="assignment : ${assignmentList}" th:object="${assignment}">
-                            <td th:text="${assignment.getAssignmentTitle()}">Title</td>
-                            <td th:text="${assignment.getHoursPerWeek()}">Assignment</td>
-                            <td>
-                                <form th:action="@{/get-assignment-id/{id} (id = ${assignment.getId()})}">
-                                    <button type = "submit">Update</button>
-                                </form>
-                            </td>
-                            <td>
-                                <form th:action="@{/delete-assignment/{id} (id=${assignment.getId()})}">
-                                    <button type = "submit">Remove</button>
-                                </form>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div class="structureCard">
+            <div class="structureCardTitle">Assignments</div>
 
-                <div class ="optionForum">
-                    <form th:action="@{/add-update-assignment}" method="post">
+            <div class="structureCardContent">
+
+                <div class ="structureForum">
+
+                    <div class="structureFormCardTitle">
+
+                        <form th:action="@{/set-isUpdate-as-False}">
+                            <div th:if="${isAssignmentUpdate}">
+                                <form th:action="@{/is-assignment-update-false}">
+                                    <button class="AddStructureButton" type ="submit">
+                                        Add
+                                    </button>
+                                </form>
+                            </div>
+                        </form>
+
+                        <div class="structureUpdateTitle"
+                             th:text="${isAssignmentUpdate} ? 'Update' : 'Add'">
+                            Update
+                        </div>
+                    </div>
+
+                    <form class="structureForm"
+                          th:action="@{/add-update-assignment}" method="post">
                         <div>
                             <label for="assignment_title">Title: </label>
+                            <br>
                             <input type ="text" id="assignment_title" name="assignmentTitle"
                                    th:value ="${isAssignmentUpdate}? ${assignment.getAssignmentTitle()} : ''">
                         </div>
                         <div>
                             <label for="assignmentHours">Assignment: </label>
+                            <br>
                             <input type = "number" id="assignmentHours" name="assignment"
                                    th:value ="${isAssignmentUpdate}? ${assignment.getHoursPerWeek()} : ''">
                         </div>
-                        <button type="submit"
+                        <button class="submitButton"
+                                type="submit"
                                 th:text="${isAssignmentUpdate}? 'Update Assignment' : 'Add Assignment'">Add Update assignment
                         </button>
-                        <div th:if="${isAssignmentUpdate}">
-                            <form th:action="@{/is-assignment-update-false}">
+                    </form>
+                </div>
+
+                <div class ="tableBackground">
+                    <table class="structureTable">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Assignment</th>
+                                <th>Update</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="assignment : ${assignmentList}" th:object="${assignment}">
+                                <td th:text="${assignment.getAssignmentTitle()}">Title</td>
+                                <td th:text="${assignment.getHoursPerWeek()}">Assignment</td>
+                                <td>
+                                    <form th:action="@{/get-assignment-id/{id} (id = ${assignment.getId()})}">
+                                        <button type = "submit">Update</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form th:action="@{/delete-assignment/{id} (id=${assignment.getId()})}">
+                                        <button type = "submit">Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+    <!--    Position-->
+        <div class="structureCard">
+            <h3 class="structureCardTitle">Positions</h3>
+            <div class ="structureCardContent">
+
+
+
+                <div class ="structureForum">
+
+                    <div class="structureFormCardTitle">
+
+
+                        <div th:if="${isPositionUpdate}">
+                            <form th:action ="@{/is-position-update-false}">
                                 <button type ="submit">
                                     Add
                                 </button>
                             </form>
                         </div>
-                    </form>
+
+                        <form th:action="@{/add-update-position}" method="post">
+                            <div>
+                                <label for="position_title">Title: </label>
+                                <input type ="text" id="position_title" name="title"
+                                       th:value ="${isPositionUpdate}? ${position.getTitle()} : ''">
+                            </div>
+                            <br>
+                            <label for="position_role">Position Role:</label><br>
+                            <select name="position_role" id="position_role" required><br>
+                                <option
+                                        th:value="${''}"
+                                        th:disabled="${false}"
+                                        th:selected="true">
+                                    Select Role
+                                </option>
+                                <option th:each="role :${roles}"
+                                        th:value="${role}" th:text ="${role.getName()}"></option>
+                            </select>
+                            <br>
+                            <button type="submit"
+                                    th:text="${isPositionUpdate}? 'Update Position' : 'Add Position'">Add Update position
+                            </button>
+
+                        </form>
+                    </div>
                 </div>
-            </div>
-        </div>
-    <!--    Position-->
-        <div class="structureBox">
-            <h3 class="structureTitle">Positions</h3>
-            <div class ="structureOptions">
+
+
+                <div class ="tableBackground">
                 <table class="optionTable">
                     <thead>
                         <tr>
@@ -104,39 +171,8 @@
                         </tr>
                     </tbody>
                 </table>
-
-                <div class ="optionForum">
-                    <form th:action="@{/add-update-position}" method="post">
-                        <div>
-                            <label for="position_title">Title: </label>
-                            <input type ="text" id="position_title" name="title"
-                                   th:value ="${isPositionUpdate}? ${position.getTitle()} : ''">
-                        </div>
-                        <br>
-                        <label for="position_role">Position Role:</label><br>
-                        <select name="position_role" id="position_role" required><br>
-                            <option
-                                    th:value="${''}"
-                                    th:disabled="${false}"
-                                    th:selected="true">
-                                Select Role
-                            </option>
-                            <option th:each="role :${roles}"
-                                    th:value="${role}" th:text ="${role.getName()}"></option>
-                        </select>
-                        <br>
-                        <button type="submit"
-                                th:text="${isPositionUpdate}? 'Update Position' : 'Add Position'">Add Update position
-                        </button>
-                        <div th:if="${isPositionUpdate}">
-                            <form th:action ="@{/is-position-update-false}">
-                                <button type ="submit">
-                                    Add
-                                </button>
-                            </form>
-                        </div>
-                    </form>
                 </div>
+
             </div>
         </div>
         <!--    Separate-->

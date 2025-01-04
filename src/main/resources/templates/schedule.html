@@ -42,7 +42,7 @@
             <input type="submit">
         </form>
 
-        <table>
+        <table class="tableBackground">
             <thead class="scheduleHeader">
             <tr>
                 <th class= "thMonth" colspan="2" th:if="${selectedMonth != null}"
@@ -78,7 +78,7 @@
 
                 <tr th:if="${employeeSchedule.key.getFirstName() != null && employeeSchedule.key.getLastName() != null}">
 
-                    <td class="tdFulName" th:text ="${employeeSchedule.key.fullName}">Leonardo Dicabrio</td>
+                    <td class="tdFulName" th:text ="${employeeSchedule.key.fullName}">Leonardo Dicaprio</td>
 
                     <td class="tdPosition" th:if ="${employeeSchedule.key.getPosition() != null}"
                         th:text = "${employeeSchedule.key.getPosition().getTitle()}">Manager</td>
@@ -87,19 +87,22 @@
                         th:text = "${'No Set'}"></td>
 
                     <div th:each="eSchedule, status : ${employeeSchedule.value}" th:object="${eSchedule}">
+
+<!--days button if is empty-->
                         <td th:if="${eSchedule.getShiftStart() == null}">
 
                             <form method="get" th:action="@{/select-employee/{employeeUsername}/select-day/{dayOfMonth} (dayOfMonth = ${status.index+1}, employeeUsername =${employeeSchedule.key.getUsername()})}">
-                                <button class="tdButtonEmpty" type="submit">15</button>
+                                <button class="tdButtonEmpty" type="submit"></button>
                             </form>
 
                         </td>
+<!--days button if is not empty-->
                         <td th:if="${eSchedule.getShiftStart() != null}">
                             <form method="get"
-                                  th:action="@{/select-employee/{employeeUsername}/select-day/{dayOfMonth} (dayOfMonth = ${status.index+1}, employeeUsername =${employeeSchedule.key.getUsername()})}"
-                                  th:classappend="${eSchedule.getShiftEnd().getHour() > 16}?'tdButtonAfternoon':'tdButtonMorning'">
+                                  th:action="@{/select-employee/{employeeUsername}/select-day/{dayOfMonth} (dayOfMonth = ${status.index+1}, employeeUsername =${employeeSchedule.key.getUsername()})}">
                                 <button class="tdButtonMorning"
                                         type="submit"
+                                        th:classappend="${eSchedule.getShiftEnd().getHour() > 16}?'tdButtonAfternoon':'tdButtonMorning'"
                                         th:text ="${eSchedule.getDailySchedule()}">14:00 20:00</button>
                             </form>
                         </td>
