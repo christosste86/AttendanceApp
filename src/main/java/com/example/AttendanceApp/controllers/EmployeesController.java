@@ -2,10 +2,7 @@ package com.example.AttendanceApp.controllers;
 
 
 import com.example.AttendanceApp.models.*;
-import com.example.AttendanceApp.services.AssignmentService;
-import com.example.AttendanceApp.services.EmployeesService;
-import com.example.AttendanceApp.services.PositionService;
-import com.example.AttendanceApp.services.SeparateService;
+import com.example.AttendanceApp.services.*;
 import org.apache.catalina.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,25 +23,28 @@ public class EmployeesController {
     private final SeparateService separateService;
     private final PositionService positionService;
     private final AssignmentService assignmentService;
+    private final BenefitCardService benefitCardService;
     private final PasswordEncoder passwordEncoder;
     private boolean isUpdate = false;
     private List<Employee> employeesList = new ArrayList<>();
     private Long employeeId;
     private String firstName;
     private String lastName;
+    private BenefitCard benefitCardSn;
     private Separate separate;
     private Position position;
-    Assignment assignment;
-    Double paymentPerHour;
-    String username;
-    String password;
+    private Assignment assignment;
+    private Double paymentPerHour;
+    private String username;
+    private String password;
 
     @Autowired
-    public EmployeesController(EmployeesService employeesService, SeparateService separateService, PositionService positionService, AssignmentService assignmentService, PasswordEncoder passwordEncoder) {
+    public EmployeesController(EmployeesService employeesService, SeparateService separateService, PositionService positionService, AssignmentService assignmentService, BenefitCardService benefitCardService, PasswordEncoder passwordEncoder) {
         this.employeesService = employeesService;
         this.separateService = separateService;
         this.positionService = positionService;
         this.assignmentService = assignmentService;
+        this.benefitCardService = benefitCardService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -61,6 +61,7 @@ public class EmployeesController {
         model.addAttribute("employeeId", this.employeeId);
         model.addAttribute("firstName" , this.firstName);
         model.addAttribute("lastName" , this.lastName);
+        model.addAttribute("benefitCardSn" , this.benefitCardSn);
         model.addAttribute("separate" , this.separate);
         model.addAttribute("position" , this.position);
         model.addAttribute("assignment" , this.assignment);
@@ -84,6 +85,7 @@ public class EmployeesController {
     @PostMapping("/add-update-employee")
     public String createEmployee(@RequestParam String firstName,
                                  @RequestParam String lastName,
+                                 @RequestParam String benefitCardSn,
                                  @RequestParam Separate separate,
                                  @RequestParam Position position,
                                  @RequestParam Assignment assignment,
@@ -92,10 +94,15 @@ public class EmployeesController {
                                  @RequestParam String password){
         if(!isUpdate){
             Employee employee = new Employee(firstName, lastName, username, passwordEncoder.encode(password), paymentPerHour);
+            BenefitCard benefitCard = new BenefitCard();
+            benefitCard.setSerialNumber(benefitCardSn);
+            //create if benefit card serial number exist
+
             employee.setPosition(position);
             employee.addRole(new Role(position.getRole()));
             employee.setAssignment(assignment);
             employee.setSeparate(separate);
+            employee.setBenefitCard(benefitCard);
             if(!employeesService.isExist(username)){
                 employeesService.saveEmployee(employee);
             }
@@ -133,7 +140,7 @@ public class EmployeesController {
 
     @GetMapping("/about-employee/{employee}")
     public String aboutEmployeePage(Model model, @PathVariable("employee") Long employeeOrder){
-        model.addAttribute("employees", employeesService.getEmployeeById(employeeOrder));
+        model.addAttribute("employeeId", employeesService.getEmployeeById(employeeOrder));
         return "redirect:/employees";
     }
 
@@ -143,6 +150,7 @@ public class EmployeesController {
         Employee employee = employeesService.getEmployeeById(employeeOrder);
         this.firstName = employee.getFirstName();
         this.lastName = employee.getLastName();
+        this.benefitCardSn = employee.getBenefitCard();
         this.separate = employee.getSeparate();
         this.position = employee.getPosition();
         this.assignment = employee.getAssignment();
@@ -164,4 +172,5 @@ public class EmployeesController {
         employeesService.deleteById(employeeOrder);
         return "redirect:/employees";
     }
+
 }

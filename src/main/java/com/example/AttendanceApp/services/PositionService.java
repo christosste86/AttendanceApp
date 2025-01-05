@@ -17,7 +17,7 @@ public interface PositionService {
 
     void createPosition(Position position);
 
-    void updatePosition(long id, String title, String role);
+    void updatePosition(long id, String title,String sortTitle, String role);
 
     void deletePosition(long id);
 }

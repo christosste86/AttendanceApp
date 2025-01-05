@@ -11,6 +11,8 @@ public class Position extends BaseEntity{
 
     private String title;
 
+    private String sortTitle;
+
     private String role;
 
     @OneToMany(mappedBy = "position")
@@ -19,8 +21,9 @@ public class Position extends BaseEntity{
     public Position() {
     }
 
-    public Position(String title, String role) {
+    public Position(String title,String sortTitle, String role) {
         this.title = title;
+        this.sortTitle = sortTitle;
         this.role = role;
     }
 
@@ -38,6 +41,14 @@ public class Position extends BaseEntity{
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getSortTitle() {
+        return sortTitle;
+    }
+
+    public void setSortTitle(String sortTitle) {
+        this.sortTitle = sortTitle;
     }
 
     public void setEmployees(Employee employee) {

@@ -29,6 +29,12 @@ public class BenefitCardServiceImpl implements BenefitCardService {
     }
 
     @Override
+    public BenefitCard getBenefitCardBySerialNumber(String serialNumber) {
+        Optional<BenefitCard> benefitCard = benefitCardRepository.findBySerialNumber(serialNumber);
+        return benefitCard.orElse(null);
+    }
+
+    @Override
     public void createBenefitCard(BenefitCard benefitCard) {
         benefitCardRepository.save(benefitCard);
     }

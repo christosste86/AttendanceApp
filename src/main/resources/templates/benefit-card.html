@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <meta charset="UTF-8">
+    <title>Benefits</title>
+</head>
+<body>
+<header>
+    <nav th:replace="~{fragments/navbar :: bavigation-bar}"></nav>
+</header>
+    <div class="benefitCard">
+    <!--Benefit card Table-->
+    <div class="benefitCardCard">
+        <div class="benefitCardCardTitle">
+            <div>Benefit Card</div>
+            <div class="benefitCardCardLine"></div>
+            <!--Benefit Card Serial Number-->
+            <div th:text="${'S/N:' + employee.getBenefitCard().getSerialNumber()}"
+                 class="benefitCardCardSn">S/N: 1258456989</div>
+            <!--Employee Full name-->
+            <div class="benefitCardFullName"
+                 th:text="${'Full name: ' + employee.getFullName()}">Full name: Leonardo Dicaprio</div>
+        </div>
+    </div>
+
+    <div class="benefitCardTable">
+        <table>
+    <!--Credit-->
+            <tr>
+                <th>Credit</th>
+                <td th:text="${employee.getBenefitCard().getPoints()}">2000</td>
+    <!--Credit Form-->
+                <td>
+                    <form th:action="">
+                        <label for="credit">Add credit:</label>
+                        <input id="credit" type ="number" name ="credit" min="-999999" max="999999">
+                        <button type="submit">Add</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

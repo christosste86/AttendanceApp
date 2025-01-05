@@ -101,12 +101,13 @@ public class StructureController {
 
     @PostMapping("/add-update-position")
     public String createUpdatePosition(@RequestParam String title,
+                                       @RequestParam String sortTitle,
                                        @RequestParam String position_role){
         if(isPositionUpdate){
-            positionService.updatePosition(this.positionId, title, position_role);;
+            positionService.updatePosition(this.positionId, title, sortTitle, position_role);;
             this.isPositionUpdate = false;
         }else{
-            Position newPosition = new Position(title,position_role);
+            Position newPosition = new Position(title, sortTitle, position_role);
             positionService.createPosition(newPosition);
         }
         return "redirect:/structure";

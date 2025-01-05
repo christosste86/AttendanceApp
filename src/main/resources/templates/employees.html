@@ -10,18 +10,21 @@
     <nav th:replace="~{fragments/navbar :: bavigation-bar}"></nav>
 </header>
 <main>
-    <h1>All Employees</h1>
+<!--Left Size-->
     <div class = "leftSize">
+        <h1>All Employees</h1>
+<!--Employees Table-->
         <div class="tableBackground">
             <table class="employeeTable" th:if="${employees.size() > 0}">
+<!--Table Header-->
                 <thead>
                 <tr>
                     <th>Username</th>
                     <th>Firstname</th>
                     <th>Lastname</th>
                     <th>Position</th>
-                    <th>Assignment</th>
                     <th>Separate</th>
+                    <th>Assignment</th>
                     <th>BenefitCard S/N</th>
                     <th>About</th>
                     <th>Update</th>
@@ -29,33 +32,51 @@
                 </tr>
                 </thead>
                 <tbody>
+<!--Table Body-->
                 <tr th:each="employee : ${employees}">
+    <!--Username-->
                     <td th:text="${employee.getUsername()}">leoDik</td>
+    <!--Firstname-->
                     <td th:text="${employee.getFirstName()}">Leonardo</td>
+    <!--Lastname-->
                     <td th:text="${employee.getLastName()}">Dicaprio</td>
+    <!--Position-->
                     <td th:if="${employee.getPosition() != null}"
                         th:text="${employee.getPosition().getTitle()}">Worker</td>
-                    <td th:if="${employee.getPosition() == null}"></td>
+    <!--Separate-->
+                    <td th:if="${employee.getSeparate() == null}"></td>
                     <td th:if="${employee.getSeparate() != null}"
                         th:text="${employee.getSeparate().getTitle()}">Actor</td>
-                    <td th:if="${employee.getSeparate() == null}" ></td>
+    <!--Assignment-->
+                    <td th:if="${employee.getAssignment() == null}" ></td>
                     <td th:if="${employee.getAssignment() != null}"
                         th:text="${employee.getAssignment().getHoursPerWeek()}">40</td>
-                    <td th:if="${employee.getAssignment() == null}"></td>
-                    <td th:if="${employee.getBenefitCard() != null}"
-                        th:text="${employee.getBenefitCard().getSerialNumber()}">125896584</td>
+    <!--BenefitCard-->
                     <td th:if="${employee.getBenefitCard() == null}"></td>
-                    <td><a th:href="@{/about-employee/{employee}(employee=${employee.getId})}">About</a></td>
+                    <td th:if="${employee.getBenefitCard() != null}">
+                        <a th:href="@{/benefit-card-employee/{employee}(employee=${employee.getId})}"
+                           th:text="${employee.getBenefitCard().getSerialNumber()}">125896584</a>
+                    </td>
+    <!--About-->
+                    <td th:if="${employee.getBenefitCard() == null}"></td>
+                    <td>
+                        <form th:action="@{/about-employee/{employee}(employee=${employee.getId})}">
+                            <button type="submit">About</button>
+                        </form>
+                    </td>
+    <!--Update-->
                     <td>
                         <form th:action="@{/get-employee-id-set-isUpdate-as-true/{id}(id = ${employee.getId()})}">
                             <button type="submit">Update</button>
                         </form>
                     </td>
+    <!--Delete-->
                     <td th:if="${!loginUserUsername.equals(employee.getUsername())}">
                         <form method="get" th:action="@{/delete-employee/{id}(id=${employee.getId})}">
                             <button type = "submit">Remove</button>
                         </form>
                     </td>
+
                     <td th:if="${loginUserRole.equals(employee.getUsername())}"
                         th:text="${'No Permission'}"></td>
                 </tr>
@@ -63,13 +84,15 @@
             </table>
         </div>
     </div>
+<!--Right Size-->
     <div class="rightSize">
-<!--       ee-->
+<!--Form card-->
         <div class="employeeFormCard">
+
         <div id="updateEmployee">
 
             <div class="employeeFormCardTitle">
-
+<!--Add button to disable update -->
                 <form th:action="@{/set-isUpdate-as-False}">
                     <div th:classappend="${isUpdate}? 'AddEmployeeButton': 'hide'">
                         <button class ="AddEmployeeButton"
@@ -78,89 +101,121 @@
                         </button>
                     </div>
                 </form>
-
+<!--Title form-->
                 <div class="employeeUpdateTitle"
                      th:text="${isUpdate} ? 'Update Employee' : 'Add Employee'">
                     Update
                 </div>
 
             </div>
-
+<!--Form-->
             <form class="employeeFrom"
                   th:action="@{/add-update-employee}" method="post">
+<!--Username Label-->
                 <div th:if="${!isUpdate ||
                             !loginUserUsername.equals(username)}">
-                    <label for="update-username">Username: </label><br>
+                    <label for="update-username">Username: </label>
+                    <br>
                     <input id="update-username" type="text" name ="username"
                            th:value="${username} ? ${username} : ''" >
                 </div>
+<!--Password Label-->
                 <div>
-                    <label for="update-password">Password: </label><br>
+                    <label for="update-password">Password: </label>
+                    <br>
                     <input id="update-password" type="password" name ="password"
                            th:value="${isUpdate} ? ${password} : ''"><br>
                 </div>
-
+<!--hide login user own options-->
                 <div th:if="${!isUpdate || !loginUserUsername.equals(username)}">
-                    <label for="update-firstName">First name:</label><br>
-                    <input id="update-firstName" type="text" placeholder=" " name="firstName"
-                           th:value="${isUpdate} ? ${firstName} : ''"><br>
+<!--Firstname Label-->
+                    <div>
+                        <label for="update-firstName">First name:</label>
+                        <br>
+                        <input id="update-firstName" type="text" placeholder=" " name="firstName"
+                               th:value="${isUpdate} ? ${firstName} : ''">
+                    </div>
+<!--Lastname Label-->
+                    <div>
+                        <label for="update-lastName">Last name:</label>
+                        <br>
+                        <input id="update-lastName" type="text" name="lastName"
+                               th:value="${isUpdate} ? ${lastName} : ''">
+                    </div>
+<!--BenefitCard Label-->
+                    <div>
+                        <label for="serialNumber">Serial number:</label>
+                        <br>
+                        <input id="serialNumber" type ="text" name ="benefitCardSn" th:value="${isUpdate} ? ${benefitCardSn.getSerialNumber()} : ''">
+                    </div>
+<!--Position Select Label-->
+                    <div>
+                        <label for="update-positionSelect">Position name:</label>
+                        <br>
+                        <select name="position" id="update-positionSelect" required>
+                            <option
+                                    th:value="${isUpdate && employeeId != null}? ${position.id} :''"
+                                    th:disabled="${isUpdate == false} ? ${true} : ${false}"
+                                    th:text="${isUpdate && employeeId != null}? ${position.getTitle()} : 'Select Position'"
+                                    th:selected="true">
+                                Select Seperated
+                            </option>
+                            <option th:each="position :${positionsList}"
+                                    th:value="${position.id}" th:text ="${position.getTitle()}"></option>
+                        </select>
+                    </div>
+<!--Separate Select Label-->
+                    <div>
+                        <label for="update-separateSelect">Seperated name:</label>
+                        <br>
+                        <select name="separate" id="update-separateSelect" required>
+                            <option
+                                    th:value="${isUpdate && employeeId != null}? ${separate.id} :''"
+                                    th:disabled="${isUpdate == false} ? ${true} : ${false}"
+                                    th:text="${isUpdate && employeeId != null}? ${separate.getTitle()} : 'Select Seperated'"
+                                    th:selected="true">
+                                Select Seperated
+                            </option>
+                            <option th:each="separate :${separatedList}" th:value="${separate.id}" th:text ="${separate.getTitle()}"></option>
+                        </select>
+                    </div>
+<!--Assignment Select Label-->
+                    <div>
+                        <label for="update-assignmentSelect">Assignment:</label>
+                        <br>
+                        <select name="assignment" id="update-assignmentSelect" required>
+                            <option
+                                    th:value="${isUpdate && employeeId != null}? ${assignment.id} :''"
+                                    th:disabled="${isUpdate == false} ? ${true} : ${false}"
+                                    th:text="${isUpdate && employeeId != null} ? ${assignment.hoursPerWeek} : 'Select Assignment'"
+                                    th:selected="true">
+                                Select Seperated
+                            </option>
+                            <option th:each="assignment :${assignmentsList}"
+                                    th:value="${assignment.id}"
+                                    th:text ="${assignment.hoursPerWeek}"></option>
+                        </select>
+                    </div>
+<!--Payment Select Label-->
+                    <div>
+                        <label for="update-paymentPerHour">Payment: </label><br>
+                        <input id="update-paymentPerHour" type="number" name="paymentPerHour"
+                               placeholder="0.0/h"
+                               th:value="${isUpdate} ? ${paymentPerHour} : ''">
+                    </div>
 
-                    <label for="update-lastName">Last name:</label><br>
-                    <input id="update-lastName" type="text" name="lastName"
-                           th:value="${isUpdate} ? ${lastName} : ''"><br>
-
-                    <label for="update-positionSelect">Position name:</label><br>
-                    <select name="position" id="update-positionSelect" required><br>
-                        <option
-                                th:value="${isUpdate && employeeId != null}? ${position.id} :''"
-                                th:disabled="${isUpdate == false} ? ${true} : ${false}"
-                                th:text="${isUpdate && employeeId != null}? ${position.getTitle()} : 'Select Position'"
-                                th:selected="true">
-                            Select Seperated
-                        </option>
-                        <option th:each="position :${positionsList}"
-                                th:value="${position.id}" th:text ="${position.getTitle()}"></option>
-                    </select>
-                    <br>
-                    <label for="update-separateSelect">Seperated name:</label><br>
-                    <select name="separate" id="update-separateSelect" required><br>
-                        <option
-                                th:value="${isUpdate && employeeId != null}? ${separate.id} :''"
-                                th:disabled="${isUpdate == false} ? ${true} : ${false}"
-                                th:text="${isUpdate && employeeId != null}? ${separate.getTitle()} : 'Select Seperated'"
-                                th:selected="true">
-                            Select Seperated
-                        </option>
-                        <option th:each="separate :${separatedList}" th:value="${separate.id}" th:text ="${separate.getTitle()}"></option>
-                    </select>
-                    <br>
-                    <label for="update-assignmentSelect">Assignment:</label><br>
-                    <select name="assignment" id="update-assignmentSelect" required><br>
-                        <option
-                                th:value="${isUpdate && employeeId != null}? ${assignment.id} :''"
-                                th:disabled="${isUpdate == false} ? ${true} : ${false}"
-                                th:text="${isUpdate && employeeId != null} ? ${assignment.hoursPerWeek} : 'Select Assignment'"
-                                th:selected="true">
-                            Select Seperated
-                        </option>
-                        <option th:each="assignment :${assignmentsList}"
-                                th:value="${assignment.id}"
-                                th:text ="${assignment.hoursPerWeek}"></option>
-                    </select>
-                    <br>
-                    <label for="update-paymentPerHour">Payment: </label><br>
-                    <input id="update-paymentPerHour" type="number" name="paymentPerHour"
-                           placeholder="0.0/h"
-                           th:value="${isUpdate} ? ${paymentPerHour} : ''"><br>
                 </div>
+<!--Submit button-->
                 <button class ="submitButton"
                         type="submit"
                         th:text="${isUpdate} ? 'Update Employee' : 'Add Employee'">Update employee</button>
+
             </form>
         </div>
         </div>
     </div>
 </main>
+<!--JavaScript-->
 <script>
     function openUpdateEmployee() {
         var updateElement = document.getElementById("updateEmployee");

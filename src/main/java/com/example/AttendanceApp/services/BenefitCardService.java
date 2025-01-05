@@ -10,6 +10,8 @@ public interface BenefitCardService {
 
     BenefitCard getBenefitCardById(long id);
 
+    BenefitCard getBenefitCardBySerialNumber(String serialNumber);
+
     void createBenefitCard(BenefitCard benefitCard);
 
     void updateBenefitCardPoints(long id, int points);

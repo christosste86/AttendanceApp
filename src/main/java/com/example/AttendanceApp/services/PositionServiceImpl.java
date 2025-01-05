@@ -58,7 +58,7 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
-    public void updatePosition(long id, String title, String role) {
+    public void updatePosition(long id, String title, String sortTitle, String role) {
         Optional<Position> position = positionRepository.findById(id);
         if (position.isPresent()) {
             Position p = position.get();
