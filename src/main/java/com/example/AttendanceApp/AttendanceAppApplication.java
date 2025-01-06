@@ -35,6 +35,7 @@ public class AttendanceAppApplication implements CommandLineRunner {
 
 		Position adminPosition = new Position();
 		adminPosition.setTitle("Administrator");
+		adminPosition.setSortTitle("ADMIN");
 		adminPosition.setRole("ADMIN");
 		if(positionRepository.findByTitle(adminPosition.getTitle()).isEmpty()) {
 			positionRepository.save(adminPosition);

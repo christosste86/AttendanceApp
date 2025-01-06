@@ -92,10 +92,16 @@ public class EmployeesController {
                                  @RequestParam Double paymentPerHour,
                                  @RequestParam String username,
                                  @RequestParam String password){
+        BenefitCard benefitCard = new BenefitCard();
+        benefitCard.setSerialNumber(benefitCardSn);
+        benefitCard.setPoints(0);
+
+        if(!benefitCardService.isExist(benefitCard.getSerialNumber())){
+            benefitCardService.createBenefitCard(benefitCard);
+        }
+
         if(!isUpdate){
             Employee employee = new Employee(firstName, lastName, username, passwordEncoder.encode(password), paymentPerHour);
-            BenefitCard benefitCard = new BenefitCard();
-            benefitCard.setSerialNumber(benefitCardSn);
             //create if benefit card serial number exist
 
             employee.setPosition(position);
@@ -111,6 +117,7 @@ public class EmployeesController {
                     this.employeeId,
                     firstName,
                     lastName,
+                    benefitCard,
                     separate,
                     position,
                     assignment,

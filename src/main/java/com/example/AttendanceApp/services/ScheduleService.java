@@ -8,6 +8,7 @@ import com.example.AttendanceApp.models.Schedule;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public interface ScheduleService {
@@ -25,7 +26,7 @@ public interface ScheduleService {
 
     List<Schedule>monthlyEmployeesSchedule(LocalDate month);
 
-    HashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth(LocalDate month, List<Employee> employees);
+    LinkedHashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth(LocalDate month, List<Employee> employees);
 
     HashMap<Employee, Details> monthlyTotalHours(LocalDate month, HashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth);
 

@@ -74,8 +74,8 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public HashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth(LocalDate month, List<Employee> employees){
-        HashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth = new HashMap<>();
+    public LinkedHashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth(LocalDate month, List<Employee> employees){
+        LinkedHashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth = new LinkedHashMap<>();
         for (Employee e: employees){
             List<Schedule> schedule = new ArrayList<>();
             addEmptySchedule(schedule, month);

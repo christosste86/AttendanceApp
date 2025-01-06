@@ -63,6 +63,7 @@ public class PositionServiceImpl implements PositionService {
         if (position.isPresent()) {
             Position p = position.get();
             p.setTitle(title);
+            p.setSortTitle(sortTitle);
             p.setRole(role);
             positionRepository.save(p);
         }

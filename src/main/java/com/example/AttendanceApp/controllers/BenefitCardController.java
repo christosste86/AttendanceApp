@@ -6,10 +6,7 @@ import com.example.AttendanceApp.services.BenefitCardService;
 import com.example.AttendanceApp.services.EmployeesService;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class BenefitCardController {
@@ -27,24 +24,22 @@ public class BenefitCardController {
         return "benefit-card";
     }
 
-    @GetMapping("/benefit-card-employee/{employee}")
+    @GetMapping("/benefit-card/{employee}")
     public String benefitCardEmployeePage(Model model, @PathVariable("employee") Long employeeOrder){
         model.addAttribute("employee", employeesService.getEmployeeById(employeeOrder));
         return "benefit-card";
     }
 
-    @GetMapping("/add-benefit-card/")
-    public String getBenefitCardForm() {
-        return "benefit-card";
-    }
 
-    @PostMapping("/add-benefit-card/")
-    public String createBenefitCard(@ModelAttribute String serialNumber,
-                                    @ModelAttribute int points,
-                                    @ModelAttribute Employee employee) {
-        BenefitCard newBenefitCard = new BenefitCard(serialNumber, points);
-        newBenefitCard.setEmployee(employee);
-        benefitCardService.createBenefitCard(newBenefitCard);
-        return "redirect:/benefits";
+    @PostMapping("/benefit-card/{employeeId}/add-credit")
+    public String addCredit(@PathVariable Long employeeId,
+                            @ModelAttribute int points){
+        Employee employee = employeesService.getEmployeeById(employeeId);
+        BenefitCard benefitCard = employee.getBenefitCard();
+        int benefitCardPoints = benefitCard.getPoints();
+
+        benefitCard.setPoints(points);
+        benefitCardService.updateBenefitCardPoints(benefitCard);
+        return "redirect:/benefit-card/"+ employeeId;
     }
 }

@@ -1,9 +1,6 @@
 package com.example.AttendanceApp.services;
 
-import com.example.AttendanceApp.models.Assignment;
-import com.example.AttendanceApp.models.Employee;
-import com.example.AttendanceApp.models.Position;
-import com.example.AttendanceApp.models.Separate;
+import com.example.AttendanceApp.models.*;
 import com.example.AttendanceApp.repositaries.EmployeeRepository;
 import com.example.AttendanceApp.security.util.SecurityUtil;
 import org.springframework.security.core.Authentication;
@@ -101,6 +98,7 @@ public class EmployeesServiceImpl implements EmployeesService, UserDetailsServic
     public void updateEmployeeById(long id,
                                    String firstName,
                                    String lastName,
+                                   BenefitCard benefitCard,
                                    Separate separate,
                                    Position position,
                                    Assignment assignment,
@@ -112,6 +110,7 @@ public class EmployeesServiceImpl implements EmployeesService, UserDetailsServic
             Employee e = employees.get();
             e.setFirstName(firstName);
             e.setLastName(lastName);
+            e.setBenefitCard(benefitCard);
             e.setSeparate(separate);
             e.setPosition(position);
             e.setAssignment(assignment);

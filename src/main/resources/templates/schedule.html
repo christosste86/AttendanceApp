@@ -81,7 +81,7 @@
                     <td class="tdFulName" th:text ="${employeeSchedule.key.fullName}">Leonardo Dicaprio</td>
 
                     <td class="tdPosition" th:if ="${employeeSchedule.key.getPosition() != null}"
-                        th:text = "${employeeSchedule.key.getPosition().getTitle()}">Manager</td>
+                        th:text = "${employeeSchedule.key.getPosition().getSortTitle()}">Manager</td>
 
                     <td th:if ="${employeeSchedule.key.getPosition() == null}"
                         th:text = "${'No Set'}"></td>

@@ -16,10 +16,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @Controller
 public class ScheduleController {
@@ -63,7 +60,7 @@ public class ScheduleController {
         model.addAttribute("employees", this.employeesList);
         model.addAttribute("separatedList", separateService.getSeparates());
         model.addAttribute("positionsList", positionService.getPositions());
-        HashMap<Employee, List<Schedule>> employeesMonthlySchedule = scheduleService.employeesScheduleHashMapPerMonth(this.selectedMonth, this.employeesList);
+        LinkedHashMap <Employee, List<Schedule>> employeesMonthlySchedule = scheduleService.employeesScheduleHashMapPerMonth(this.selectedMonth, this.employeesList);
         this.employeesList.forEach(System.out::println);
         model.addAttribute("monthlyEmployeesSchedule", employeesMonthlySchedule);
         List<String> dayOfWeeks = new ArrayList<>();

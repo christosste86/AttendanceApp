@@ -14,7 +14,9 @@ public interface BenefitCardService {
 
     void createBenefitCard(BenefitCard benefitCard);
 
-    void updateBenefitCardPoints(long id, int points);
+    boolean isExist(String serialNumber);
+
+    void updateBenefitCardPoints(BenefitCard benefitCard);
 
     void updateBenefitCardSerialNumber(long id, String SerialNumber);
 

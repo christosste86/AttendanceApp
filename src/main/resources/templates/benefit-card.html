@@ -33,7 +33,7 @@
                 <td th:text="${employee.getBenefitCard().getPoints()}">2000</td>
     <!--Credit Form-->
                 <td>
-                    <form th:action="">
+                    <form th:action="@{/benefit-card/{employeeId}/add-credit (employeeId = ${employee.getId()})}" method="post">
                         <label for="credit">Add credit:</label>
                         <input id="credit" type ="number" name ="credit" min="-999999" max="999999">
                         <button type="submit">Add</button>

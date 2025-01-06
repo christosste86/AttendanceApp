@@ -54,7 +54,7 @@
     <!--BenefitCard-->
                     <td th:if="${employee.getBenefitCard() == null}"></td>
                     <td th:if="${employee.getBenefitCard() != null}">
-                        <a th:href="@{/benefit-card-employee/{employee}(employee=${employee.getId})}"
+                        <a th:href="@{/benefit-card/{employee}(employee=${employee.getId})}"
                            th:text="${employee.getBenefitCard().getSerialNumber()}">125896584</a>
                     </td>
     <!--About-->
@@ -146,7 +146,7 @@
                     <div>
                         <label for="serialNumber">Serial number:</label>
                         <br>
-                        <input id="serialNumber" type ="text" name ="benefitCardSn" th:value="${isUpdate} ? ${benefitCardSn.getSerialNumber()} : ''">
+                        <input id="serialNumber" type ="text" name ="benefitCardSn" th:value="${isUpdate && benefitCardSn != null } ? ${benefitCardSn.getSerialNumber()} : ''">
                     </div>
 <!--Position Select Label-->
                     <div>

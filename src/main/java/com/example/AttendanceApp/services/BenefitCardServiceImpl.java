@@ -40,12 +40,15 @@ public class BenefitCardServiceImpl implements BenefitCardService {
     }
 
     @Override
-    public void updateBenefitCardPoints(long id, int points) {
-        Optional<BenefitCard> benefitCard = benefitCardRepository.findById(id);
-        if (benefitCard.isPresent()){
-            BenefitCard b = benefitCard.get();
-            b.setPoints(b.getPoints() + points);
-        }
+    public boolean isExist(String serialNumber) {
+        if(benefitCardRepository.findBySerialNumber(serialNumber).isPresent()){
+            return true;
+        }return false;
+    }
+
+    @Override
+    public void updateBenefitCardPoints(BenefitCard benefitCard) {
+        benefitCardRepository.save(benefitCard);
     }
 
     @Override
