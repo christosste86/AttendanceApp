@@ -35,7 +35,7 @@
                 <td>
                     <form th:action="@{/benefit-card/{employeeId}/add-credit (employeeId = ${employee.getId()})}" method="post">
                         <label for="credit">Add credit:</label>
-                        <input id="credit" type ="number" name ="credit" min="-999999" max="999999">
+                        <input id="credit" type ="number" name ="points" min="-999999" max="999999">
                         <button type="submit">Add</button>
                     </form>
                 </td>

@@ -49,7 +49,7 @@ public class PositionServiceImpl implements PositionService {
     public Role getRoleByName(String roleName) {
         if(roleRepository.findByPositionRoleName(roleName).isEmpty()) {
             return new Role();
-        }return roleRepository.findByPositionRoleName(roleName).getFirst();
+        }return roleRepository.findByPositionRoleName(roleName).get();
     }
 
     @Override

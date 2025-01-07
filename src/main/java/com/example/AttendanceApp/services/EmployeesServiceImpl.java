@@ -2,6 +2,7 @@ package com.example.AttendanceApp.services;
 
 import com.example.AttendanceApp.models.*;
 import com.example.AttendanceApp.repositaries.EmployeeRepository;
+import com.example.AttendanceApp.repositaries.RoleRepository;
 import com.example.AttendanceApp.security.util.SecurityUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,34 +22,48 @@ public class EmployeesServiceImpl implements EmployeesService, UserDetailsServic
 
     private final EmployeeRepository employeesRepository;
     private Employee logintEmployee;
+    private List<Employee> employeesList = new ArrayList<>();
 
     public EmployeesServiceImpl(EmployeeRepository employeesRepository) {
         this.employeesRepository = employeesRepository;
     }
 
+    private List<Employee> getEmployeesWithRoleLevelOneAndTwo(){
+        List<Employee> employees = new ArrayList<>();
+        employeesRepository.findEmployeesBySeparateOrderByPositionTitle(getLoginEmployee().getSeparate()).forEach(employee -> {
+            employee.getRoles().forEach(r->{
+                if(r.getName().equals("ROLE_LEVEL3") || r.getName().equals("ROLE_LEVEL2")){
+                    employees.add(employee);
+                }
+            });
+        });
+        return employees;
+    }
+
+
 
     @Override
-    public List<Employee> getEmployeesList() {
+    public List<Employee> employeesListByRole() {
         String role = getLoginEmployee().getRoles().stream().toList().getFirst().toString();
-        System.out.println("Role name: " + role);
         if(role.equals("ROLE_LEVEL3")){
-            System.out.println("Role Level3");
             return employeesRepository.findEmployeesByUsername(getLoginEmployee().getUsername());
         }
         if(role.equals("ROLE_LEVEL2")){
-            List<Employee> employees = new ArrayList<>();
-            employeesRepository.findEmployeesBySeparate(getLoginEmployee().getSeparate()).forEach(employee -> {
-                employee.getRoles().forEach(r->{
-                    if(r.getName().equals("ROLE_LEVEL3") || r.getName().equals("ROLE_LEVEL2")){
-                        employees.add(employee);
-                    }
-                });
-            });
-            return employees;
+            return getEmployeesWithRoleLevelOneAndTwo();
         }
         if(role.equals("ROLE_ADMIN") || role.equals("ROLE_LEVEL1")){
-            return employeesRepository.findAll();
+            return employeesRepository.findEmployeesOrderByPositionTitle();
         }return new ArrayList<>();
+    }
+
+    @Override
+    public List<Employee> getEmployeesList() {
+        return this.employeesList;
+    }
+
+    @Override
+    public void setEmployeesList(List<Employee> employeesList) {
+        this.employeesList = employeesList;
     }
 
     @Override
@@ -123,11 +138,7 @@ public class EmployeesServiceImpl implements EmployeesService, UserDetailsServic
 
     @Override
     public List<Employee> getFilteredEmployeesList(String firstName, String lastName, Separate separate, Position position){
-        if(employeesRepository.filterEmployees(firstName, lastName, separate, position).isEmpty()){
-            return employeesRepository.findAll();
-        }else{
-            return employeesRepository.filterEmployees(firstName, lastName, separate, position);
-        }
+        return employeesRepository.filterEmployees(firstName, lastName, separate, position);
     }
 
     @Override
@@ -137,6 +148,7 @@ public class EmployeesServiceImpl implements EmployeesService, UserDetailsServic
             throw new UsernameNotFoundException(username);
         }
         this.logintEmployee = employee.get();
+        this.employeesList = employeesListByRole();
         return this.logintEmployee;
     }
 }

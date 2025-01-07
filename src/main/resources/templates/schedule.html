@@ -21,25 +21,28 @@
             <input type="submit">
         </form>
 
-        <form th:action="@{/employee-filter/}" method="get">
+        <form th:action="@{/filter-employee-list}" method="get">
             <label for="filteredFirstName">First name: </label>
-            <input type="text" id="filteredFirstName" name="firstName">
+            <input type="text" id="filteredFirstName" name="employeeFirstName">
 
             <label for="filteredLastName">Last name: </label>
-            <input type="text" id="filteredLastName" name="lastName">
+            <input type="text" id="filteredLastName" name="employeeLastName">
 
             <label for="separateSelect">Seperated name:</label>
-            <select name="separatedName" id="separateSelect" required>
+            <select name="employeeSeparate" id="separateSelect" required>
                 <option value="" disabled selected>Select Seperated</option>
                 <option th:each="separate :${separatedList}" th:value="${separate.getId()}" th:text ="${separate.getTitle()}"></option>
             </select>
 
             <label for="positionSelect">Position name:</label>
-            <select name="position" id="positionSelect" required>
+            <select name="employeePosition" id="positionSelect" required>
                 <option value="" disabled selected>Select position</option>
                 <option th:each="position :${positionsList}" th:value="${position.getId()}" th:text ="${position.getTitle()}"></option>
             </select>
             <input type="submit">
+        </form>
+        <form th:action="@{/disable-filter}">
+            <button type="submit">Cancel</button>
         </form>
 
         <table class="tableBackground">
@@ -58,8 +61,12 @@
             </tr>
 
             <tr>
-                <th class="thFulName">Employee</th>
-                <th class="thPosition">Position</th>
+                <th class="thFulName">
+                    <a th:href="@{/order-by-firstname}">Employee</a>
+                </th>
+                <th class="thPosition">
+                    <a th:href="@{/order-by-position-title}">Position</a>
+                </th>
                 <div th:each ="dayOfWeek: ${selectedMonthDayWeekShort}" th:object="${dayOfWeek}">
                     <th th:classappend="${dayOfWeek.equals('Sat') || dayOfWeek.equals('Sun')?'weekDay' : 'thDaysOfWeek'}"
                         th:text="${dayOfWeek}">

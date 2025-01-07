@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class ScheduleController {
@@ -31,6 +32,7 @@ public class ScheduleController {
     private String selectedEmployeeUsername;
     private final List<LocalDate> days = new ArrayList<>();
     private List<Employee> employeesList = new ArrayList<>();
+    LinkedHashMap <Employee, List<Schedule>> employeesMonthlySchedule = new LinkedHashMap<>();
     private String firstname;
     private String lastname;
     private Separate separate;
@@ -55,12 +57,11 @@ public class ScheduleController {
         model.addAttribute("selectedMonth", this.selectedMonth);
         model.addAttribute("selectedDay", this.selectedDay);
         model.addAttribute("selectedEmployee", employeesService.getEmployeeByUsername(this.selectedEmployeeUsername));
-        List<Employee> filteredEmpolyeeList = employeesService.getFilteredEmployeesList(this.firstname,this.lastname,this.separate,this.position);
         this.employeesList = employeesService.getEmployeesList();
         model.addAttribute("employees", this.employeesList);
         model.addAttribute("separatedList", separateService.getSeparates());
         model.addAttribute("positionsList", positionService.getPositions());
-        LinkedHashMap <Employee, List<Schedule>> employeesMonthlySchedule = scheduleService.employeesScheduleHashMapPerMonth(this.selectedMonth, this.employeesList);
+         employeesMonthlySchedule = scheduleService.employeesScheduleHashMapPerMonth(this.selectedMonth, this.employeesList);
         this.employeesList.forEach(System.out::println);
         model.addAttribute("monthlyEmployeesSchedule", employeesMonthlySchedule);
         List<String> dayOfWeeks = new ArrayList<>();
@@ -133,6 +134,34 @@ public class ScheduleController {
         System.out.println("Received LocalDate: " + this.selectedMonth);
         this.days.clear();
         setMothDaysList();
+        return "redirect:/schedule";
+    }
+
+    @GetMapping("/order-by-position-title")
+    public String getScheduleSortedByPositionTitle() {
+        employeesService.setEmployeesList(employeesService.getEmployeesList().stream().sorted(Comparator.comparing(employee -> employee.getPosition().getTitle().toLowerCase())).collect(Collectors.toList()));
+        return "redirect:/schedule";
+    }
+
+    @GetMapping("/order-by-firstname")
+    public String getScheduleSortedByFirstname() {
+        employeesService.setEmployeesList(employeesService.getEmployeesList().stream().sorted(Comparator.comparing(employee -> employee.getFirstName().toLowerCase())).collect(Collectors.toList()));
+        return "redirect:/schedule";
+    }
+
+    @GetMapping("/filter-employee-list")
+    public String getScheduleFiltered(@RequestParam String employeeFirstName,
+                                      @RequestParam String employeeLastName,
+                                      @RequestParam Separate employeeSeparate,
+                                      @RequestParam Position employeePosition) {
+        List<Employee> filteredEmpolyeeList = employeesService.getFilteredEmployeesList("%"+employeeFirstName+"%","%"+employeeLastName+"%",employeeSeparate,employeePosition);
+        employeesService.setEmployeesList(filteredEmpolyeeList);
+        return "redirect:/schedule";
+    }
+
+    @GetMapping("/disable-filter")
+    public String disableFilter() {
+        employeesService.setEmployeesList(employeesService.employeesListByRole());
         return "redirect:/schedule";
     }
 }

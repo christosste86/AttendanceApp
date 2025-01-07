@@ -8,7 +8,11 @@ import java.util.List;
 public interface EmployeesService {
     boolean isExist(String username);
 
+    List<Employee> employeesListByRole();
+
     List<Employee> getEmployeesList();
+
+    void setEmployeesList(List<Employee> employeesList);
 
     List<Employee> getFilteredEmployeesList(String firstName, String lastName, Separate separate, Position position);
 

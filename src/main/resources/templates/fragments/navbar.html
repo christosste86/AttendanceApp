@@ -1,11 +1,10 @@
 <nav th:fragment="bavigation-bar">
     <ul>
         <li> <a th:href="@{/}">Home </a></li>
-        <li> <a th:href="@{schedule}">Schedule </a></li>
-        <li> <a th:href="@{employees}">Employees </a></li>
-        <li> <a th:href="@{structure}">Structure </a> </li>
-        <li> <a th:href="@{benefit-card}">Benefits </a> </li>
-        <li class="navLastLi"> <a th:href="@{login}">Logout</a></li>
+        <li> <a th:href="@{/schedule}">Schedule </a></li>
+        <li> <a th:href="@{/employees}">Employees </a></li>
+        <li> <a th:href="@{/structure}">Structure </a> </li>
+        <li class="navLastLi"> <a th:href="@{/logout}">Logout</a></li>
         <li class="navLastLi">
             <div class="navProfile">
                 <img class="imgNavProfile" th:src="${'/images/profile.png'}">

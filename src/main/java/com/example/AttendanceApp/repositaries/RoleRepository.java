@@ -7,9 +7,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Integer> {
     @Query("select r from Role r where r.name = :positionRoleName")
-    List<Role> findByPositionRoleName(@Param("positionRoleName") String positionRoleName);
+    Optional<Role> findByPositionRoleName(@Param("positionRoleName") String positionRoleName);
 }

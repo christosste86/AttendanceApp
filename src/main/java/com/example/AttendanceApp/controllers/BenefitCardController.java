@@ -26,19 +26,20 @@ public class BenefitCardController {
 
     @GetMapping("/benefit-card/{employee}")
     public String benefitCardEmployeePage(Model model, @PathVariable("employee") Long employeeOrder){
-        model.addAttribute("employee", employeesService.getEmployeeById(employeeOrder));
+        Employee employee = employeesService.getEmployeeById(employeeOrder);
+        model.addAttribute("employee", employee);
+        model.addAttribute("employeeBenefitCard", employee.getBenefitCard());
         return "benefit-card";
     }
 
 
     @PostMapping("/benefit-card/{employeeId}/add-credit")
     public String addCredit(@PathVariable Long employeeId,
-                            @ModelAttribute int points){
+                            @RequestParam int points){
         Employee employee = employeesService.getEmployeeById(employeeId);
         BenefitCard benefitCard = employee.getBenefitCard();
         int benefitCardPoints = benefitCard.getPoints();
-
-        benefitCard.setPoints(points);
+        benefitCard.setPoints(benefitCardPoints + points);
         benefitCardService.updateBenefitCardPoints(benefitCard);
         return "redirect:/benefit-card/"+ employeeId;
     }
