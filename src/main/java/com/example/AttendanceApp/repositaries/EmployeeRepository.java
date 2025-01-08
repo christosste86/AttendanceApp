@@ -34,31 +34,35 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             "e.lastName like :lastName and " +
             "e.separate = :separate and " +
             "e.position = :position")
-    List<Employee> filterEmployeesByFirstNameLastNameSeparatePosition(String firstName,
-                                                                      String lastName,
-                                                                      Separate separate,
-                                                                      Position position);
+    List<Employee> filterEmployeesByFirstNameLastNameSeparatePosition(
+            String firstName,
+            String lastName,
+            Separate separate,
+            Position position);
 
     @Query("select e from Employee e where " +
             "e.firstName like :firstName and " +
             "e.lastName like :lastName and " +
             "e.separate = :separate")
-    List<Employee> filterEmployeesByFirstNameLastNameSeparate(String firstName,
-                                                              String lastName,
-                                                              Separate separate);
+    List<Employee> filterEmployeesByFirstNameLastNameSeparate(
+            String firstName,
+            String lastName,
+            Separate separate);
 
     @Query("select e from Employee e where " +
             "e.firstName like :firstName and " +
             "e.lastName like :lastName and " +
             "e.position = :position")
-    List<Employee> filterEmployeesByFirstNameLastNamePosition(String firstName,
-                                                              String lastName,
-                                                              Position position);
+    List<Employee> filterEmployeesByFirstNameLastNamePosition(
+            String firstName,
+            String lastName,
+            Position position);
 
     @Query("select e from Employee e where " +
             "e.firstName like :firstName and " +
             "e.lastName like :lastName")
-    List<Employee> filterEmployeesByFirstNameLastName(String firstName,
-                                                              String lastName);
+    List<Employee> filterEmployeesByFirstNameLastName(
+            String firstName,
+            String lastName);
 
 }

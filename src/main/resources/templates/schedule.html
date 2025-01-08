@@ -40,7 +40,7 @@
                     Select Seperated
                 </option>
                 <option th:each="separate :${separatedList}"
-                        th:value="${separate}"
+                        th:value="${separate.getId()}"
                         th:text ="${separate.getTitle()}"></option>
             </select>
 <!--Filter by position-->
@@ -54,7 +54,7 @@
                     All Seperates
                 </option>
                 <option th:each="position :${positionsList}"
-                        th:value="${position}"
+                        th:value="${position.getId()}"
                         th:text ="${position.getTitle()}"></option>
             </select>
             <input type="submit">
