@@ -240,6 +240,22 @@ thead th {
   color: #efe2e2;
 }
 
+.tdButtonNight{
+  width:27px;
+  height:27px;
+  background: #051d64;
+  color: #efe2e2;
+  text-align: center;
+  font-size: 8px;
+  font-weight: bold;
+  padding: 0;
+  border: 0;
+}
+.tdButtonNight:hover{
+  background: #000000;
+  color: #efe2e2;
+}
+
 /**/
 
 
@@ -249,14 +265,14 @@ thead th {
 .openAddSchedule {
   background: #efe2e2;
   width:200px;
-  height: 270px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top:10px;
-
+  height: 310px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-
+  position: sticky;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
 }
 
 .topLine{
@@ -296,6 +312,67 @@ thead th {
   margin-left: auto;
   padding:10px;
   font-size: 15px;
+}
+
+.favoriteShifts{
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.favoriteShiftMorningButton{
+  background: #fbbe00;
+  color:#333333;
+  width:50px;
+  height:35px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 0;
+  border: 1px solid #0c1014;
+  margin: 2px;
+  border-radius: 5px;
+}
+
+.favoriteShiftMorningButton:hover{
+  background: #ff8d00;
+  color: #333333;
+}
+
+.favoriteShiftAfternoonButton{
+  background: #3e6fd6;
+  color: #efe2e2;
+  width:50px;
+  height:35px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 0;
+  border: 1px solid #0c1014;
+  margin: 2px;
+  border-radius: 5px;
+}
+.favoriteShiftAfternoonButton:hover{
+  background: #1450a3;
+  color: #efe2e2;
+}
+
+.favoriteShiftNightButton{
+  background: #051d64;
+  color: #efe2e2;
+  width:50px;
+  height:35px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 0;
+  border: 1px solid #0c1014;
+  margin: 2px;
+  border-radius: 5px;
+}
+.favoriteShiftNightButton:hover{
+  background: #000000;
+  color: #efe2e2;
 }
 
 /*And of Schedule*/

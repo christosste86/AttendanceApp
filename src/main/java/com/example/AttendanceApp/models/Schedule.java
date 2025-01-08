@@ -20,10 +20,9 @@ public class Schedule extends BaseEntity{
     public Schedule() {
     }
 
-    public Schedule(LocalDateTime start, LocalDateTime end, Double workedHours, boolean isPresent) {
+    public Schedule(LocalDateTime start, LocalDateTime end, boolean isPresent) {
         this.shiftStart = start;
         this.shiftEnd = end;
-        this.workedHours = workedHours;
         this.isPresent = isPresent;
     }
 
@@ -51,16 +50,32 @@ public class Schedule extends BaseEntity{
         return isPresent;
     }
 
+    public void setShiftStart(LocalDateTime shiftStart) {
+        this.shiftStart = shiftStart;
+    }
+
+    public void setShiftEnd(LocalDateTime shiftEnd) {
+        this.shiftEnd = shiftEnd;
+    }
+
+    public void setWorkedHours(Double workedHours) {
+        this.workedHours = workedHours;
+    }
+
+    public void setPresent(boolean present) {
+        isPresent = present;
+    }
+
+    public String getEmptyDailySchedule(){
+        return "";
+    }
+
     public String getDailySchedule(){
         DecimalFormat df = new DecimalFormat("00");
         return String.format("%s:%s %s:%s",df.format(this.shiftStart.getHour())
                 , df.format(this.shiftStart.getMinute())
                 , df.format(this.shiftEnd.getHour())
                 , df.format(this.shiftEnd.getMinute()));
-    }
-
-    public String getEmptyDailySchedule(){
-        return "";
     }
 
     @Override

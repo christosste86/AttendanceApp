@@ -1,9 +1,6 @@
 package com.example.AttendanceApp.controllers;
 
-import com.example.AttendanceApp.models.Employee;
-import com.example.AttendanceApp.models.Position;
-import com.example.AttendanceApp.models.Schedule;
-import com.example.AttendanceApp.models.Separate;
+import com.example.AttendanceApp.models.*;
 import com.example.AttendanceApp.services.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,23 +24,27 @@ public class ScheduleController {
     private final SeparateService separateService;
     private final EmployeesController employeesController;
     private final EmployeesService employeesService;
+    private final FavoriteShiftService favoriteShiftService;
     private LocalDate selectedMonth = LocalDate.now().withDayOfMonth(1);
     private Integer selectedDay;
     private String selectedEmployeeUsername;
     private final List<LocalDate> days = new ArrayList<>();
     private List<Employee> employeesList = new ArrayList<>();
     LinkedHashMap <Employee, List<Schedule>> employeesMonthlySchedule = new LinkedHashMap<>();
+    private String scheduleFormClass = "hide";
+    private String selectedDayClass = "selected";
     private String firstname;
     private String lastname;
     private Separate separate;
     private Position position;
 
-    public ScheduleController(ScheduleService scheduleService, PositionService positionService, SeparateService separateService, EmployeesController employeesController,EmployeesService employeesService) {
+    public ScheduleController(ScheduleService scheduleService, PositionService positionService, SeparateService separateService, EmployeesController employeesController, EmployeesService employeesService, FavoriteShiftService favoriteShiftService) {
         this.scheduleService = scheduleService;
         this.positionService = positionService;
         this.separateService = separateService;
         this.employeesController = employeesController;
         this.employeesService = employeesService;
+        this.favoriteShiftService = favoriteShiftService;
     }
 
 
@@ -61,8 +62,7 @@ public class ScheduleController {
         model.addAttribute("employees", this.employeesList);
         model.addAttribute("separatedList", separateService.getSeparates());
         model.addAttribute("positionsList", positionService.getPositions());
-         employeesMonthlySchedule = scheduleService.employeesScheduleHashMapPerMonth(this.selectedMonth, this.employeesList);
-        this.employeesList.forEach(System.out::println);
+        employeesMonthlySchedule = scheduleService.employeesScheduleHashMapPerMonth(this.selectedMonth, this.employeesList);
         model.addAttribute("monthlyEmployeesSchedule", employeesMonthlySchedule);
         List<String> dayOfWeeks = new ArrayList<>();
         this.days.forEach(d->{
@@ -71,9 +71,11 @@ public class ScheduleController {
         model.addAttribute("selectedMonthDayWeekShort", dayOfWeeks);
         model.addAttribute("monthlyEmployeesTotalHours", scheduleService.monthlyTotalHours(this.selectedMonth, employeesMonthlySchedule));
         model.addAttribute("loginUser", employeesService.getLoginEmployee());
-        employeesMonthlySchedule.forEach((k,v) -> System.out.println(k + ": " + v.size()));
+        model.addAttribute("favoriteShiftList", favoriteShiftService.getFavoriteShifts());
+        model.addAttribute("scheduleFormClass", scheduleFormClass);
         return "schedule";
     }
+
 
 
     @GetMapping("/add-schedule")
@@ -86,7 +88,9 @@ public class ScheduleController {
                                  @RequestParam Integer shiftStartMinutes,
                                  @RequestParam Integer shiftEndHour,
                                  @RequestParam Integer shiftEndMinutes,
-                                 @RequestParam (defaultValue = "true") boolean isPresent) {
+                                 @RequestParam (defaultValue = "true") boolean isPresent,
+                                 Model model) {
+        model.addAttribute("addScheduleClass", "openAddSchedule" );
         if(shiftStartMinutes == null){
             shiftStartMinutes = 0;
         }
@@ -95,19 +99,65 @@ public class ScheduleController {
         }
         LocalDateTime shiftStart = this.selectedMonth.withDayOfMonth(this.selectedDay).atTime(shiftStartHour, shiftStartMinutes, 0, 0);
         LocalDateTime shiftEnd = this.selectedMonth.withDayOfMonth(this.selectedDay).atTime(shiftEndHour, shiftEndMinutes, 0, 0);
-        double workedHours = Duration.between(shiftStart, shiftEnd).toMinutes()/60.0;
         Employee employee = employeesService.getEmployeeByUsername(this.selectedEmployeeUsername);
-        System.out.println(employee.getFullName()+ ":"+shiftStart + " " + shiftEnd + "=" + workedHours);
-        Schedule schedule = new Schedule(shiftStart, shiftEnd, workedHours, isPresent);
-        System.out.println("Adding schedule");
+        Schedule schedule = new Schedule(shiftStart, shiftEnd, isPresent);
         schedule.setEmployee(employee);
-        scheduleService.saveSchedule(schedule);
+        if(scheduleService.isEmployeeDayExist(employee,shiftStart.getYear(), shiftStart.getMonthValue(), shiftStart.getDayOfMonth())){
+            Schedule existedSchedule = scheduleService.getScheduleByEmployeeDate(employee,shiftStart.getYear(), shiftStart.getMonthValue(), shiftStart.getDayOfMonth());
+            scheduleService.updateScheduleById(existedSchedule.getId(), shiftStart, shiftEnd);
+        }else{
+            scheduleService.saveSchedule(schedule);
+        }
+        if(shiftEndHour >= 5 && shiftEndHour <= 16){
+            favoriteShiftService.updateFavoriteShift(1, shiftStart, shiftEnd);
+        }
+        else if(shiftEndHour >= 11 && shiftEndHour <= 23){
+            favoriteShiftService.updateFavoriteShift(2, shiftStart, shiftEnd);
+        }else{
+            favoriteShiftService.updateFavoriteShift(3, shiftStart, shiftEnd);
+        }
+        this.scheduleFormClass ="hide";
+        return "redirect:/schedule";
+
+    }
+
+//Create day shift for employee from favorites
+    @GetMapping("/add-schedule-from-favorite/{shiftId}")
+    public String getScheduleFromFavorite(@PathVariable("shiftId") long shiftId) {
+    return "redirect:/schedule";
+}
+
+    @PostMapping("/add-schedule-from-favorite/{shiftId}")
+    public String createScheduleFromFavorite(@PathVariable("shiftId") long shiftId){
+
+        FavoriteShift favoriteShift = favoriteShiftService.getFavoriteShiftById(shiftId);
+
+        Employee employee = employeesService.getEmployeeByUsername(this.selectedEmployeeUsername);
+        Schedule schedule = new Schedule(
+                this.selectedMonth.withDayOfMonth(this.selectedDay).atTime(favoriteShift.getShiftStart()),
+                this.selectedMonth.withDayOfMonth(this.selectedDay).atTime(favoriteShift.getShiftEnd()),
+                true);
+        schedule.setEmployee(employee);
+        if(scheduleService.isEmployeeDayExist(employee, this.selectedMonth.getYear(), this.selectedMonth.getMonthValue(), this.selectedMonth.getDayOfMonth())){
+            Schedule existedSchedule = scheduleService.getScheduleByEmployeeDate(employee,schedule.getShiftStart().getYear(), schedule.getShiftStart().getMonthValue(), schedule.getShiftStart().getDayOfMonth());
+            scheduleService.updateScheduleById(existedSchedule.getId(), schedule.getShiftStart(), schedule.getShiftStart());
+        }else{
+            scheduleService.saveSchedule(schedule);
+        }
+        this.scheduleFormClass ="hide";
+        return "redirect:/schedule";
+    }
+
+    @GetMapping("/close-schedule-form")
+    public String closeScheduleForm(Model model) {
+        this.scheduleFormClass = "hide";
         return "redirect:/schedule";
     }
 
     @GetMapping ("/select-employee/{employeeUsername}/select-day/{dayOfMonth}")
     public String selectEmployeeAndDayOfMonth(@PathVariable("employeeUsername")  String employeeUsername,
                                               @PathVariable("dayOfMonth") int dayOfMonth) {
+        this.scheduleFormClass = "openAddSchedule";
         this.selectedEmployeeUsername = employeeUsername;
         this.selectedDay = dayOfMonth;
         System.out.println(this.selectedEmployeeUsername + " " + this.selectedDay);
@@ -154,8 +204,25 @@ public class ScheduleController {
                                       @RequestParam String employeeLastName,
                                       @RequestParam Separate employeeSeparate,
                                       @RequestParam Position employeePosition) {
-        List<Employee> filteredEmpolyeeList = employeesService.getFilteredEmployeesList("%"+employeeFirstName+"%","%"+employeeLastName+"%",employeeSeparate,employeePosition);
-        employeesService.setEmployeesList(filteredEmpolyeeList);
+        List<Employee> filteredEmpolyeeList = new ArrayList<>();
+        if(employeeSeparate == null && employeePosition != null){
+            filteredEmpolyeeList = employeesService.getFilteredEmployeesListByFirstNameLastNamePosition(
+                    employeeFirstName, employeeLastName, employeePosition);
+            employeesService.setEmployeesList(filteredEmpolyeeList);
+        }else if(employeePosition == null && employeeSeparate != null){
+            filteredEmpolyeeList = employeesService.getFilteredEmployeesListByFirstNameLastNameSeparate(
+                    employeeFirstName, employeeLastName, employeeSeparate);
+            employeesService.setEmployeesList(filteredEmpolyeeList);
+        }else if(employeeSeparate == null && employeePosition == null){
+            filteredEmpolyeeList = employeesService.getFilteredEmployeesListByFirstNameLastName(
+                    employeeFirstName, employeeLastName);
+            employeesService.setEmployeesList(filteredEmpolyeeList);
+        }else{
+            filteredEmpolyeeList = employeesService.getFilteredEmployeesListByFirstNameLastNameSeparatePosition(
+                    employeeFirstName, employeeLastName, employeeSeparate, employeePosition);
+            employeesService.setEmployeesList(filteredEmpolyeeList);
+        }
+
         return "redirect:/schedule";
     }
 

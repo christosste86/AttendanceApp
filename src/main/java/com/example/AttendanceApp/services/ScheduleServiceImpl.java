@@ -36,6 +36,14 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
+    public Schedule getScheduleByEmployeeDate(Employee employee, int year, int month, int day) {
+        if(isEmployeeDayExist(employee, year, month, day)){
+            return scheduleRepository.findScheduleByEmployeeAndSelectedDay(employee, year, month, day).getFirst();
+        }
+        return null;
+    }
+
+    @Override
     public boolean scheduleExists(Employee employee, LocalDateTime shiftStart, LocalDateTime shiftEnd) {
         List<Schedule> schedules = scheduleRepository.findByEmployeeWorkingShiftDateAndTime(employee, shiftStart, shiftEnd);
         return !schedules.isEmpty();
@@ -43,6 +51,8 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     public void saveSchedule(Schedule schedule) {
+        double workedHours = Duration.between(schedule.getShiftStart(), schedule.getShiftEnd()).toMinutes()/60.0;
+        schedule.setWorkedHours(workedHours);
         scheduleRepository.save(schedule);
     }
 
@@ -52,10 +62,14 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public void updateScheduleById(long id) {
+    public void updateScheduleById(long id, LocalDateTime shiftStart, LocalDateTime shiftEnd) {
         Optional<Schedule> schedule = scheduleRepository.findById(id);
         if (schedule.isPresent()){
             Schedule s = schedule.get();
+            s.setShiftStart(shiftStart);
+            s.setShiftEnd(shiftEnd);
+            double workedHours = Duration.between(shiftStart, shiftEnd).toMinutes()/60.0;
+            s.setWorkedHours(workedHours);
         }
     }
 
@@ -92,6 +106,13 @@ public class ScheduleServiceImpl implements ScheduleService{
             }
             employeesScheduleHashMapPerMonth.put(e, schedule);
         }return employeesScheduleHashMapPerMonth;
+    }
+
+    @Override
+    public boolean isEmployeeDayExist(Employee employee, int year, int month, int day){
+        if(scheduleRepository.findScheduleByEmployeeAndSelectedDay(employee, year, month, day).isEmpty()){
+            return false;
+        }return true;
     }
 
     @Override

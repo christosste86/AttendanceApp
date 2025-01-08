@@ -19,12 +19,16 @@ import java.util.List;
 @Controller
 public class EmployeesController {
 
+    //Services
     private final EmployeesService employeesService;
     private final SeparateService separateService;
     private final PositionService positionService;
     private final AssignmentService assignmentService;
     private final BenefitCardService benefitCardService;
+
+    //Security
     private final PasswordEncoder passwordEncoder;
+
     private boolean isUpdate = false;
     private List<Employee> employeesList = new ArrayList<>();
     private Long employeeId;
@@ -126,23 +130,6 @@ public class EmployeesController {
                     passwordEncoder.encode(password));
         }
         return "redirect:/employees";
-    }
-
-
-
-    @GetMapping("/employee-filter/")
-    public String getEmployeeFilter(Model model,
-                                    @RequestParam("firstName") String firstName,
-                                    @RequestParam("lastName") String lastName,
-                                    @RequestParam("separatedName") Separate separate,
-                                    @RequestParam("position") Position position) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.separate = separate;
-        this.position = position;
-        this.employeesList = employeesService.getFilteredEmployeesList(this.firstName, this.lastName, this.separate, this.position);
-        model.addAttribute("filteredEmployees", this.employeesList);
-        return "redirect:/";
     }
 
     @GetMapping("/about-employee/{employee}")

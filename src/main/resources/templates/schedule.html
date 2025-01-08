@@ -13,7 +13,7 @@
 
 <main>
     <h1>Employees Schedule</h1>
-
+<!--Month schedule select -->
     <div class = "schedule">
         <form th:action = "@{/month-list/}" method="get">
             <label for="daymonth">Select month:</label>
@@ -21,31 +21,52 @@
             <input type="submit">
         </form>
 
+<!--Filter employee schedule list-->
         <form th:action="@{/filter-employee-list}" method="get">
+<!--Filter by username             -->
             <label for="filteredFirstName">First name: </label>
             <input type="text" id="filteredFirstName" name="employeeFirstName">
-
+<!--Filter by lastname-->
             <label for="filteredLastName">Last name: </label>
             <input type="text" id="filteredLastName" name="employeeLastName">
-
+<!--Filter by separate-->
             <label for="separateSelect">Seperated name:</label>
             <select name="employeeSeparate" id="separateSelect" required>
-                <option value="" disabled selected>Select Seperated</option>
-                <option th:each="separate :${separatedList}" th:value="${separate.getId()}" th:text ="${separate.getTitle()}"></option>
+<!--                Option if no selected-->
+                <option th:value="null"
+                        th:disabled="false"
+                        th:text="${'All Positions'}"
+                        th:selected="true">
+                    Select Seperated
+                </option>
+                <option th:each="separate :${separatedList}"
+                        th:value="${separate}"
+                        th:text ="${separate.getTitle()}"></option>
             </select>
-
+<!--Filter by position-->
             <label for="positionSelect">Position name:</label>
             <select name="employeePosition" id="positionSelect" required>
-                <option value="" disabled selected>Select position</option>
-                <option th:each="position :${positionsList}" th:value="${position.getId()}" th:text ="${position.getTitle()}"></option>
+                <!--                Option if no selected-->
+                <option th:value="null"
+                        th:disabled="false"
+                        th:text="${'All Positions'}"
+                        th:selected="true">
+                    All Seperates
+                </option>
+                <option th:each="position :${positionsList}"
+                        th:value="${position}"
+                        th:text ="${position.getTitle()}"></option>
             </select>
             <input type="submit">
         </form>
+<!--Cancel filtering and set original employee list         -->
         <form th:action="@{/disable-filter}">
             <button type="submit">Cancel</button>
         </form>
 
+<!--Schedule table        -->
         <table class="tableBackground">
+<!--Table Header            -->
             <thead class="scheduleHeader">
             <tr>
                 <th class= "thMonth" colspan="2" th:if="${selectedMonth != null}"
@@ -76,7 +97,7 @@
                 <th class ="thDetails">Hours</th>
                 <th class ="thDetails">Shifts</th>
             </tr>
-
+<!--Table body-->
             </thead>
             <tbody class="scheduleBody">
 
@@ -125,12 +146,17 @@
         </table>
     </div>
 
-    <!--                            add Schedule-->
-    <div id="addSchedule" class="openAddSchedule">
+
+
+<!-- add Schedule-->
+    <div id="addSchedule" th:class="${scheduleFormClass}">
 
         <div class = "topLine">
             <div class = "scheduleTitle">Add Schedule</div>
-<!--            <button class="closeButton" onclick="closeAddSchedule()">X</button>-->
+            <form th:action="@{/close-schedule-form}" method="get">
+                <button type="submit">X</button>
+            </form>
+
         </div>
 
         <div class="employeeDateSchedule">
@@ -145,14 +171,26 @@
                  th:text = "${selectedMonth.withDayOfMonth(selectedDay)}">
                 2024-12-26
             </div>
-
         </div>
 
+<!--Favorite Shifts-->
+        <div class="favoriteShifts">
+            <div th:each="favoriteShift : ${favoriteShiftList}">
+                <div th:if="${favoriteShift.getShiftStart() != null && favoriteShift.getShiftEnd() != null}">
+                    <form method="post" th:action="@{/add-schedule-from-favorite/{shiftId} (shiftId = ${favoriteShift.getId()})}">
+                        <button type="submit" th:text="${favoriteShift.getFormatedTime()}" th:class="${'favoriteShift'+favoriteShift.getShiftName()+'Button'}"></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+<!--Form Schedule-->
         <div class="formSchedule">
 
             <form th:action="@{/add-schedule}" method="post">
             <div>
                 <div>Start Shift</div>
+<!--input start shift hour                -->
                 <div class="time">
                     <label for="shiftStartHours"></label>
                     <input class="timeHours"
@@ -161,6 +199,7 @@
                            name="shiftStartHour"
                            value="00"
                            min="0" max="23" step="1">
+<!--input start shift Minutes                -->
                     <label for="shiftStartMinutes">:</label>
                     <input class="timeMinutes"
                            id="shiftStartMinutes"
@@ -169,6 +208,8 @@
                            value="00"
                            min="0" max="59" step="1">
                 </div>
+
+<!--input End shift hour                -->
                 <div>End Shift</div>
                 <div class="time">
                     <label for="shiftEndHour"></label>
@@ -178,6 +219,7 @@
                            name="shiftEndHour"
                            value="00"
                            min="0" max="23" step="1">
+<!--input End shift minutes                -->
                     <label for="shiftEndMinutes">:</label>
                     <input class="timeMinutes"
                            id="shiftEndMinutes"
@@ -201,24 +243,11 @@
     <!--                            End Add Schedule-->
 </main>
 <script>
-    function openAddSchedule() {
-        var element = document.getElementById("addSchedule");
-        if (element.classList.contains("hide")) {
-            element.classList.remove("hide");
-            element.classList.add("openAddSchedule");
-        }
-    }
-    function hide() {
-        var element = document.getElementById("addSchedule");
-        element.classList.toggle("hide");
-    }
-
-    // Get the current date
+    // Get the current month
     const now = new Date();
-    // Format the date as "YYYY-MM"
     const currentMonth = now.toISOString().substring(0, 7);
-    // Set the value of the input field
     document.getElementById("daymonth").value = currentMonth;
+
 </script>
 </body>
 </html>

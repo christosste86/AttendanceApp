@@ -24,4 +24,11 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findScheduleByEmployeeAndSelectedMonth(@Param("employee") Employee employee,
                                                           @Param("yearValue") int yearValue,
                                                           @Param("monthValue") int monthValue);
+
+    @Query("select s from Schedules s where s.employee = :employee and year(s.shiftStart) = :yearValue and month(s.shiftStart) = :monthValue and day(s.shiftStart) = :dayValue")
+    List<Schedule> findScheduleByEmployeeAndSelectedDay(@Param("employee") Employee employee,
+                                                          @Param("yearValue") int yearValue,
+                                                          @Param("monthValue") int monthValue,
+                                                        @Param("dayValue") int dayValue);
+
 }

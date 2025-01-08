@@ -18,11 +18,15 @@ public interface ScheduleService {
 
     Schedule getScheduleById(long id);
 
+    Schedule getScheduleByEmployeeDate(Employee employee, int year, int month, int day);
+
     void saveSchedule(Schedule schedule);
+
+    boolean isEmployeeDayExist(Employee employee, int year, int month, int day);
 
     void deleteSchedule(Schedule schedule);
 
-    void updateScheduleById(long id);
+    void updateScheduleById(long id, LocalDateTime shiftStart, LocalDateTime shiftEnd);
 
     List<Schedule>monthlyEmployeesSchedule(LocalDate month);
 

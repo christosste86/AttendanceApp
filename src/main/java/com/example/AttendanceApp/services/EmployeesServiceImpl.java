@@ -26,6 +26,7 @@ public class EmployeesServiceImpl implements EmployeesService, UserDetailsServic
 
     public EmployeesServiceImpl(EmployeeRepository employeesRepository) {
         this.employeesRepository = employeesRepository;
+
     }
 
     private List<Employee> getEmployeesWithRoleLevelOneAndTwo(){
@@ -137,9 +138,26 @@ public class EmployeesServiceImpl implements EmployeesService, UserDetailsServic
     }
 
     @Override
-    public List<Employee> getFilteredEmployeesList(String firstName, String lastName, Separate separate, Position position){
-        return employeesRepository.filterEmployees(firstName, lastName, separate, position);
+    public List<Employee> getFilteredEmployeesListByFirstNameLastNameSeparatePosition(String firstName, String lastName, Separate separate, Position position){
+        return employeesRepository.filterEmployeesByFirstNameLastNameSeparatePosition(firstName, lastName, separate, position);
     }
+
+    @Override
+    public List<Employee> getFilteredEmployeesListByFirstNameLastNameSeparate(String firstName, String lastName, Separate separate) {
+        return employeesRepository.filterEmployeesByFirstNameLastNameSeparate(firstName, lastName, separate);
+    }
+
+    @Override
+    public List<Employee> getFilteredEmployeesListByFirstNameLastNamePosition(String firstName, String lastName, Position position) {
+        return employeesRepository.filterEmployeesByFirstNameLastNamePosition(firstName, lastName, position);
+    }
+
+
+    @Override
+    public List<Employee> getFilteredEmployeesListByFirstNameLastName(String firstName, String lastName) {
+        return employeesRepository.filterEmployeesByFirstNameLastName(firstName, lastName);
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
