@@ -12,8 +12,6 @@ import java.util.List;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    @Query("select s from Schedules s where month(s.shiftStart) = :month and year(s.shiftStart) = :year")
-    List<Schedule> findByMonthAndYear(@Param("month") int month, @Param("year") int year);
 
     @Query("select s from Schedules s where s.employee = :employee and s.shiftStart >= :shiftStar and s.shiftEnd <= :shiftEnd")
     List<Schedule> findByEmployeeWorkingShiftDateAndTime(@Param("employee") Employee employee,

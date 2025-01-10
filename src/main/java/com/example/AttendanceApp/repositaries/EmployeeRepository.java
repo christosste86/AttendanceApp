@@ -16,8 +16,6 @@ import java.util.Optional;
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     @Query("select e from Employee e where e.username = :username")
-    List<Employee> findEmployeesByUsername(String username);
-
     Optional<Employee> findEmployeeByUsername(String username);
 
     @Query("select e from Employee e order by e.position.title")

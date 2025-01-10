@@ -36,7 +36,9 @@
                 </tr>
                 <tr>
                     <th>Assignment: </th>
-                    <td th:text="${loginUser.getAssignment()}">Assignment name</td>
+                    <td th:text="${loginUser.getAssignment().getAssignmentTitle() +
+                    ' / '
+                    + loginUser.getAssignment().getHoursPerWeek()}">Assignment name</td>
                 </tr>
 
             </table>
@@ -63,7 +65,7 @@
                         <form th:action="@{/update-password}" method="post">
                             <label class="hide" for="update-password"></label>
                             <input class ="inputPass" id="update-password" type="password" name ="password">
-                            <button type="submit">Update</button>
+                            <button class="updateButton" type="submit">Update</button>
                         </form>
                     </td>
                 </tr>

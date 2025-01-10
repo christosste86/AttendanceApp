@@ -11,9 +11,9 @@ public interface AssignmentService {
 
     Assignment getAssignmentById(long id);
 
-    void createAssignment(Assignment assignment);
+    boolean isExist(String title, int hoursPerWeek);
 
-    void updateAssignmentTitle(long id, String title);
+    void createAssignment(Assignment assignment);
 
     void updateAssignment(long id, String title, int hoursPerWeek);
 

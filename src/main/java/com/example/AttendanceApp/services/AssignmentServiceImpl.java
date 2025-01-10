@@ -29,17 +29,14 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
-    public void createAssignment(Assignment assignment) {
-        assignmentRepository.save(assignment);
+    public boolean isExist(String title, int hoursPerWeek) {
+        Optional<Assignment> assignment = assignmentRepository.findByAssignmentTitleAndHoursPerWeek(title, hoursPerWeek);
+        return assignment.isPresent();
     }
 
     @Override
-    public void updateAssignmentTitle(long id, String title) {
-        Optional<Assignment> assignment = assignmentRepository.findById(id);
-        if (assignment.isPresent()) {
-            Assignment a = assignment.get();
-            a.setAssignmentTitle(title);
-        }
+    public void createAssignment(Assignment assignment) {
+        assignmentRepository.save(assignment);
     }
 
     @Override

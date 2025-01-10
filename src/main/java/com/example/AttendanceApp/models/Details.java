@@ -8,7 +8,11 @@ public class Details {
     public Details(Double totalHours, Integer shifts, Double monthlyFullTimeHours) {
         this.totalHours = totalHours;
         this.shifts = shifts;
-        this.monthlyFullTimeHours = monthlyFullTimeHours;
+        if(monthlyFullTimeHours == null){
+            this.monthlyFullTimeHours = 0.0;
+        }else{
+            this.monthlyFullTimeHours = monthlyFullTimeHours;
+        }
     }
 
     public Double getTotalHours() {

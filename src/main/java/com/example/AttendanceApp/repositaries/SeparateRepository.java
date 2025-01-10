@@ -7,9 +7,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SeparateRepository extends JpaRepository<Separate, Long> {
-    @Query("select s from separates s where s.id = :id")
-    List<Separate> findBySeparateId(@Param("id") Long id);
+    @Query("select s from separates s where s.title = :title")
+    Optional<Separate> findByTitle(@Param("title") String title);
 }

@@ -13,7 +13,7 @@ public interface PositionService {
 
     Position getPositionById(long id);
 
-    Role getRoleByName(String roleName);
+    boolean isExistByTitleOrSortTitle(String title, String sortTitle);
 
     void createPosition(Position position);
 

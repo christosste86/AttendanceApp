@@ -10,11 +10,9 @@
     <nav th:replace="~{fragments/navbar :: bavigation-bar}"></nav>
 </header>
 <main>
-<!--Left Size-->
-    <div class = "leftSize">
-        <h1>All Employees</h1>
+        <div class="structureCardTitle">Employees</div>
 <!--Employees Table-->
-        <div class="tableBackground">
+        <div class="employeesTableBackground">
             <table class="employeeTable" th:if="${employees.size() > 0}">
 <!--Table Header-->
                 <thead>
@@ -54,11 +52,10 @@
     <!--BenefitCard-->
                     <td th:if="${employee.getBenefitCard() == null}"></td>
                     <td th:if="${employee.getBenefitCard() != null}">
-                        <a th:href="@{/benefit-card/{employee}(employee=${employee.getId})}"
+                        <a th:href="@{/benefit-card/{employeeId}(employee=${employee.getId})}"
                            th:text="${employee.getBenefitCard().getSerialNumber()}">125896584</a>
                     </td>
     <!--About-->
-                    <td th:if="${employee.getBenefitCard() == null}"></td>
                     <td>
                         <form th:action="@{/about-employee/{employee}(employee=${employee.getId})}">
                             <button type="submit">About</button>
@@ -67,13 +64,13 @@
     <!--Update-->
                     <td>
                         <form th:action="@{/get-employee-id-set-isUpdate-as-true/{id}(id = ${employee.getId()})}">
-                            <button type="submit">Update</button>
+                            <button class ="updateButton" type="submit">Update</button>
                         </form>
                     </td>
     <!--Delete-->
                     <td th:if="${!loginUserUsername.equals(employee.getUsername())}">
                         <form method="get" th:action="@{/delete-employee/{id}(id=${employee.getId})}">
-                            <button type = "submit">Remove</button>
+                            <button class="deleteButton" type = "submit">Remove</button>
                         </form>
                     </td>
 
@@ -83,24 +80,23 @@
                 </tbody>
             </table>
         </div>
-    </div>
-<!--Right Size-->
-    <div class="rightSize">
+        <div>
+            <form th:action="@{/set-isUpdate-as-False}">
+                <button class="submitButton" type="submit">Add New Employee</button>
+            </form>
+        </div>
+
 <!--Form card-->
-        <div class="employeeFormCard">
+        <div th:class="${employeeFormCssClass}">
+            <div>
+                <form th:action="@{/hide-employee-form}">
+                    <button class="closeButton" type="button">x</button>
+                </form>
+            </div>
 
         <div id="updateEmployee">
 
             <div class="employeeFormCardTitle">
-<!--Add button to disable update -->
-                <form th:action="@{/set-isUpdate-as-False}">
-                    <div th:classappend="${isUpdate}? 'AddEmployeeButton': 'hide'">
-                        <button class ="AddEmployeeButton"
-                                type ="submit">
-                            Add
-                        </button>
-                    </div>
-                </form>
 <!--Title form-->
                 <div class="employeeUpdateTitle"
                      th:text="${isUpdate} ? 'Update Employee' : 'Add Employee'">
@@ -109,7 +105,7 @@
 
             </div>
 <!--Form-->
-            <form class="employeeFrom"
+            <form class="employeeForm"
                   th:action="@{/add-update-employee}" method="post">
 <!--Username Label-->
                 <div th:if="${!isUpdate ||
@@ -117,6 +113,7 @@
                     <label for="update-username">Username: </label>
                     <br>
                     <input id="update-username" type="text" name ="username"
+                           th:class="${isExistUserNameCssClass}"
                            th:value="${username} ? ${username} : ''" >
                 </div>
 <!--Password Label-->
@@ -144,9 +141,13 @@
                     </div>
 <!--BenefitCard Label-->
                     <div>
-                        <label for="serialNumber">Serial number:</label>
+                        <label for="serialNumber"> BenefitCard s/n:</label>
                         <br>
-                        <input id="serialNumber" type ="text" name ="benefitCardSn" th:value="${isUpdate && benefitCardSn != null } ? ${benefitCardSn.getSerialNumber()} : ''">
+                        <input id="serialNumber"
+                               type ="text"
+                               name ="benefitCardSn"
+                               th:class="${isExistBenefitCardSnCssClass}"
+                               th:value="${isUpdate && benefitCardSn != null } ? ${benefitCardSn.getSerialNumber()} : ''" min="100000000" max ="999999999">
                     </div>
 <!--Position Select Label-->
                     <div>
@@ -206,32 +207,13 @@
 
                 </div>
 <!--Submit button-->
-                <button class ="submitButton"
+                <button th:classappend="${isUpdate} ? 'updateButton' :'submitButton'"
                         type="submit"
                         th:text="${isUpdate} ? 'Update Employee' : 'Add Employee'">Update employee</button>
 
             </form>
         </div>
         </div>
-    </div>
 </main>
-<!--JavaScript-->
-<script>
-    function openUpdateEmployee() {
-        var updateElement = document.getElementById("updateEmployee");
-        var addElement = document.getElementById("addEmployee");
-        if (updateElement.classList.contains("hide")) {
-            updateElement.classList.remove("hide");
-            addElement.classList.remove("openEmployee");
-            addElement.classList.add("hide");
-            updateElement.classList.add("openEmployee");
-        }
-    }
-    function hide() {
-        var updateElement = document.getElementById("updateEmployee");
-        var addElement = document.getElementById("addEmployee");
-        element.classList.toggle("hide");
-    }
-</script>
 </body>
 </html>

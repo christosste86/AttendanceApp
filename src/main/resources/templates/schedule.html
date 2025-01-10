@@ -33,11 +33,9 @@
             <label for="separateSelect">Seperated name:</label>
             <select name="employeeSeparate" id="separateSelect" required>
 <!--                Option if no selected-->
-                <option th:value="null"
-                        th:disabled="false"
-                        th:text="${'All Positions'}"
-                        th:selected="true">
-                    Select Seperated
+                <option th:value = "${null}"
+                        th:text="${'All Separates'}">
+                    All Separates
                 </option>
                 <option th:each="separate :${separatedList}"
                         th:value="${separate.getId()}"
@@ -47,11 +45,9 @@
             <label for="positionSelect">Position name:</label>
             <select name="employeePosition" id="positionSelect" required>
                 <!--                Option if no selected-->
-                <option th:value="null"
-                        th:disabled="false"
-                        th:text="${'All Positions'}"
-                        th:selected="true">
-                    All Seperates
+                <option th:value="${null}"
+                        th:text="${'All Positions'}">
+                    All Positions
                 </option>
                 <option th:each="position :${positionsList}"
                         th:value="${position.getId()}"
@@ -130,7 +126,7 @@
                                   th:action="@{/select-employee/{employeeUsername}/select-day/{dayOfMonth} (dayOfMonth = ${status.index+1}, employeeUsername =${employeeSchedule.key.getUsername()})}">
                                 <button class="tdButtonMorning"
                                         type="submit"
-                                        th:classappend="${eSchedule.getShiftEnd().getHour() > 16}?'tdButtonAfternoon':'tdButtonMorning'"
+                                        th:classappend="${eSchedule.getShiftStart().getHour() >= 5 && eSchedule.getShiftEnd().getHour() <= 16}? 'tdButtonMorning': 'tdButtonAfternoon'"
                                         th:text ="${eSchedule.getDailySchedule()}">14:00 20:00</button>
                             </form>
                         </td>
@@ -152,11 +148,12 @@
     <div id="addSchedule" th:class="${scheduleFormClass}">
 
         <div class = "topLine">
+            <div>
+                <form th:action="@{/close-schedule-form}" method="get">
+                    <button class="closeButton" type="submit">X</button>
+                </form>
+            </div>
             <div class = "scheduleTitle">Add Schedule</div>
-            <form th:action="@{/close-schedule-form}" method="get">
-                <button type="submit">X</button>
-            </form>
-
         </div>
 
         <div class="employeeDateSchedule">
@@ -168,7 +165,7 @@
 
             <div class="addScheduleDate"
                  th:if="${selectedDay != null}"
-                 th:text = "${selectedMonth.withDayOfMonth(selectedDay)}">
+                 th:text = "${selectedMonth.withDayOfMonth(selectedDay.getDayOfMonth())}">
                 2024-12-26
             </div>
         </div>
@@ -187,57 +184,62 @@
 <!--Form Schedule-->
         <div class="formSchedule">
 
-            <form th:action="@{/add-schedule}" method="post">
-            <div>
-                <div>Start Shift</div>
-<!--input start shift hour                -->
-                <div class="time">
-                    <label for="shiftStartHours"></label>
-                    <input class="timeHours"
-                           id="shiftStartHours"
-                           type="number"
-                           name="shiftStartHour"
-                           value="00"
-                           min="0" max="23" step="1">
-<!--input start shift Minutes                -->
-                    <label for="shiftStartMinutes">:</label>
-                    <input class="timeMinutes"
-                           id="shiftStartMinutes"
-                           type="number"
-                           name="shiftStartMinutes"
-                           value="00"
-                           min="0" max="59" step="1">
-                </div>
+                <form th:action="@{/add-schedule}" method="post">
+                <div>
+                    <div>Start Shift</div>
+    <!--input start shift hour                -->
+                    <div class="time">
+                        <label for="shiftStartHours"></label>
+                        <input class="timeHours"
+                               id="shiftStartHours"
+                               type="number"
+                               name="shiftStartHour"
+                               th:value="${selectedSchedule == null}? '00' : ${selectedSchedule.getShiftStart().getHour()}"
+                               min="0" max="23" step="1">
+    <!--input start shift Minutes                -->
+                        <label for="shiftStartMinutes">:</label>
+                        <input class="timeMinutes"
+                               id="shiftStartMinutes"
+                               type="number"
+                               name="shiftStartMinutes"
+                               th:value="${selectedSchedule == null}? '00' : ${selectedSchedule.getShiftStart().getMinute()}"
+                               min="0" max="59" step="1">
+                    </div>
 
-<!--input End shift hour                -->
-                <div>End Shift</div>
-                <div class="time">
-                    <label for="shiftEndHour"></label>
-                    <input class="timeHours"
-                           id="shiftEndHour"
-                           type="number"
-                           name="shiftEndHour"
-                           value="00"
-                           min="0" max="23" step="1">
-<!--input End shift minutes                -->
-                    <label for="shiftEndMinutes">:</label>
-                    <input class="timeMinutes"
-                           id="shiftEndMinutes"
-                           type="number"
-                           name="shiftEndMinutes"
-                           value="00"
-                           min="0" max="59" step="1">
+    <!--input End shift hour                -->
+                    <div>End Shift</div>
+                    <div class="time">
+                        <label for="shiftEndHour"></label>
+                        <input class="timeHours"
+                               id="shiftEndHour"
+                               type="number"
+                               name="shiftEndHour"
+                               th:value="${selectedSchedule == null}? '00' : ${selectedSchedule.getShiftEnd().getHour()}"
+                               min="0" max="23" step="1">
+    <!--input End shift minutes                -->
+                        <label for="shiftEndMinutes">:</label>
+                        <input class="timeMinutes"
+                               id="shiftEndMinutes"
+                               type="number"
+                               name="shiftEndMinutes"
+                               th:value="${selectedSchedule == null}? '00' : ${selectedSchedule.getShiftEnd().getMinute()}"
+                               min="0" max="59" step="1">
+                    </div>
                 </div>
-            </div>
-            <div>
-                <label for="isPresent">Present</label>
-                <input id="isPresent"
-                       type="checkbox"
-                       name="isPresent"
-                       th:value="true">
-            </div>
-            <button type="submit">Add Schedule</button>
-        </form>
+                <div>
+                    <label for="isPresent">Present</label>
+                    <input id="isPresent"
+                           type="checkbox"
+                           name="isPresent"
+                           th:value="true">
+                </div>
+                <button class="submitButton" type="submit">Add Schedule</button>
+            </form>
+            <form th:if="${selectedSchedule != null}"
+                    th:action="@{/delete-employee-day-shift}">
+                <button class="deleteButton" type="submit">Delete</button>
+            </form>
+
         </div>
     </div>
     <!--                            End Add Schedule-->

@@ -46,10 +46,9 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
-    public Role getRoleByName(String roleName) {
-        if(roleRepository.findByPositionRoleName(roleName).isEmpty()) {
-            return new Role();
-        }return roleRepository.findByPositionRoleName(roleName).get();
+    public boolean isExistByTitleOrSortTitle(String title, String sortTitle) {
+        Optional<Position> position = positionRepository.findByTitleOrSortTitle(title, sortTitle);
+        return position.isPresent();
     }
 
     @Override

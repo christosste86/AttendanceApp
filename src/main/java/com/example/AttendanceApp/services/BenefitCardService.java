@@ -1,6 +1,7 @@
 package com.example.AttendanceApp.services;
 
 import com.example.AttendanceApp.models.BenefitCard;
+import com.example.AttendanceApp.models.Employee;
 import com.example.AttendanceApp.models.Separate;
 
 import java.util.List;
@@ -10,15 +11,13 @@ public interface BenefitCardService {
 
     BenefitCard getBenefitCardById(long id);
 
-    BenefitCard getBenefitCardBySerialNumber(String serialNumber);
-
     void createBenefitCard(BenefitCard benefitCard);
 
     boolean isExist(String serialNumber);
 
     void updateBenefitCardPoints(BenefitCard benefitCard);
 
-    void updateBenefitCardSerialNumber(long id, String SerialNumber);
+    void updateBenefitCard(long id,String SerialNumber, int credit, Employee employee);
 
     void deleteBenefitCard(long id);
 }

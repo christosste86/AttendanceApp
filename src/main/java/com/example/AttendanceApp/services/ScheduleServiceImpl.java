@@ -128,7 +128,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                 }
             }
             totalHour = new BigDecimal(totalHour).setScale(2, RoundingMode.HALF_UP).doubleValue();
-            totalHours.put(e, new Details(totalHour, shifts, monthlyFullTimeHours(month, 40)));
+            totalHours.put(e, new Details(totalHour, shifts, monthlyFullTimeHours(month, e.getAssignment().getHoursPerWeek())));
         }return totalHours;
     }
 
@@ -136,9 +136,9 @@ public class ScheduleServiceImpl implements ScheduleService{
     public Double monthlyFullTimeHours(LocalDate month, int assignment) {
         double totalHour = 0.0;
         for (int day = 1; day <= month.withDayOfMonth(1).lengthOfMonth(); day++) {
-            if (month.withDayOfMonth(day).getDayOfWeek() != DayOfWeek.SATURDAY
-                    && month.withDayOfMonth(day).getDayOfWeek() != DayOfWeek.SUNDAY) {
-                totalHour += assignment / 8.0;
+            if (!month.withDayOfMonth(day).getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
+            !month.withDayOfMonth(day).getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                totalHour = totalHour + ((double) assignment / 5);
             }
         }
         return totalHour;

@@ -47,7 +47,7 @@ public class EmployeesServiceImpl implements EmployeesService, UserDetailsServic
     public List<Employee> employeesListByRole() {
         String role = getLoginEmployee().getRoles().stream().toList().getFirst().toString();
         if(role.equals("ROLE_LEVEL3")){
-            return employeesRepository.findEmployeesByUsername(getLoginEmployee().getUsername());
+            return List.of(getEmployeeByUsername(getLoginEmployee().getUsername()));
         }
         if(role.equals("ROLE_LEVEL2")){
             return getEmployeesWithRoleLevelOneAndTwo();
@@ -69,10 +69,10 @@ public class EmployeesServiceImpl implements EmployeesService, UserDetailsServic
 
     @Override
     public Employee getEmployeeByUsername(String username) {
-        if(employeesRepository.findEmployeesByUsername(username).isEmpty()){
-            return null;
-        }
-        return employeesRepository.findEmployeesByUsername(username).getFirst();
+        Optional<Employee> employee = employeesRepository.findEmployeeByUsername(username);
+        if(employee.isPresent()){
+            return employee.get();
+        }return null;
     }
 
     @Override
@@ -89,7 +89,8 @@ public class EmployeesServiceImpl implements EmployeesService, UserDetailsServic
 
     @Override
     public boolean isExist(String username){
-        return !employeesRepository.findEmployeesByUsername(username).isEmpty();
+        Optional<Employee> employee = employeesRepository.findEmployeeByUsername(username);
+        return employee.isPresent();
     }
 
     @Override

@@ -29,6 +29,12 @@ public class SeparateServiceImpl implements SeparateService {
     }
 
     @Override
+    public boolean isExistBySeparateTitle(String separateTitle) {
+        Optional<Separate> separate = separateRepository.findByTitle(separateTitle);
+        return separate.isPresent();
+    }
+
+    @Override
     public void createSeparate(Separate separate) {
         separateRepository.save(separate);
     }

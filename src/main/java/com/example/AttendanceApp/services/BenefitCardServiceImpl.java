@@ -29,12 +29,6 @@ public class BenefitCardServiceImpl implements BenefitCardService {
     }
 
     @Override
-    public BenefitCard getBenefitCardBySerialNumber(String serialNumber) {
-        Optional<BenefitCard> benefitCard = benefitCardRepository.findBySerialNumber(serialNumber);
-        return benefitCard.orElse(null);
-    }
-
-    @Override
     public void createBenefitCard(BenefitCard benefitCard) {
         benefitCardRepository.save(benefitCard);
     }
@@ -52,11 +46,13 @@ public class BenefitCardServiceImpl implements BenefitCardService {
     }
 
     @Override
-    public void updateBenefitCardSerialNumber(long id, String SerialNumber) {
+    public void updateBenefitCard(long id,String SerialNumber, int credit, Employee employee) {
         Optional<BenefitCard> benefitCard = benefitCardRepository.findById(id);
         if (benefitCard.isPresent()){
             BenefitCard b = benefitCard.get();
             b.setSerialNumber(SerialNumber);
+            b.setPoints(credit);
+            b.setEmployee(employee);
             benefitCardRepository.save(b);
         }
     }

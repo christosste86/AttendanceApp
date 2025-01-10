@@ -67,18 +67,9 @@ li a:hover:not(.active) {
 
 /*end navbar*/
 
-.leftSize {
-    float:left;
+main{
+  display: inline-block;
 }
-
-.rightSize {
-    float: right;
-    width: 200px;
-}
-  .left{
-    width: 100px;
-    float: left;
-  }
 
 thead th {
   position: sticky;
@@ -264,8 +255,9 @@ thead th {
 /*Add Schedule form*/
 .openAddSchedule {
   background: #efe2e2;
+  padding:5px;
   width:200px;
-  height: 310px;
+  height: 340px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   position: sticky;
@@ -278,7 +270,7 @@ thead th {
 .topLine{
   background: #333333;
   width: 200px;
-  height:50px;
+  height:40px;
   color: #bbbbbb;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
@@ -287,7 +279,7 @@ thead th {
 
 .scheduleTitle{
   text-align: center;
-  margin:15px;
+  margin:7px;
   font-weight: bold;
   font-size: 20px;
 }
@@ -428,7 +420,7 @@ thead th {
 .profileTitle{
   background: #2c3a47;
   color: #f4f6f7;
-  height: 150px;
+  height: 170px;
   text-align: center;
   font-size: 25px;
   border-top-left-radius: 5px;
@@ -449,11 +441,16 @@ thead th {
 
 /*general*/
 
-.tableBackground{
+.tableBackground, .structureTableBackground. .employeesTableBackground{
   background: #2c3a47;
   padding: 2px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
+}
+
+.isExistBenefitCard, .isExistUserName{
+  background: #e89797;
+  color: #e3e7ec;
 }
 
 .inputPass{
@@ -463,7 +460,7 @@ thead th {
   display: none;
 }
 
-.submitButton{
+.submitButton, .deleteButton, .updateButton{
   background: #2c3a47;
   color: #f4f6f7;
   margin-top:5px;
@@ -474,6 +471,39 @@ thead th {
 .submitButton:hover{
   background: #0c1014;
   color: #f4f6f7;
+}
+
+.deleteButton{
+  background: darkred;
+}
+
+.deleteButton:hover{
+  background: indianred;
+}
+
+.updateButton{
+  background: steelblue;
+}
+
+.updateButton:hover{
+  background: dodgerblue;
+}
+
+.closeButton{
+  background: #f4f6f7;
+  font-size: 25px;
+  width: 50px;
+  height: 40px;
+  color: #2c3a47;
+  float:right;
+  padding-left:18px;
+  clip-path: polygon(45% 0, 100% 0, 100% 100%, 0% 100%);
+  border-top-right-radius: 5px;
+}
+
+.closeButton:hover {
+  background: #bbbbbb;
+  color: #020d13;
 }
 
 /*Employees*/
@@ -502,15 +532,18 @@ thead th {
   padding-right: 5px;
 }
 
-.employeeFormCard{
+.employeeFormCard , .structureCard{
   background: #f4f6f7;
-  margin-left: auto;
-  margin-right: auto;
   padding:5px;
   width: 250px;
   box-shadow: 5px 5px 5px grey;
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
+  position: sticky;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
 }
 
 .employeeFormCardTitle {
@@ -521,31 +554,20 @@ thead th {
   border-top-left-radius: 5px;
 
 }
-.employeeUpdateTitle, .structureUpdateTitle{
+.employeeUpdateTitle {
   color: #f4f6f7;
   text-align: center;
   padding-top: 7px;
   font-size: 20px;
 }
 
-.AddEmployeeButton, .AddStructureButton{
-  background: #f4f6f7;
-  width: 50px;
-  height: 40px;
-  color: #2c3a47;
-  float:right;
-  padding-left:18px;
-  clip-path: polygon(45% 0, 100% 0, 100% 100%, 0% 100%);
-  border-top-right-radius: 5px;
-}
-
-.AddEmployeeButton:hover {
-  background: #bbbbbb;
-  color: #020d13;
-}
-
-.employeeForm{
+.employeeForm, .structureForm{
   padding:10px;
+}
+
+.structureTableBackground, .employeesTableBackground{
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
 }
 
 /*And Employees*/
@@ -553,17 +575,13 @@ thead th {
 /*Structure*/
 
 .structure {
+  margin-left: auto;
+  margin-right: auto;
   display: flex;
 }
 
 .structureCard{
-  background: #efe2e2;
   width: 350px;
-  border: 1px solid black;
-  margin:10px;
-  display: block;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
 }
 
 .structureCardTitle{
@@ -576,10 +594,14 @@ thead th {
   border-top-right-radius: 5px;
 }
 
+.structureTable{
+  margin:10px;
+}
 
-
-.structureCardContent{
-  display: block;
+table{
+  margin-left:10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .structure th{
@@ -604,40 +626,6 @@ thead th {
 .structureForm{
   margin-bottom: 10px;
   padding:10px;
-}
-
-
-.structureFormCardTitle{
-  background: #efe2e2;
-  color: #2c3a47;
-  height:50px;
-}
-
-.structureFormTitle{
-  background: #efe2e2;
-  color: #2c3a47;
-  height:31px;
-  text-align: center;
-  padding-top: 7px;
-  font-size: 20px;
-  border: 2px solid #2c3a47;
-}
-
-.addStructureButton{
-  background: #f4f6f7;
-  width: 50px;
-  height: 40px;
-  color: #2c3a47;
-  float:right;
-  padding-left:18px;
-  margin-top: 2px;
-  border-top: 0;
-  clip-path: polygon(45% 0, 100% 0, 100% 100%, 0% 100%);
-}
-
-.addStructureButton:hover{
-  background: #2c3a47;
-  color: #f4f6f7;
 }
 
 .structureForm input{

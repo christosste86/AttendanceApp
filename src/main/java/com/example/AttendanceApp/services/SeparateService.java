@@ -10,6 +10,8 @@ public interface SeparateService {
 
     Separate getSeparateById(long id);
 
+    boolean isExistBySeparateTitle(String separateTitle);
+
     void createSeparate(Separate separate);
 
     void updateSeparateTitle(long id, String title, String description);

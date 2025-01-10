@@ -42,6 +42,11 @@ public class EmployeesController {
     private String username;
     private String password;
 
+    //css classes
+    private String employeeFormCssClass = "hide";
+    private String isExistBenefitCardSnCssClass = "";
+    private String isExistUserNameCssClass = "";
+
     @Autowired
     public EmployeesController(EmployeesService employeesService, SeparateService separateService, PositionService positionService, AssignmentService assignmentService, BenefitCardService benefitCardService, PasswordEncoder passwordEncoder) {
         this.employeesService = employeesService;
@@ -75,14 +80,9 @@ public class EmployeesController {
         model.addAttribute("isUpdate" , this.isUpdate);
         model.addAttribute("loginUserRole", employeesService.getLoginEmployee().getRoles().stream().toList().getFirst().toString());
         model.addAttribute("loginUserUsername", employeesService.getLoginEmployee().getUsername());
-        return "employees";
-    }
-
-    @GetMapping("/add-employee")
-    public String getEmployeesForm(Model model){
-        model.addAttribute("separates", separateService.getSeparates());
-        model.addAttribute("positions", positionService.getPositions());
-        model.addAttribute("assignments", assignmentService.getAssignments());
+        model.addAttribute("employeeFormCssClass" , this.employeeFormCssClass);
+        model.addAttribute("isExistBenefitCardSnCssClass", this.isExistBenefitCardSnCssClass);
+        model.addAttribute("isExistUserNameCssClass", this.isExistUserNameCssClass);
         return "employees";
     }
 
@@ -106,8 +106,9 @@ public class EmployeesController {
 
         if(!isUpdate){
             Employee employee = new Employee(firstName, lastName, username, passwordEncoder.encode(password), paymentPerHour);
-            //create if benefit card serial number exist
-
+            if(employeesService.getEmployeeByUsername(username) != null){
+                this.isExistUserNameCssClass = "isExistUserName";
+            }
             employee.setPosition(position);
             employee.addRole(new Role(position.getRole()));
             employee.setAssignment(assignment);
@@ -115,7 +116,12 @@ public class EmployeesController {
             employee.setBenefitCard(benefitCard);
             if(!employeesService.isExist(username)){
                 employeesService.saveEmployee(employee);
+                this.employeeFormCssClass = "hide";
+            }else{
+                this.isExistBenefitCardSnCssClass = "isExistBenefitCard";
             }
+            employeesService.setEmployeesList(employeesService.employeesListByRole());
+
         }else{
             employeesService.updateEmployeeById(
                     this.employeeId,
@@ -152,18 +158,31 @@ public class EmployeesController {
         this.username = employee.getUsername();
         this.password = employee.getPassword();
         this.isUpdate = true;
+        this.isExistBenefitCardSnCssClass = "";
+        this.isExistUserNameCssClass = "";
+        this.employeeFormCssClass = "employeeFormCard";
         return "redirect:/employees";
     }
 
     @GetMapping("/set-isUpdate-as-False")
     public String setIsUpdateAsFalse(){
         this.isUpdate = false;
+        this.isExistUserNameCssClass = "";
+        this.isExistBenefitCardSnCssClass = "";
+        this.employeeFormCssClass = "employeeFormCard";
         return "redirect:/employees";
     }
 
     @GetMapping("/delete-employee/{id}")
     public String deleteEmployee(@PathVariable("id") Long employeeOrder){
         employeesService.deleteById(employeeOrder);
+        return "redirect:/employees";
+    }
+
+    //change class to hide
+    @GetMapping("/hide-employee-form")
+    public String hideEmployeeForm(){
+        this.employeeFormCssClass = "hide";
         return "redirect:/employees";
     }
 
