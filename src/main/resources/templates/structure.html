@@ -10,17 +10,31 @@
 <header>
     <nav th:replace="~{fragments/navbar :: bavigation-bar}"></nav>
 </header>
+
 <main>
     <h1> Structure Schedule</h1>
-    <div class="structure">
 
-<!--Assignments-->
-        <div class="structureTable">
-<!--Assignments Title-->
-            <div class="structureCardTitle">Assignments</div><div>
+    <div class="sidenav">
+        <a th:classappend="${assignmentNavigationOption != null} ? assignmentNavigationOption"
+           th:href="@{/open-assignment-table}">Assignments</a>
+        <a th:classappend="${positionNavigationOption != null} ? positionNavigationOption"
+           th:href="@{/open-position-table}">Positions</a>
+        <a th:classappend="${separateNavigationOption != null} ? separateNavigationOption"
+           th:href="@{/open-separate-table}">Separates</a>
+    </div>
+
+    <div class="structure">
+        <!--    sidenav-->
+
 
 
 <!--Assignments Table-->
+        <div th:class="${assignmentTableCardCss}">
+            <!--Assignments Title-->
+            <div class="structureCardTitle">Assignments</div><div>
+
+
+            <!--Assignments Table-->
             <div class ="structureTableBackground">
                 <table>
                     <thead>
@@ -62,12 +76,12 @@
         </div>
 
 
-<!--Position-->
-        <div class="structureTable">
-<!--Position Title-->
+<!--Position Table-->
+        <div th:class="${positionTableCardCss}">
+        <!--Position Title-->
             <div class="structureCardTitle">Positions</div>
 
-<!--position table-->
+                <!--position table-->
                 <div class ="structureTableBackground">
                 <table>
                     <thead>
@@ -117,12 +131,12 @@
             </div>
         </div>
 
-<!--Separate-->
-        <div class="structureTable">
-<!--Separate title-->
+<!--Separate Table-->
+        <div th:class="${separateTableCardCss}">
+        <!--Separate title-->
             <div class ="structureCardTitle">Separates</div>
 
-<!--Separate table-->
+            <!--Separate table-->
             <div class ="structureTableBackground">
 
                 <table>
@@ -164,7 +178,7 @@
     <!--Assignment Form card-->
     <div th:class="${assignmentCardClassCss}">
         <div>
-            <form th:action="@{/close-structure-form}">
+            <form th:action="@{/close-structure-forms}">
                 <button class="closeButton" type="submit">x</button>
             </form>
         </div>
@@ -202,7 +216,7 @@
     <div th:class ="${positionCardClassCss}">
 
         <div>
-            <form th:action="@{/close-structure-form}">
+            <form th:action="@{/close-structure-forms}">
                 <button class="closeButton" type="submit">x</button>
             </form>
         </div>
@@ -254,10 +268,9 @@
     </div>
 
     <!--Separate Form Card-->
-    <div th:class="${separateCardClassCss}"
-    class="structureCard">
+    <div th:class="${separateCardClassCss}">
         <div>
-            <form th:action="@{/close-structure-form}">
+            <form th:action="@{/close-structure-forms}">
                 <button class="closeButton" type="submit">x</button>
             </form>
         </div>

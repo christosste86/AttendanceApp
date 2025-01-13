@@ -36,10 +36,12 @@ public class ScheduleController {
     private final List<LocalDate> days = new ArrayList<>();
     private List<Employee> employeesList = new ArrayList<>();
     private LinkedHashMap <Employee, List<Schedule>> employeesMonthlySchedule = new LinkedHashMap<>();
+    private LinkedHashMap <Employee, List<Schedule>> employeesMonthlyScheduleWeekBefore = new LinkedHashMap<>();
 
     //css classes
     private String scheduleFormClass = "hide";
     private String selectedDayClass = "selected";
+    private String weekMonthBefore;
 
     public ScheduleController(ScheduleService scheduleService, PositionService positionService, SeparateService separateService, EmployeesService employeesService, FavoriteShiftService favoriteShiftService) {
         this.scheduleService = scheduleService;
@@ -64,13 +66,22 @@ public class ScheduleController {
         model.addAttribute("employees", this.employeesList);
         model.addAttribute("separatedList", separateService.getSeparates());
         model.addAttribute("positionsList", positionService.getPositions());
-        employeesMonthlySchedule = scheduleService.employeesScheduleHashMapPerMonth(this.selectedMonth, this.employeesList);
+        this.employeesMonthlySchedule = scheduleService.employeesScheduleHashMapPerMonth(
+                1,
+                this.selectedMonth.lengthOfMonth(),
+                this.selectedMonth.getYear(),
+                this.selectedMonth.getMonthValue(),
+                this.employeesList);
         model.addAttribute("monthlyEmployeesSchedule", employeesMonthlySchedule);
-        List<String> dayOfWeeks = new ArrayList<>();
-        this.days.forEach(d->{
-            dayOfWeeks.add(d.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH));
-        });
-        model.addAttribute("selectedMonthDayWeekShort", dayOfWeeks);
+        this.employeesMonthlyScheduleWeekBefore = scheduleService.employeesScheduleHashMapPerMonth(
+                this.selectedMonth.minusMonths(1).lengthOfMonth() -7,
+                this.selectedMonth.minusMonths(1).lengthOfMonth(),
+                this.selectedMonth.minusMonths(1).getYear(),
+                this.selectedMonth.minusMonths(1).getMonthValue(),
+                this.employeesList);
+        model.addAttribute("employeesMonthlyScheduleWeekBefore", this.employeesMonthlyScheduleWeekBefore);
+        model.addAttribute("selectedMonthDayWeekShort", getDayOfWeek(this.selectedMonth, 1, this.selectedMonth.lengthOfMonth()));
+        model.addAttribute("selectedMonthWeekBeforeWeekShort", getDayOfWeek(this.selectedMonth.minusMonths(1), this.selectedMonth.minusMonths(1).lengthOfMonth()-7, this.selectedMonth.lengthOfMonth()));
         model.addAttribute("monthlyEmployeesTotalHours", scheduleService.monthlyTotalHours(this.selectedMonth, employeesMonthlySchedule));
         model.addAttribute("loginUser", employeesService.getLoginEmployee());
         model.addAttribute("favoriteShiftList", favoriteShiftService.getFavoriteShifts());
@@ -79,6 +90,13 @@ public class ScheduleController {
         return "schedule";
     }
 
+    private List<String> getDayOfWeek(LocalDate date, int startDay, int endDay) {
+        List<String> getDayOfWeek = new ArrayList<>();
+        for (int i = startDay; i <= endDay ; i++) {
+            getDayOfWeek.add(date.withDayOfMonth(i).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH));
+        }
+        return getDayOfWeek;
+    }
 
     @PostMapping("/add-schedule")
     public String createSchedule(@RequestParam Integer shiftStartHour,

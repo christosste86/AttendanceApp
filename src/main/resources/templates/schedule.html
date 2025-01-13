@@ -69,8 +69,15 @@
                     th:text="${selectedMonth.getMonth()}">
                     Month
                 </th>
-                <div th:each="day : ${daysOfMonth}" th:object="${day}">
-                    <th class="thDays" th:text="${day.getDayOfMonth()}">
+<!--                week before that month days-->
+                <div th:each="day : ${#numbers.sequence(selectedMonth.minusMonths(1).lengthOfMonth()-7,selectedMonth.minusMonths(1).lengthOfMonth())}" th:object="${day}">
+                    <th class="thDays" th:text="${day}">
+                        1
+                    </th>
+                </div>
+<!--                monthly days-->
+                <div th:each="day : ${#numbers.sequence(1,selectedMonth.lengthOfMonth())}" th:object="${day}">
+                    <th class="thDays" th:text="${day}">
                         1
                     </th>
                 </div>
@@ -84,12 +91,22 @@
                 <th class="thPosition">
                     <a th:href="@{/order-by-position-title}">Position</a>
                 </th>
+<!--                one week before that month-->
+                <div th:each ="dayOfWeek: ${selectedMonthWeekBeforeWeekShort}" th:object="${dayOfWeek}">
+                    <th th:classappend="${dayOfWeek.equals('Sat') || dayOfWeek.equals('Sun')?'weekDay' : 'thDaysOfWeek'}"
+                        th:text="${dayOfWeek}">
+                        1
+                    </th>
+                </div>
+<!--                days of month-->
                 <div th:each ="dayOfWeek: ${selectedMonthDayWeekShort}" th:object="${dayOfWeek}">
                     <th th:classappend="${dayOfWeek.equals('Sat') || dayOfWeek.equals('Sun')?'weekDay' : 'thDaysOfWeek'}"
                         th:text="${dayOfWeek}">
                         1
                     </th>
                 </div>
+
+
                 <th class ="thDetails">Hours</th>
                 <th class ="thDetails">Shifts</th>
             </tr>

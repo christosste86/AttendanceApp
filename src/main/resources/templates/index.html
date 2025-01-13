@@ -36,7 +36,8 @@
                 </tr>
                 <tr>
                     <th>Assignment: </th>
-                    <td th:text="${loginUser.getAssignment().getAssignmentTitle() +
+                    <td th:if="${loginUser.getAssignment() != null}"
+                        th:text="${loginUser.getAssignment().getAssignmentTitle() +
                     ' / '
                     + loginUser.getAssignment().getHoursPerWeek()}">Assignment name</td>
                 </tr>

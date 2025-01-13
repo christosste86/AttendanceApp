@@ -16,8 +16,6 @@ public interface ScheduleService {
 
     List<Schedule> getSchedule();
 
-    Schedule getScheduleById(long id);
-
     Schedule getScheduleByEmployeeDate(Employee employee, int year, int month, int day);
 
     void saveSchedule(Schedule schedule);
@@ -28,9 +26,7 @@ public interface ScheduleService {
 
     void updateScheduleById(long id, LocalDateTime shiftStart, LocalDateTime shiftEnd);
 
-    List<Schedule>monthlyEmployeesSchedule(LocalDate month);
-
-    LinkedHashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth(LocalDate month, List<Employee> employees);
+    LinkedHashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth(int startDay, int endDay, int year, int month, List<Employee> employees);
 
     HashMap<Employee, Details> monthlyTotalHours(LocalDate month, HashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth);
 

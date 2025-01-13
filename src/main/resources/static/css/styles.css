@@ -68,6 +68,7 @@ li a:hover:not(.active) {
 /*end navbar*/
 
 main{
+  margin-top: 30px;
   display: inline-block;
 }
 
@@ -441,7 +442,7 @@ thead th {
 
 /*general*/
 
-.tableBackground, .structureTableBackground. .employeesTableBackground{
+.tableBackground, .structureTableBackground, .employeesTableBackground{
   background: #2c3a47;
   padding: 2px;
   border-top-left-radius: 5px;
@@ -532,17 +533,17 @@ thead th {
   padding-right: 5px;
 }
 
-.employeeFormCard , .structureCard{
+.employeeFormCard, .structureCard{
   background: #f4f6f7;
   padding:5px;
   width: 250px;
   box-shadow: 5px 5px 5px grey;
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
-  position: sticky;
-  top: 50%;
+  position: absolute;
+  top: 100px;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%);
   z-index: 2;
 }
 
@@ -574,9 +575,32 @@ thead th {
 
 /*Structure*/
 
+.sidenav{
+  float: left;
+  height: 100%;
+  width:200px;
+  background: #2c3a47;
+  overflow-x: hidden;
+}
+
+
+.sidenav a , .selectedOption{
+  padding: 8px 8px 8px 8px;
+  text-decoration: none;
+  font-size: 15px;
+  color: #f1f1f1;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover , .selectedOption{
+  background: #3a8ae3;
+}
+
 .structure {
   margin-left: auto;
   margin-right: auto;
+  float:left;
   display: flex;
 }
 
@@ -594,7 +618,7 @@ thead th {
   border-top-right-radius: 5px;
 }
 
-.structureTable{
+.assignmentTable, .positionTable, .separateTable{
   margin:10px;
 }
 

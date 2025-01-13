@@ -34,9 +34,18 @@ public class StructureController {
     private Separate separate;
 
     //Css Style
+    //Form
     private String assignmentCardClassCss = "hide";
     private String positionCardClassCss = "hide";
     private String separateCardClassCss = "hide";
+    //Table
+    private String assignmentTableCardCss = "assignmentTable";
+    private String positionTableCardCss = "hide";
+    private String separateTableCardCss = "hide";
+    //side navigation
+    private String assignmentNavigationOption = "selectedOption";
+    private String positionNavigationOption = null;
+    private String separateNavigationOption = null;
 
     @Autowired
     public StructureController(AssignmentService assignmentService, PositionService positionService, SeparateService separateService) {
@@ -61,9 +70,18 @@ public class StructureController {
         model.addAttribute("separate", this.separate);
         model.addAttribute("roles", positionService.getRoles());
         //css style
+        //Form
         model.addAttribute("assignmentCardClassCss", this.assignmentCardClassCss);
         model.addAttribute("positionCardClassCss", this.positionCardClassCss);
         model.addAttribute("separateCardClassCss", this.separateCardClassCss);
+        //Table
+        model.addAttribute("assignmentTableCardCss", this.assignmentTableCardCss);
+        model.addAttribute("positionTableCardCss", this.positionTableCardCss);
+        model.addAttribute("separateTableCardCss", this.separateTableCardCss);
+        //side navigation
+        model.addAttribute("assignmentNavigationOption", this.assignmentNavigationOption);
+        model.addAttribute("positionNavigationOption", this.positionNavigationOption);
+        model.addAttribute("separateNavigationOption", this.separateNavigationOption);
         return "structure";
     }
 
@@ -77,17 +95,13 @@ public class StructureController {
         if(isAssignmentUpdate){
             assignmentService.updateAssignment(this.assignment.getId(), assignmentTitle, assignment);
             this.isAssignmentUpdate = false;
-            this.positionCardClassCss="hide";
-            this.separateCardClassCss="hide";
-            this.assignmentCardClassCss="hide";
+            closeAllForms();
         }else{
             Assignment newAssignment = new Assignment(assignmentTitle, assignment);
             if(!assignmentService.isExist(assignmentTitle, assignment)){
                 assignmentService.createAssignment(newAssignment);
             }
-            this.positionCardClassCss="hide";
-            this.separateCardClassCss="hide";
-            this.assignmentCardClassCss="hide";
+            closeAllForms();
         }
         return "redirect:/structure";
     }
@@ -103,8 +117,7 @@ public class StructureController {
     {
         this.isAssignmentUpdate = true;
         this.assignment = assignmentService.getAssignmentById(assignmentId);
-        this.separateCardClassCss="hide";
-        this.positionCardClassCss="hide";
+        closeAllForms();
         this.assignmentCardClassCss="structureCard";
         return "redirect:/structure";
     }
@@ -112,8 +125,7 @@ public class StructureController {
     @GetMapping("/is-assignment-update-false")
     public String isUpdateAssignmentFalse(){
         this.isAssignmentUpdate = false;
-        this.positionCardClassCss="hide";
-        this.separateCardClassCss="hide";
+        closeAllForms();
         this.assignmentCardClassCss = "structureCard";
         return "redirect:/structure";
     }
@@ -128,17 +140,13 @@ public class StructureController {
         if(isPositionUpdate){
             positionService.updatePosition(this.position.getId(), title, sortTitle, position_role);;
             this.isPositionUpdate = false;
-            this.assignmentCardClassCss="hide";
-            this.separateCardClassCss="hide";
-            this.positionCardClassCss="hide";
+            closeAllForms();
         }else{
             Position newPosition = new Position(title, sortTitle, position_role);
             if(!positionService.isExistByTitleOrSortTitle(title, sortTitle)){
                 positionService.createPosition(newPosition);
             }
-            this.assignmentCardClassCss="hide";
-            this.separateCardClassCss="hide";
-            this.positionCardClassCss="hide";
+            closeAllForms();
         }
         return "redirect:/structure";
     }
@@ -156,8 +164,7 @@ public class StructureController {
     {
         this.isPositionUpdate = true;
         this.position = positionService.getPositionById(positionId);
-        this.assignmentCardClassCss="hide";
-        this.separateCardClassCss="hide";
+        closeAllForms();
         this.positionCardClassCss= "structureCard";
         return "redirect:/structure";
     }
@@ -165,8 +172,7 @@ public class StructureController {
     @GetMapping("/is-position-update-false")
     public String isUpdatePositionFalse(){
         this.isPositionUpdate = false;
-        this.assignmentCardClassCss="hide";
-        this.separateCardClassCss="hide";
+        closeAllForms();
         this.positionCardClassCss = "structureCard";
         return "redirect:/structure";
     }
@@ -179,21 +185,16 @@ public class StructureController {
         if(isSeparateUpdate){
             separateService.updateSeparateTitle(this.separate.getId(), title, description);
             this.isSeparateUpdate = false;
-            this.assignmentCardClassCss="hide";
-            this.positionCardClassCss="hide";
-            this.separateCardClassCss="hide";
+            closeAllForms();
         }else{
             Separate newSeparate = new Separate(title, description);
             if(!separateService.isExistBySeparateTitle(title)){
                 separateService.createSeparate(newSeparate);
             }
-            this.assignmentCardClassCss="hide";
-            this.positionCardClassCss="hide";
-            this.separateCardClassCss="hide";
+            closeAllForms();
         }
         return "redirect:/structure";
     }
-
 
     @GetMapping("/delete-separate/{id}")
     public String deleteSeparate(@PathVariable("id") Long separateId){
@@ -206,8 +207,7 @@ public class StructureController {
     {
         this.isSeparateUpdate = true;
         this.separate = separateService.getSeparateById(separateId);
-        this.assignmentCardClassCss="hide";
-        this.positionCardClassCss="hide";
+        closeAllForms();
         this.separateCardClassCss = "structureCard";
         return "redirect:/structure";
     }
@@ -215,18 +215,79 @@ public class StructureController {
     @GetMapping("/is-separate-update-false")
     public String isUpdateSeparateFalse(){
         this.isSeparateUpdate = false;
-        this.assignmentCardClassCss="hide";
-        this.positionCardClassCss="hide";
+        closeAllForms();
         this.separateCardClassCss ="structureCard";
         return "redirect:/structure";
     }
 
     //Classes css
-    @GetMapping("/close-structure-form")
-    public String closeForm(){
+
+    //Close all Forms
+    @GetMapping("/close-structure-forms")
+    public String closeAllForms(){
         this.assignmentCardClassCss = "hide";
         this.positionCardClassCss = "hide";
         this.separateCardClassCss = "hide";
+        return "redirect:/structure";
+    }
+
+    //Close all Table
+    @GetMapping("/close-structure-tables")
+    public String closeAllTables(){
+        this.positionTableCardCss = "hide";
+        this.separateTableCardCss = "hide";
+        this.assignmentTableCardCss = "hide";
+        return "redirect:/structure";
+    }
+
+    //NavigationBarLeft
+    @GetMapping("hide-all-side-nav-options")
+    public String hideAllSideNavOptions(){
+        this.assignmentCardClassCss = null;
+        this.positionTableCardCss = null;
+        this.separateTableCardCss = null;
+        return "redirect:/structure";
+    }
+
+    @GetMapping("/open-assignment-table")
+    public String openAssignmentTable(){
+        hideAllSideNavOptions();
+        this.assignmentNavigationOption = "selectedOption";
+        //close all Forms
+        closeAllForms();
+        //close all Tables
+        closeAllTables();
+        //open Assignment table
+        this.assignmentTableCardCss = "assignmentTable";
+
+        return "redirect:/structure";
+    }
+
+    @GetMapping("/open-position-table")
+    public String openPositionTable(){
+        hideAllSideNavOptions();
+        this.positionNavigationOption = "selectedOption";
+        //close all Forms
+        closeAllForms();
+        //close all Tables
+        closeAllTables();
+        //open Position table
+        this.positionTableCardCss = "positionTable";
+
+        return "redirect:/structure";
+    }
+
+    @GetMapping("/open-separate-table")
+    public String openSeparateTable(){
+        hideAllSideNavOptions();
+        this.separateNavigationOption = "selectedOption";
+        //close all Forms
+        closeAllForms();
+        //close all Tables
+        closeAllTables();
+        //open Position table
+        this.separateTableCardCss = "separateTable";
+
         return "redirect:/structure";
     }
 

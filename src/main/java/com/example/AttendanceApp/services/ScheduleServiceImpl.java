@@ -29,13 +29,6 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public Schedule getScheduleById(long id) {
-        return scheduleRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException(String.format("Location with id (%s) not found.", id))
-        );
-    }
-
-    @Override
     public Schedule getScheduleByEmployeeDate(Employee employee, int year, int month, int day) {
         if(isEmployeeDayExist(employee, year, month, day)){
             return scheduleRepository.findScheduleByEmployeeAndSelectedDay(employee, year, month, day).getFirst();
@@ -73,28 +66,23 @@ public class ScheduleServiceImpl implements ScheduleService{
         }
     }
 
-    @Override
-    public List<Schedule>monthlyEmployeesSchedule(LocalDate month){
-        return scheduleRepository.findAll();
-    }
 
-
-    private void addEmptySchedule(List<Schedule> schedule, LocalDate month){
+    private void addEmptySchedule(List<Schedule> schedule, int startDay, int endDay){
         if(schedule.isEmpty()){
-            for (int i = 1; i <= month.lengthOfMonth(); i++) {
+            for (int i = startDay; i <= endDay; i++) {
                 schedule.add(new Schedule());
             }
         }
     }
 
     @Override
-    public LinkedHashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth(LocalDate month, List<Employee> employees){
+    public LinkedHashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth(int startDay, int endDay, int year, int month, List<Employee> employees){
         LinkedHashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth = new LinkedHashMap<>();
         for (Employee e: employees){
             List<Schedule> schedule = new ArrayList<>();
-            addEmptySchedule(schedule, month);
-            for (int i = 1; i <= month.lengthOfMonth(); i++) {
-                List<Schedule> employeeScheduleSelectedMonth = scheduleRepository.findScheduleByEmployeeAndSelectedMonth(e, month.getYear(), month.getMonthValue());
+            addEmptySchedule(schedule, startDay, endDay);
+            for (int i = 1; i <= endDay; i++) {
+                List<Schedule> employeeScheduleSelectedMonth = scheduleRepository.findScheduleByEmployeeAndSelectedMonth(e, year, month);
                 if(!employeeScheduleSelectedMonth.isEmpty()) {
                     for (Schedule empMonthSchedule : employeeScheduleSelectedMonth) {
                         if (empMonthSchedule.getShiftStart().getDayOfMonth() == i) {
@@ -134,13 +122,14 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     public Double monthlyFullTimeHours(LocalDate month, int assignment) {
-        double totalHour = 0.0;
+        int weekDays = 0;
         for (int day = 1; day <= month.withDayOfMonth(1).lengthOfMonth(); day++) {
-            if (!month.withDayOfMonth(day).getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
-            !month.withDayOfMonth(day).getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
-                totalHour = totalHour + ((double) assignment / 5);
+            if (month.withDayOfMonth(day).getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
+            month.withDayOfMonth(day).getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                weekDays = weekDays + 1;
             }
         }
-        return totalHour;
+        return (month.withDayOfMonth(1).lengthOfMonth() - weekDays) * (assignment / 5.0);
     }
+
 }
