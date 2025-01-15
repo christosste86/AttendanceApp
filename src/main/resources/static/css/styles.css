@@ -83,12 +83,33 @@ thead th {
 }
 
 /* Schedule */
-
 .schedule{
   margin-top: 5px;
   margin-left: auto;
   margin-right: auto;
 }
+
+.selectMonth{
+  margin-top: 5px;
+}
+
+.filter{
+  background: white;
+  padding-top:5px;
+  padding-bottom: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+}
+
+.filter form{
+  margin-right: 5px;
+}
+
+.filter input{
+  width:100px
+}
+
 
 /*Header*/
 
@@ -108,10 +129,19 @@ thead th {
   border-top-right-radius: 5px;
 }
 
-.thDays {
+.thMenuHeader{
+  background: none;
+  align-items: center;
+}
+
+.thDays, .tdDays , .thPreviousDays{
   width: 25px;
   height: 25px;
   padding: 2px;
+}
+
+.thPreviousDays{
+  background: cadetblue;
 }
 
 .thMonth {

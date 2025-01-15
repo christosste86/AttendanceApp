@@ -16,17 +16,17 @@ public interface ScheduleService {
 
     List<Schedule> getSchedule();
 
-    Schedule getScheduleByEmployeeDate(Employee employee, int year, int month, int day);
+    Schedule getScheduleByEmployeeDate(Employee employee, LocalDate shiftDay);
 
     void saveSchedule(Schedule schedule);
 
-    boolean isEmployeeDayExist(Employee employee, int year, int month, int day);
+    boolean isEmployeeDayExist(Employee employee, LocalDate day);
 
     void deleteSchedule(Schedule schedule);
 
     void updateScheduleById(long id, LocalDateTime shiftStart, LocalDateTime shiftEnd);
 
-    LinkedHashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth(int startDay, int endDay, int year, int month, List<Employee> employees);
+    LinkedHashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth(List<Employee> employees, LocalDate startLocalDate, LocalDate endLocalDate);
 
     HashMap<Employee, Details> monthlyTotalHours(LocalDate month, HashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth);
 

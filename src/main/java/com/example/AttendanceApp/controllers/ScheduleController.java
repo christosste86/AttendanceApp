@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
@@ -28,20 +27,18 @@ public class ScheduleController {
 
     //selected data
     private LocalDate selectedMonth = LocalDate.now().withDayOfMonth(1);
+    private LocalDate startLocalDate = this.selectedMonth;
+    private LocalDate endLocalDate = this.selectedMonth.withDayOfMonth(this.selectedMonth.lengthOfMonth());
     private LocalDate selectedDay;
     private Employee selectedEmployee;
     private Schedule selectedSchedule;
 
     //list of days and Employees
-    private final List<LocalDate> days = new ArrayList<>();
     private List<Employee> employeesList = new ArrayList<>();
-    private LinkedHashMap <Employee, List<Schedule>> employeesMonthlySchedule = new LinkedHashMap<>();
-    private LinkedHashMap <Employee, List<Schedule>> employeesMonthlyScheduleWeekBefore = new LinkedHashMap<>();
 
     //css classes
     private String scheduleFormClass = "hide";
     private String selectedDayClass = "selected";
-    private String weekMonthBefore;
 
     public ScheduleController(ScheduleService scheduleService, PositionService positionService, SeparateService separateService, EmployeesService employeesService, FavoriteShiftService favoriteShiftService) {
         this.scheduleService = scheduleService;
@@ -54,35 +51,21 @@ public class ScheduleController {
 
     @GetMapping("/schedule")
     public String getMainPage(Model model){
-        setMothDaysList();
-
         model.addAttribute("schedule", scheduleService.getSchedule());
-        model.addAttribute("daysOfMonth", this.days);
+        model.addAttribute("daysOfMonth", getDaysOfPeriod());
         model.addAttribute("selectedMonth", this.selectedMonth);
         model.addAttribute("selectedDay", this.selectedDay);
+        model.addAttribute("startLocalDate", this.startLocalDate);
+        model.addAttribute("endLocalDate", this.endLocalDate);
         model.addAttribute("selectedEmployee", this.selectedEmployee);
         model.addAttribute("selectedSchedule", this.selectedSchedule);
         this.employeesList = employeesService.getEmployeesList();
         model.addAttribute("employees", this.employeesList);
         model.addAttribute("separatedList", separateService.getSeparates());
         model.addAttribute("positionsList", positionService.getPositions());
-        this.employeesMonthlySchedule = scheduleService.employeesScheduleHashMapPerMonth(
-                1,
-                this.selectedMonth.lengthOfMonth(),
-                this.selectedMonth.getYear(),
-                this.selectedMonth.getMonthValue(),
-                this.employeesList);
-        model.addAttribute("monthlyEmployeesSchedule", employeesMonthlySchedule);
-        this.employeesMonthlyScheduleWeekBefore = scheduleService.employeesScheduleHashMapPerMonth(
-                this.selectedMonth.minusMonths(1).lengthOfMonth() -7,
-                this.selectedMonth.minusMonths(1).lengthOfMonth(),
-                this.selectedMonth.minusMonths(1).getYear(),
-                this.selectedMonth.minusMonths(1).getMonthValue(),
-                this.employeesList);
-        model.addAttribute("employeesMonthlyScheduleWeekBefore", this.employeesMonthlyScheduleWeekBefore);
-        model.addAttribute("selectedMonthDayWeekShort", getDayOfWeek(this.selectedMonth, 1, this.selectedMonth.lengthOfMonth()));
-        model.addAttribute("selectedMonthWeekBeforeWeekShort", getDayOfWeek(this.selectedMonth.minusMonths(1), this.selectedMonth.minusMonths(1).lengthOfMonth()-7, this.selectedMonth.lengthOfMonth()));
-        model.addAttribute("monthlyEmployeesTotalHours", scheduleService.monthlyTotalHours(this.selectedMonth, employeesMonthlySchedule));
+        model.addAttribute("monthlyEmployeesSchedule", getEmployeesScheduleHashMapPerMonth());
+        model.addAttribute("selectedMonthDayWeekShort", getDayOfWeek(this.startLocalDate, this.endLocalDate));
+        model.addAttribute("monthlyEmployeesTotalHours", scheduleService.monthlyTotalHours(this.selectedMonth, getEmployeesScheduleHashMapPerMonth()));
         model.addAttribute("loginUser", employeesService.getLoginEmployee());
         model.addAttribute("favoriteShiftList", favoriteShiftService.getFavoriteShifts());
         model.addAttribute("scheduleFormClass", scheduleFormClass);
@@ -90,12 +73,27 @@ public class ScheduleController {
         return "schedule";
     }
 
-    private List<String> getDayOfWeek(LocalDate date, int startDay, int endDay) {
-        List<String> getDayOfWeek = new ArrayList<>();
-        for (int i = startDay; i <= endDay ; i++) {
-            getDayOfWeek.add(date.withDayOfMonth(i).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH));
+    private LinkedHashMap<Employee, List<Schedule>> getEmployeesScheduleHashMapPerMonth(){
+        return scheduleService.employeesScheduleHashMapPerMonth(
+                this.employeesList,
+                this.startLocalDate,
+                this.endLocalDate);
+    }
+
+    private LinkedHashMap<LocalDate, String> getDayOfWeek(LocalDate startLocalDate, LocalDate endLocalDate) {
+        LinkedHashMap<LocalDate, String> getDayOfWeek = new LinkedHashMap<>();
+        for (LocalDate day = startLocalDate; !day.isAfter(endLocalDate); day = day.plusDays(1)) {
+            getDayOfWeek.put(day, day.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH));
         }
         return getDayOfWeek;
+    }
+
+    private List<LocalDate> getDaysOfPeriod(){
+        List<LocalDate> days = new ArrayList<>();
+        for(LocalDate day = this.startLocalDate; !day.isAfter(this.endLocalDate) ; day = day.plusDays(1)){
+            days.add(day);
+        }
+        return days;
     }
 
     @PostMapping("/add-schedule")
@@ -117,8 +115,8 @@ public class ScheduleController {
         Employee employee = employeesService.getEmployeeByUsername(this.selectedEmployee.getUsername());
         Schedule schedule = new Schedule(shiftStart, shiftEnd, isPresent);
         schedule.setEmployee(employee);
-        if(scheduleService.isEmployeeDayExist(employee,shiftStart.getYear(), shiftStart.getMonthValue(), shiftStart.getDayOfMonth())){
-            Schedule existedSchedule = scheduleService.getScheduleByEmployeeDate(employee,shiftStart.getYear(), shiftStart.getMonthValue(), shiftStart.getDayOfMonth());
+        if(scheduleService.isEmployeeDayExist(employee,shiftStart.toLocalDate())){
+            Schedule existedSchedule = scheduleService.getScheduleByEmployeeDate(employee,shiftStart.toLocalDate());
             scheduleService.updateScheduleById(existedSchedule.getId(), shiftStart, shiftEnd);
         }else{
             scheduleService.saveSchedule(schedule);
@@ -153,8 +151,8 @@ public class ScheduleController {
                 this.selectedMonth.withDayOfMonth(this.selectedDay.getDayOfMonth()).atTime(favoriteShift.getShiftEnd()),
                 true);
         schedule.setEmployee(employee);
-        if(scheduleService.isEmployeeDayExist(employee, this.selectedMonth.getYear(), this.selectedMonth.getMonthValue(), this.selectedMonth.getDayOfMonth())){
-            Schedule existedSchedule = scheduleService.getScheduleByEmployeeDate(employee,schedule.getShiftStart().getYear(), schedule.getShiftStart().getMonthValue(), schedule.getShiftStart().getDayOfMonth());
+        if(scheduleService.isEmployeeDayExist(employee, this.selectedMonth)){
+            Schedule existedSchedule = scheduleService.getScheduleByEmployeeDate(employee,schedule.getShiftStart().toLocalDate());
             scheduleService.updateScheduleById(existedSchedule.getId(), schedule.getShiftStart(), schedule.getShiftStart());
         }else{
             scheduleService.saveSchedule(schedule);
@@ -166,7 +164,7 @@ public class ScheduleController {
     @GetMapping("/delete-employee-day-shift")
     public String deleteEmployeeDayShift() {
         Employee employee = employeesService.getEmployeeByUsername(this.selectedEmployee.getUsername());
-        Schedule schedule = scheduleService.getScheduleByEmployeeDate(employee, this.selectedMonth.getYear(), this.selectedMonth.getMonthValue(), this.selectedDay.getDayOfMonth());
+        Schedule schedule = scheduleService.getScheduleByEmployeeDate(employee, this.selectedMonth);
         if(schedule.getShiftStart() != null && schedule.getShiftEnd() != null){
             scheduleService.deleteSchedule(schedule);
         }
@@ -178,28 +176,49 @@ public class ScheduleController {
     //select
     @GetMapping ("/select-employee/{employeeUsername}/select-day/{dayOfMonth}")
     public String selectEmployeeAndDayOfMonth(@PathVariable("employeeUsername")  String employeeUsername,
-                                              @PathVariable("dayOfMonth") int dayOfMonth) {
+                                              @PathVariable("dayOfMonth") LocalDateTime selectedDay) {
         this.scheduleFormClass = "openAddSchedule";
         this.selectedEmployee = employeesService.getEmployeeByUsername(employeeUsername);
-        this.selectedDay = LocalDate.of(this.selectedMonth.getYear(), this.selectedMonth.getMonthValue(), dayOfMonth);
-        this.selectedSchedule = scheduleService.getScheduleByEmployeeDate(this.selectedEmployee,this.selectedDay.getYear(), this.selectedDay.getMonthValue(), this.selectedDay.getDayOfMonth());
+        this.selectedDay = selectedDay.toLocalDate();
+        this.selectedSchedule = scheduleService.getScheduleByEmployeeDate(this.selectedEmployee,this.selectedDay);
         return "redirect:/schedule";
     }
 
-    private void setMothDaysList(){
-        this.days.clear();
-        for(int day = 0; day < this.selectedMonth.lengthOfMonth(); day++){
-            this.days.add(this.selectedMonth.plusDays(day));
-            System.out.println(this.selectedMonth.plusDays(day));
-        }
-    }
 
     @GetMapping("/month-list/")
     public String showMonthList(@RequestParam(value = "month", required = false) String selectedMonth) {
         this.selectedMonth = LocalDate.parse(selectedMonth+"-01");
         System.out.println("Received LocalDate: " + this.selectedMonth);
-        this.days.clear();
-        setMothDaysList();
+        return "redirect:/schedule";
+    }
+
+    //set start localDate for employees schedule with last seven days of previous month
+    @GetMapping("/get-last-seven-days-of-previous-selected-month")
+    public String getLastWeekOfPreviousMont() {
+        LocalDate previousMonth = this.selectedMonth.minusMonths(1);
+        this.startLocalDate = previousMonth.withDayOfMonth(previousMonth.lengthOfMonth()-7);
+        return "redirect:/schedule";
+    }
+
+    //set end localDate for employees schedule with first seven days of next month
+    @GetMapping("/get-first-seven-days-of-next-selected-month")
+    public String getFirstWeekOfNextMont() {
+        LocalDate nextMonth = this.selectedMonth.plusMonths(1);
+        this.endLocalDate = nextMonth.withDayOfMonth(7);
+        return "redirect:/schedule";
+    }
+
+    //set start localDay for employees schedule with selected month first day.
+    @GetMapping("/get-first-day-of-selected-month")
+    public String getFisrtDayOfSelectedMonth() {
+        this.startLocalDate = this.selectedMonth;
+        return "redirect:/schedule";
+    }
+
+    //set end localDay for employees schedule with selected month last day.
+    @GetMapping("/get-last-day-of-selected-month")
+    public String getLastDayOfSelectedMonth() {
+        this.endLocalDate = this.selectedMonth.withDayOfMonth(this.selectedMonth.lengthOfMonth());
         return "redirect:/schedule";
     }
 

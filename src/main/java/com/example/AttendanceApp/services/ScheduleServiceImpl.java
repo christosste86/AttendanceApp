@@ -29,9 +29,15 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public Schedule getScheduleByEmployeeDate(Employee employee, int year, int month, int day) {
-        if(isEmployeeDayExist(employee, year, month, day)){
-            return scheduleRepository.findScheduleByEmployeeAndSelectedDay(employee, year, month, day).getFirst();
+    public Schedule getScheduleByEmployeeDate(Employee employee, LocalDate shiftDay) {
+        Optional<Schedule> schedule = scheduleRepository.findScheduleByEmployeeAndSelectedDay(
+                employee,
+                shiftDay.getYear(),
+                shiftDay.getMonthValue(),
+                shiftDay.getDayOfMonth()
+        );
+        if(schedule.isPresent()) {
+            return schedule.get();
         }
         return null;
     }
@@ -67,40 +73,48 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
 
-    private void addEmptySchedule(List<Schedule> schedule, int startDay, int endDay){
+    private void addEmptySchedule(List<Schedule> schedule, LocalDate startLocalDate, LocalDate endLocalDate){
         if(schedule.isEmpty()){
-            for (int i = startDay; i <= endDay; i++) {
+            for (LocalDate day = startLocalDate; !day.isAfter(endLocalDate); day = day.plusDays(1)) {
                 schedule.add(new Schedule());
             }
         }
+        System.out.println("EmptySchedule: " + schedule.size());
     }
 
     @Override
-    public LinkedHashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth(int startDay, int endDay, int year, int month, List<Employee> employees){
+    public LinkedHashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth(List<Employee> employees, LocalDate startLocalDate, LocalDate endLocalDate){
         LinkedHashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth = new LinkedHashMap<>();
         for (Employee e: employees){
             List<Schedule> schedule = new ArrayList<>();
-            addEmptySchedule(schedule, startDay, endDay);
-            for (int i = 1; i <= endDay; i++) {
-                List<Schedule> employeeScheduleSelectedMonth = scheduleRepository.findScheduleByEmployeeAndSelectedMonth(e, year, month);
+            addEmptySchedule(schedule, startLocalDate, endLocalDate);
+            int index = 0;
+            for (LocalDate day = startLocalDate; !day.isAfter(endLocalDate); day = day.plusDays(1)) {
+                List<Schedule> employeeScheduleSelectedMonth = scheduleRepository.findScheduleByEmployeeAndSelectedMonth(e, startLocalDate.atStartOfDay(), endLocalDate.atTime(23,59,59));
                 if(!employeeScheduleSelectedMonth.isEmpty()) {
                     for (Schedule empMonthSchedule : employeeScheduleSelectedMonth) {
-                        if (empMonthSchedule.getShiftStart().getDayOfMonth() == i) {
-                            schedule.remove(i - 1);
-                            schedule.add(i - 1, empMonthSchedule);
+                        if (empMonthSchedule.getShiftStart().toLocalDate().isEqual(day)) {
+                            schedule.remove(index);
+                            schedule.add(index, empMonthSchedule);
                         }
                     }
                 }
+                index = index + 1;
             }
             employeesScheduleHashMapPerMonth.put(e, schedule);
         }return employeesScheduleHashMapPerMonth;
     }
 
     @Override
-    public boolean isEmployeeDayExist(Employee employee, int year, int month, int day){
-        if(scheduleRepository.findScheduleByEmployeeAndSelectedDay(employee, year, month, day).isEmpty()){
-            return false;
-        }return true;
+    public boolean isEmployeeDayExist(Employee employee, LocalDate day){
+        Optional<Schedule> schedule = scheduleRepository.findScheduleByEmployeeAndSelectedDay(
+                employee,
+                day.getYear(),
+                day.getMonthValue(),
+                day.getDayOfMonth());
+        if(schedule.isPresent()) {
+            return true;
+        }return false;
     }
 
     @Override

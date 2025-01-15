@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 @Entity(name ="Schedules")
 public class Schedule extends BaseEntity{
@@ -76,6 +78,10 @@ public class Schedule extends BaseEntity{
                 , df.format(this.shiftStart.getMinute())
                 , df.format(this.shiftEnd.getHour())
                 , df.format(this.shiftEnd.getMinute()));
+    }
+
+    public String getDayOfWeekShortEnText(){
+        return this.shiftStart.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
     }
 
     @Override
