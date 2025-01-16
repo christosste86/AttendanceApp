@@ -108,7 +108,7 @@ public class ScheduleController {
                                  @RequestParam Integer shiftStartMinutes,
                                  @RequestParam Integer shiftEndHour,
                                  @RequestParam Integer shiftEndMinutes,
-                                 @RequestParam (defaultValue = "true") boolean isPresent,
+                                 @RequestParam boolean isPresent,
                                  Model model) {
         model.addAttribute("addScheduleClass", "openAddSchedule" );
         if(shiftStartMinutes == null){

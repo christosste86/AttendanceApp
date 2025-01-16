@@ -296,9 +296,10 @@
                     <input id="isPresent"
                            type="checkbox"
                            name="isPresent"
-                           th:value="true">
+                           checked
+                    >
                 </div>
-                <button class="submitButton" type="submit">Add Schedule</button>
+                <button class="submitButton" type="submit" >Add Schedule</button>
             </form>
             <form th:if="${selectedSchedule != null}"
                     th:action="@{/delete-employee-day-shift}">
