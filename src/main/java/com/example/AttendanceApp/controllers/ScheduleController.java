@@ -192,10 +192,11 @@ public class ScheduleController {
     }
 
 
-    @GetMapping("/month-list/")
+    @GetMapping("/month-list")
     public String showMonthList(@RequestParam(value = "month", required = false) String selectedMonth) {
         this.selectedMonth = LocalDate.parse(selectedMonth+"-01");
-        System.out.println("Received LocalDate: " + this.selectedMonth);
+        this.startLocalDate = this.selectedMonth;
+        this.endLocalDate = this.selectedMonth.withDayOfMonth(this.selectedMonth.lengthOfMonth());
         return "redirect:/schedule";
     }
 
