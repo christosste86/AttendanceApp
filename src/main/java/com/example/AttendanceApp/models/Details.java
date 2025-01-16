@@ -1,41 +1,34 @@
 package com.example.AttendanceApp.models;
 
 public class Details {
-    private Double totalHours;
-    private Integer shifts;
-    private Double monthlyFullTimeHours;
+    private double totalHours;
+    private int shifts;
+    private int workingHours;
 
-    public Details(Double totalHours, Integer shifts, Double monthlyFullTimeHours) {
-        this.totalHours = totalHours;
-        this.shifts = shifts;
-        if(monthlyFullTimeHours == null){
-            this.monthlyFullTimeHours = 0.0;
-        }else{
-            this.monthlyFullTimeHours = monthlyFullTimeHours;
-        }
+    public Details() {
     }
 
-    public Double getTotalHours() {
+    public double getTotalHours() {
         return totalHours;
     }
 
-    public Integer getShifts() {
-        return shifts;
-    }
-
-    public Double getMonthlyFullTimeHours() {
-        return monthlyFullTimeHours;
-    }
-
-    public void setTotalHours(Double totalHours) {
+    public void setTotalHours(double totalHours) {
         this.totalHours = totalHours;
     }
 
-    public void setShifts(Integer shifts) {
+    public int getShifts() {
+        return shifts;
+    }
+
+    public void setShifts(int shifts) {
         this.shifts = shifts;
     }
 
-    public void setMonthlyFullTimeHours(Double monthlyFullTimeHours) {
-        this.monthlyFullTimeHours = monthlyFullTimeHours;
+    public int getWorkingHours() {
+        return workingHours;
+    }
+
+    public void setWorkingHours(int workingHours) {
+        this.workingHours = workingHours;
     }
 }

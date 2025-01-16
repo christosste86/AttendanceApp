@@ -21,8 +21,8 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
                                                          @Param("shiftEnd") LocalDateTime shiftEnd);
 
 
-    @Query("select s from Schedules s where s.employee = :employee and s.shiftStart between :startLocalDay and :endLocalDay")
-    List<Schedule> findScheduleByEmployeeAndSelectedMonth(@Param("employee") Employee employee,
+    @Query("select s from Schedules s where s.employee = :employee and s.shiftEnd between :startLocalDay and :endLocalDay")
+    List<Schedule> findScheduleByEmployeeAndPeriod(@Param("employee") Employee employee,
                                                           @Param("startLocalDay") LocalDateTime startLocalDay,
                                                           @Param("endLocalDay") LocalDateTime endLocalDay);
 
@@ -32,4 +32,11 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
                                                           @Param("monthValue") int monthValue,
                                                         @Param("dayValue") int dayValue);
 
+//    @Query("select sum(timestamp (minute, s.shiftStart, s.shiftEnd)) " +
+//            "from Schedules s " +
+//            "where s.employee = :employee " +
+//            "and s.shiftEnd between :startLocalDay and :endLocalDay")
+//    Double getEmployeePeriodTotalHours(@Param("employee") Employee employee,
+//                                       @Param("startLocalDay") LocalDateTime startLocalDay,
+//                                       @Param("endLocalDay") LocalDateTime endLocalDay);
 }

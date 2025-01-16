@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface ScheduleService {
     boolean scheduleExists(Employee employee, LocalDateTime shiftStart, LocalDateTime shiftEnd);
@@ -26,10 +27,8 @@ public interface ScheduleService {
 
     void updateScheduleById(long id, LocalDateTime shiftStart, LocalDateTime shiftEnd);
 
-    LinkedHashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth(List<Employee> employees, LocalDate startLocalDate, LocalDate endLocalDate);
+    LinkedHashMap<Employee, LinkedHashMap<LocalDate, Schedule>> getEmployeesScheduleForPeriod(List<Employee> employees, LocalDate startLocalDate, LocalDate endLocalDate);
 
-    HashMap<Employee, Details> monthlyTotalHours(LocalDate month, HashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth);
-
-    Double monthlyFullTimeHours(LocalDate month, int assignment);
+    LinkedHashMap<Employee, Details> getPeriodDetailsPerEmployee(List<Employee> employees, LocalDate startPeriod, LocalDate endPeriod);
 
 }

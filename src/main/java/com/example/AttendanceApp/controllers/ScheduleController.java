@@ -63,9 +63,9 @@ public class ScheduleController {
         model.addAttribute("employees", this.employeesList);
         model.addAttribute("separatedList", separateService.getSeparates());
         model.addAttribute("positionsList", positionService.getPositions());
-        model.addAttribute("monthlyEmployeesSchedule", getEmployeesScheduleHashMapPerMonth());
+        model.addAttribute("getEmployeesScheduleForPeriod", getEmployeesScheduleForPeriod());
         model.addAttribute("selectedMonthDayWeekShort", getDayOfWeek(this.startLocalDate, this.endLocalDate));
-        model.addAttribute("monthlyEmployeesTotalHours", scheduleService.monthlyTotalHours(this.selectedMonth, getEmployeesScheduleHashMapPerMonth()));
+        model.addAttribute("periodEmployeeDetails", getPeriodEmployeeDetails());
         model.addAttribute("loginUser", employeesService.getLoginEmployee());
         model.addAttribute("favoriteShiftList", favoriteShiftService.getFavoriteShifts());
         model.addAttribute("scheduleFormClass", scheduleFormClass);
@@ -73,8 +73,15 @@ public class ScheduleController {
         return "schedule";
     }
 
-    private LinkedHashMap<Employee, List<Schedule>> getEmployeesScheduleHashMapPerMonth(){
-        return scheduleService.employeesScheduleHashMapPerMonth(
+    private LinkedHashMap<Employee, Details> getPeriodEmployeeDetails(){
+        return scheduleService.getPeriodDetailsPerEmployee(
+                this.employeesList,
+                this.selectedMonth,
+                this.selectedMonth.withDayOfMonth(selectedMonth.lengthOfMonth()));
+    }
+
+    private LinkedHashMap<Employee, LinkedHashMap<LocalDate, Schedule>> getEmployeesScheduleForPeriod(){
+        return scheduleService.getEmployeesScheduleForPeriod(
                 this.employeesList,
                 this.startLocalDate,
                 this.endLocalDate);
@@ -110,8 +117,8 @@ public class ScheduleController {
         if(shiftEndMinutes == null){
             shiftEndMinutes = 0;
         }
-        LocalDateTime shiftStart = this.selectedMonth.withDayOfMonth(this.selectedDay.getDayOfMonth()).atTime(shiftStartHour, shiftStartMinutes, 0, 0);
-        LocalDateTime shiftEnd = this.selectedMonth.withDayOfMonth(this.selectedDay.getDayOfMonth()).atTime(shiftEndHour, shiftEndMinutes, 0, 0);
+        LocalDateTime shiftStart = this.selectedDay.atTime(shiftStartHour, shiftStartMinutes);
+        LocalDateTime shiftEnd = this.selectedDay.atTime(shiftEndHour, shiftEndMinutes);
         Employee employee = employeesService.getEmployeeByUsername(this.selectedEmployee.getUsername());
         Schedule schedule = new Schedule(shiftStart, shiftEnd, isPresent);
         schedule.setEmployee(employee);
@@ -147,8 +154,8 @@ public class ScheduleController {
 
         Employee employee = employeesService.getEmployeeByUsername(this.selectedEmployee.getUsername());
         Schedule schedule = new Schedule(
-                this.selectedMonth.withDayOfMonth(this.selectedDay.getDayOfMonth()).atTime(favoriteShift.getShiftStart()),
-                this.selectedMonth.withDayOfMonth(this.selectedDay.getDayOfMonth()).atTime(favoriteShift.getShiftEnd()),
+                this.selectedDay.atTime(favoriteShift.getShiftStart()),
+                this.selectedDay.atTime(favoriteShift.getShiftEnd()),
                 true);
         schedule.setEmployee(employee);
         if(scheduleService.isEmployeeDayExist(employee, this.selectedMonth)){
@@ -174,12 +181,12 @@ public class ScheduleController {
 
 
     //select
-    @GetMapping ("/select-employee/{employeeUsername}/select-day/{dayOfMonth}")
+    @GetMapping ("/select-employee/{employeeUsername}/select-day/{day}")
     public String selectEmployeeAndDayOfMonth(@PathVariable("employeeUsername")  String employeeUsername,
-                                              @PathVariable("dayOfMonth") LocalDateTime selectedDay) {
+                                              @PathVariable("day") LocalDate day) {
         this.scheduleFormClass = "openAddSchedule";
         this.selectedEmployee = employeesService.getEmployeeByUsername(employeeUsername);
-        this.selectedDay = selectedDay.toLocalDate();
+        this.selectedDay = day;
         this.selectedSchedule = scheduleService.getScheduleByEmployeeDate(this.selectedEmployee,this.selectedDay);
         return "redirect:/schedule";
     }

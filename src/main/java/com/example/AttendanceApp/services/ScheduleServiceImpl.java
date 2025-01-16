@@ -73,35 +73,34 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
 
-    private void addEmptySchedule(List<Schedule> schedule, LocalDate startLocalDate, LocalDate endLocalDate){
+    private void addEmptySchedule(LinkedHashMap<LocalDate, Schedule> schedule, LocalDate startLocalDate, LocalDate endLocalDate){
         if(schedule.isEmpty()){
             for (LocalDate day = startLocalDate; !day.isAfter(endLocalDate); day = day.plusDays(1)) {
-                schedule.add(new Schedule());
+                schedule.put(day, new Schedule());
             }
         }
         System.out.println("EmptySchedule: " + schedule.size());
     }
 
     @Override
-    public LinkedHashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth(List<Employee> employees, LocalDate startLocalDate, LocalDate endLocalDate){
-        LinkedHashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth = new LinkedHashMap<>();
+    public LinkedHashMap<Employee, LinkedHashMap<LocalDate, Schedule>> getEmployeesScheduleForPeriod(List<Employee> employees, LocalDate startLocalDate, LocalDate endLocalDate){
+        LinkedHashMap<Employee, LinkedHashMap<LocalDate, Schedule>> employeesScheduleHashMapPerMonth = new LinkedHashMap<>();
         for (Employee e: employees){
-            List<Schedule> schedule = new ArrayList<>();
-            addEmptySchedule(schedule, startLocalDate, endLocalDate);
-            int index = 0;
+            LinkedHashMap<LocalDate, Schedule> scheduleByDate = new LinkedHashMap<>();
             for (LocalDate day = startLocalDate; !day.isAfter(endLocalDate); day = day.plusDays(1)) {
-                List<Schedule> employeeScheduleSelectedMonth = scheduleRepository.findScheduleByEmployeeAndSelectedMonth(e, startLocalDate.atStartOfDay(), endLocalDate.atTime(23,59,59));
-                if(!employeeScheduleSelectedMonth.isEmpty()) {
-                    for (Schedule empMonthSchedule : employeeScheduleSelectedMonth) {
-                        if (empMonthSchedule.getShiftStart().toLocalDate().isEqual(day)) {
-                            schedule.remove(index);
-                            schedule.add(index, empMonthSchedule);
-                        }
-                    }
+                Optional<Schedule> schedule = scheduleRepository.findScheduleByEmployeeAndSelectedDay(
+                        e,
+                        day.getYear(),
+                        day.getMonthValue(),
+                        day.getDayOfMonth());
+                if(schedule.isPresent()) {
+
+                    scheduleByDate.put(day, schedule.get());
+                }else{
+                    scheduleByDate.put(day, new Schedule());
                 }
-                index = index + 1;
             }
-            employeesScheduleHashMapPerMonth.put(e, schedule);
+            employeesScheduleHashMapPerMonth.put(e, scheduleByDate);
         }return employeesScheduleHashMapPerMonth;
     }
 
@@ -118,32 +117,41 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public HashMap<Employee, Details> monthlyTotalHours(LocalDate month, HashMap<Employee, List<Schedule>> employeesScheduleHashMapPerMonth){
-        HashMap<Employee, Details> totalHours = new HashMap<>();
-        for (Employee e: employeesScheduleHashMapPerMonth.keySet()){
-            double totalHour = 0.0;
-            Integer shifts = 0;
-            for (Schedule s: employeesScheduleHashMapPerMonth.get(e)){
-                if(s.getShiftStart() != null && s.getShiftEnd() != null){
-                    totalHour += Duration.between(s.getShiftStart(), s.getShiftEnd()).toMinutes()/60.0;
-                    shifts ++;
-                }
-            }
-            totalHour = new BigDecimal(totalHour).setScale(2, RoundingMode.HALF_UP).doubleValue();
-            totalHours.put(e, new Details(totalHour, shifts, monthlyFullTimeHours(month, e.getAssignment().getHoursPerWeek())));
-        }return totalHours;
+    public LinkedHashMap<Employee, Details> getPeriodDetailsPerEmployee(List <Employee> employees, LocalDate startPeriod, LocalDate endPeriod){
+        LinkedHashMap<Employee, Details> employeesDetails = new LinkedHashMap<>();
+        for(Employee e: employees){
+            Details employeePeriodDetails = new Details();
+            List<Schedule> employeePeriodSchedule = scheduleRepository.findScheduleByEmployeeAndPeriod(
+                    e,
+                    startPeriod.atStartOfDay(),
+                    endPeriod.atTime(23,59,59)
+            );
+            employeePeriodDetails.setTotalHours(totalPeriodHours(employeePeriodSchedule));
+            employeePeriodDetails.setShifts(totalPeriodShifts(employeePeriodSchedule));
+            employeePeriodDetails.setWorkingHours(periodWorkingHours(e, startPeriod, endPeriod));
+            employeesDetails.put(e, employeePeriodDetails);
+        }
+        return employeesDetails;
     }
 
-    @Override
-    public Double monthlyFullTimeHours(LocalDate month, int assignment) {
-        int weekDays = 0;
-        for (int day = 1; day <= month.withDayOfMonth(1).lengthOfMonth(); day++) {
-            if (month.withDayOfMonth(day).getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
-            month.withDayOfMonth(day).getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
-                weekDays = weekDays + 1;
+    private Double totalPeriodHours(List<Schedule> employeePeriodSchedule){
+        return employeePeriodSchedule
+                .stream()
+                .mapToDouble(s-> Duration.between(s.getShiftStart(), s.getShiftEnd()).toMinutes()).sum() / 60;
+    }
+
+    private Integer totalPeriodShifts( List<Schedule> employeePeriodSchedule){
+        return employeePeriodSchedule.size();
+    }
+
+    private int periodWorkingHours(Employee employee, LocalDate startPeriod, LocalDate endPeriod){
+        int periodWorkingDays = 0;
+        for(LocalDate day = startPeriod; !day.isAfter(endPeriod); day = day.plusDays(1)) {
+            if(!day.getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
+            !day.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                periodWorkingDays++;
             }
-        }
-        return (month.withDayOfMonth(1).lengthOfMonth() - weekDays) * (assignment / 5.0);
+        }return periodWorkingDays * (employee.getAssignment().getHoursPerWeek() / 5);
     }
 
 }
