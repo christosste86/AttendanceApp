@@ -149,9 +149,9 @@ public class ScheduleServiceImpl implements ScheduleService{
         int weekendDays = 0;
         for(LocalDate day = startPeriod; !day.isAfter(endPeriod); day = day.plusDays(1)) {
             periodWorkingDays = periodWorkingDays + 1;
-            if(!day.getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
-            !day.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
-                periodWorkingDays = periodWorkingDays + 1;
+            if(day.getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
+            day.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                weekendDays = weekendDays + 1;
             }
         }return (periodWorkingDays - weekendDays) * (employee.getAssignment().getHoursPerWeek() / 5);
     }
