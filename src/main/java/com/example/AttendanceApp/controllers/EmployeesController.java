@@ -180,8 +180,8 @@ public class EmployeesController {
     }
 
     //change class to hide
-    @GetMapping("/hide-employee-form")
-    public String hideEmployeeForm(){
+    @GetMapping("/close-employee-form")
+    public String closeEmployeeForm(){
         this.employeeFormCssClass = "hide";
         return "redirect:/employees";
     }
