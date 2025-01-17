@@ -35,7 +35,7 @@
 
 
             <!--Assignments Table-->
-            <div class ="structureTableBackground">
+
                 <table>
                     <thead>
                         <tr>
@@ -64,7 +64,7 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
+
             <!--                    Add new Assignment button-->
             <div>
                 <form th:action="@{/is-assignment-update-false}">
@@ -82,7 +82,6 @@
             <div class="structureCardTitle">Positions</div>
 
                 <!--position table-->
-                <div class ="structureTableBackground">
                 <table>
                     <thead>
                         <tr>
@@ -120,7 +119,7 @@
                         </tr>
                     </tbody>
                 </table>
-                </div>
+
             <!--            add new position button-->
             <div>
                 <form th:action="@{/is-position-update-false}">
@@ -137,7 +136,7 @@
             <div class ="structureCardTitle">Separates</div>
 
             <!--Separate table-->
-            <div class ="structureTableBackground">
+
 
                 <table>
                     <thead>
@@ -166,7 +165,6 @@
                     </tbody>
                 </table>
 
-            </div>
             <div>
                 <form th:action="@{/is-separate-update-false}">
                     <button type="submit" class ="submitButton">Add new Separate</button>
@@ -176,7 +174,7 @@
     </div>
 
     <!--Assignment Form card-->
-    <div th:class="${assignmentCardClassCss}">
+    <div th:class="${assignmentFormCardCss}">
         <div>
             <form th:action="@{/close-structure-forms}">
                 <button class="closeButton" type="submit">x</button>
@@ -213,7 +211,7 @@
     </div>
 
     <!--Position form Card-->
-    <div th:class ="${positionCardClassCss}">
+    <div th:class ="${positionFormCardCss}">
 
         <div>
             <form th:action="@{/close-structure-forms}">
@@ -268,7 +266,7 @@
     </div>
 
     <!--Separate Form Card-->
-    <div th:class="${separateCardClassCss}">
+    <div th:class="${separateFormCardCss}">
         <div>
             <form th:action="@{/close-structure-forms}">
                 <button class="closeButton" type="submit">x</button>

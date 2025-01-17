@@ -25,7 +25,7 @@
             </div>
 
 
-            <table class="profileTable">
+            <table>
                 <tr>
                     <th>Position: </th>
                     <td th:text="${loginUser.getPosition().getTitle()}">Position name</td>
@@ -44,6 +44,8 @@
 
             </table>
         </div>
+
+
         <div class="profileCard">
             <div class="profileTitle">
             <img class="profileImage"
@@ -52,7 +54,7 @@
             <div>Login</div>
             </div>
 
-            <table class="profileTable">
+            <table>
                 <tr>
                     <th>Username: </th>
                     <td th:if="${loginUser != null }"
@@ -72,6 +74,8 @@
                 </tr>
             </table>
         </div>
+
+
         <div class="profileCard" th:if="${loginUser != null}">
             <div class="profileTitle">
                 <img class="profileImage"
@@ -80,7 +84,7 @@
                 <div>Benefit Card</div>
             </div>
 
-            <table class = "profileTable">
+            <table>
                 <tr>
                     <th>Benefit Card: </th>
                     <td th:if="${loginUser.benefitCard != null }"

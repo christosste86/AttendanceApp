@@ -61,12 +61,13 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public void updateScheduleById(long id, LocalDateTime shiftStart, LocalDateTime shiftEnd) {
+    public void updateScheduleById(long id, LocalDateTime shiftStart, LocalDateTime shiftEnd, String note) {
         Optional<Schedule> schedule = scheduleRepository.findById(id);
         if (schedule.isPresent()){
             Schedule s = schedule.get();
             s.setShiftStart(shiftStart);
             s.setShiftEnd(shiftEnd);
+            s.setNotes(note);
             double workedHours = Duration.between(shiftStart, shiftEnd).toMinutes()/60.0;
             s.setWorkedHours(workedHours);
         }

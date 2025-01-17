@@ -25,7 +25,7 @@ public interface ScheduleService {
 
     void deleteSchedule(Schedule schedule);
 
-    void updateScheduleById(long id, LocalDateTime shiftStart, LocalDateTime shiftEnd);
+    void updateScheduleById(long id, LocalDateTime shiftStart, LocalDateTime shiftEnd, String note);
 
     LinkedHashMap<Employee, LinkedHashMap<LocalDate, Schedule>> getEmployeesScheduleForPeriod(List<Employee> employees, LocalDate startLocalDate, LocalDate endLocalDate);
 

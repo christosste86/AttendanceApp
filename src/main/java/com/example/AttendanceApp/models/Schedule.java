@@ -14,6 +14,7 @@ public class Schedule extends BaseEntity{
     @Column (name ="worked_hours")
     private Double workedHours;
     private boolean isPresent;
+    private String notes;
 
     @ManyToOne
     @JoinColumn(name = "employee_id")
@@ -22,10 +23,19 @@ public class Schedule extends BaseEntity{
     public Schedule() {
     }
 
-    public Schedule(LocalDateTime start, LocalDateTime end, boolean isPresent) {
+    public Schedule(LocalDateTime start, LocalDateTime end, boolean isPresent, String notes) {
         this.shiftStart = start;
         this.shiftEnd = end;
         this.isPresent = isPresent;
+        this.notes = notes;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public Employee getEmployee() {

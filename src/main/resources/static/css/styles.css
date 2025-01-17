@@ -44,6 +44,36 @@ li a:hover:not(.active) {
 
 
 
+table{
+  background: #2c3a47;
+  padding: 2px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.structure table, .employees table{
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.tableContent{
+  width:1200px;
+  overflow-x: auto;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+}
+
+.profile table{
+  background: #f4f4f4;
+  width:100%;
+  height: 140px;
+  padding:20px;
+  font-size: 15px;
+  border: 5px solid #2c3a47;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+
 .active {
   background-color: #e5c185;
 }
@@ -110,8 +140,16 @@ thead th {
   width:100px
 }
 
+.scheduleTable{
+  width:1200px;
+  overflow-x: auto;
+  overflow-y: auto;
+}
 
 /*Header*/
+.colStack{
+  position:absolute;
+}
 
 .scheduleHeader{
   font-size: 13px;
@@ -129,19 +167,26 @@ thead th {
   border-top-right-radius: 5px;
 }
 
+
+
 .thMenuHeader{
   background: none;
   align-items: center;
 }
 
-.thDays, .tdDays , .thPreviousDays{
-  width: 25px;
-  height: 25px;
-  padding: 2px;
+.thDays, .thWeeks, .tdDays , .thPreviousDays, .thPreviousWeeks{
+  width: 29px;
+  height: 29px;
+  text-align: center;
 }
 
 .thPreviousDays{
   background: cadetblue;
+}
+
+.thPreviousWeeks{
+  background: cadetblue;
+  font-size: 12px;
 }
 
 .thMonth {
@@ -160,8 +205,8 @@ thead th {
   display: inline;
 }
 
-.thDaysOfWeek {
-  text-align: center;
+.thWeeks{
+  font-size: 12px;
 }
 
 .weekDay{
@@ -169,7 +214,7 @@ thead th {
   height: 27px;
   background: #d7e9f7;
   color: #3a8ae3;
-  font-size: 10px;
+  font-size: 9px;
   text-align: center;
 }
 
@@ -214,6 +259,11 @@ thead th {
 }
 
 /*Buttons*/
+
+button{
+
+}
+
 .tdButtonEmpty{
   width:27px;
   height:27px;
@@ -263,8 +313,8 @@ thead th {
 }
 
 .tdButtonNight{
-  width:27px;
-  height:27px;
+  width:29px;
+  height:29px;
   background: #051d64;
   color: #efe2e2;
   text-align: center;
@@ -288,11 +338,11 @@ thead th {
   background: #efe2e2;
   padding:5px;
   width:200px;
-  height: 340px;
+
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   position: sticky;
-  top: 50%;
+  top: 30px;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
@@ -398,6 +448,10 @@ thead th {
   color: #efe2e2;
 }
 
+textarea {
+  resize: none;
+}
+
 /*And of Schedule*/
 
 .time{
@@ -459,12 +513,6 @@ thead th {
   padding: 20px;
 }
 
-.profileTable{
-  padding:20px;
-  font-size: 15px;
-  height: 110px;
-}
-
 .profileImage{
   width: 100px;
   margin: 10px;
@@ -472,12 +520,6 @@ thead th {
 
 /*general*/
 
-.tableBackground, .structureTableBackground, .employeesTableBackground{
-  background: #2c3a47;
-  padding: 2px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-}
 
 .isExistBenefitCard, .isExistUserName{
   background: #e89797;
@@ -492,11 +534,14 @@ thead th {
 }
 
 .submitButton, .deleteButton, .updateButton{
-  background: #2c3a47;
   color: #f4f6f7;
-  margin-top:5px;
+  margin:3px;
   border-radius: 5px;
   height: 30px;
+}
+
+.submitButton{
+  background: #2c3a47;
 }
 
 .submitButton:hover{
@@ -563,7 +608,7 @@ thead th {
   padding-right: 5px;
 }
 
-.employeeFormCard, .structureCard{
+.employeeFormCard, .structureFormCard{
   background: #f4f6f7;
   padding:5px;
   width: 250px;
@@ -575,6 +620,10 @@ thead th {
   left: 50%;
   transform: translate(-50%);
   z-index: 2;
+}
+
+.structureFormCard{
+  width: auto;
 }
 
 .employeeFormCardTitle {
@@ -596,14 +645,17 @@ thead th {
   padding:10px;
 }
 
-.structureTableBackground, .employeesTableBackground{
-  border-top-right-radius: 0;
-  border-top-left-radius: 0;
-}
+
 
 /*And Employees*/
 
 /*Structure*/
+.structure {
+  margin-left: auto;
+  margin-right: auto;
+  float:left;
+  display: flex;
+}
 
 .sidenav{
   float: left;
@@ -627,15 +679,12 @@ thead th {
   background: #3a8ae3;
 }
 
-.structure {
-  margin-left: auto;
-  margin-right: auto;
-  float:left;
-  display: flex;
-}
-
-.structureCard{
-  width: 350px;
+.structureCard {
+  background: #e5e5e5;
+  margin:5px;
+  padding:5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 
 .structureCardTitle{
@@ -648,14 +697,10 @@ thead th {
   border-top-right-radius: 5px;
 }
 
-.assignmentTable, .positionTable, .separateTable{
-  margin:10px;
-}
 
-table{
-  margin-left:10px;
-  margin-right: 10px;
-  margin-bottom: 10px;
+.structure table{
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
 }
 
 .structure th{
@@ -678,7 +723,6 @@ table{
 }
 
 .structureForm{
-  margin-bottom: 10px;
   padding:10px;
 }
 

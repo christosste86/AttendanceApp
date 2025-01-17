@@ -52,7 +52,7 @@
     <!--BenefitCard-->
                     <td th:if="${employee.getBenefitCard() == null}"></td>
                     <td th:if="${employee.getBenefitCard() != null}">
-                        <a th:href="@{/benefit-card/{employeeId}(employee=${employee.getId})}"
+                        <a th:href="@{/benefit-card/{employeeId}(employeeId=${employee.getId})}"
                            th:text="${employee.getBenefitCard().getSerialNumber()}">125896584</a>
                     </td>
     <!--About-->

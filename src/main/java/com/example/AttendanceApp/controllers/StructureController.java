@@ -35,11 +35,11 @@ public class StructureController {
 
     //Css Style
     //Form
-    private String assignmentCardClassCss = "hide";
-    private String positionCardClassCss = "hide";
-    private String separateCardClassCss = "hide";
+    private String assignmentFormCardCss = "hide";
+    private String positionFormCardCss = "hide";
+    private String separateFormCardCss = "hide";
     //Table
-    private String assignmentTableCardCss = "assignmentTable";
+    private String assignmentTableCardCss = "structureCard";
     private String positionTableCardCss = "hide";
     private String separateTableCardCss = "hide";
     //side navigation
@@ -71,9 +71,9 @@ public class StructureController {
         model.addAttribute("roles", positionService.getRoles());
         //css style
         //Form
-        model.addAttribute("assignmentCardClassCss", this.assignmentCardClassCss);
-        model.addAttribute("positionCardClassCss", this.positionCardClassCss);
-        model.addAttribute("separateCardClassCss", this.separateCardClassCss);
+        model.addAttribute("assignmentFormCardCss", this.assignmentFormCardCss);
+        model.addAttribute("positionFormCardCss", this.positionFormCardCss);
+        model.addAttribute("separateFormCardCss", this.separateFormCardCss);
         //Table
         model.addAttribute("assignmentTableCardCss", this.assignmentTableCardCss);
         model.addAttribute("positionTableCardCss", this.positionTableCardCss);
@@ -118,7 +118,7 @@ public class StructureController {
         this.isAssignmentUpdate = true;
         this.assignment = assignmentService.getAssignmentById(assignmentId);
         closeAllForms();
-        this.assignmentCardClassCss="structureCard";
+        this.assignmentFormCardCss="structureFormCard";
         return "redirect:/structure";
     }
 
@@ -126,7 +126,7 @@ public class StructureController {
     public String isUpdateAssignmentFalse(){
         this.isAssignmentUpdate = false;
         closeAllForms();
-        this.assignmentCardClassCss = "structureCard";
+        this.assignmentFormCardCss = "structureFormCard";
         return "redirect:/structure";
     }
 
@@ -165,7 +165,7 @@ public class StructureController {
         this.isPositionUpdate = true;
         this.position = positionService.getPositionById(positionId);
         closeAllForms();
-        this.positionCardClassCss= "structureCard";
+        this.positionFormCardCss= "structureFormCard";
         return "redirect:/structure";
     }
 
@@ -173,7 +173,7 @@ public class StructureController {
     public String isUpdatePositionFalse(){
         this.isPositionUpdate = false;
         closeAllForms();
-        this.positionCardClassCss = "structureCard";
+        this.positionFormCardCss = "structureFormCard";
         return "redirect:/structure";
     }
 
@@ -208,7 +208,7 @@ public class StructureController {
         this.isSeparateUpdate = true;
         this.separate = separateService.getSeparateById(separateId);
         closeAllForms();
-        this.separateCardClassCss = "structureCard";
+        this.separateFormCardCss = "structureFormCard";
         return "redirect:/structure";
     }
 
@@ -216,7 +216,7 @@ public class StructureController {
     public String isUpdateSeparateFalse(){
         this.isSeparateUpdate = false;
         closeAllForms();
-        this.separateCardClassCss ="structureCard";
+        this.separateFormCardCss ="structureFormCard";
         return "redirect:/structure";
     }
 
@@ -225,9 +225,9 @@ public class StructureController {
     //Close all Forms
     @GetMapping("/close-structure-forms")
     public String closeAllForms(){
-        this.assignmentCardClassCss = "hide";
-        this.positionCardClassCss = "hide";
-        this.separateCardClassCss = "hide";
+        this.assignmentFormCardCss = "hide";
+        this.positionFormCardCss = "hide";
+        this.separateFormCardCss = "hide";
         return "redirect:/structure";
     }
 
@@ -243,7 +243,7 @@ public class StructureController {
     //NavigationBarLeft
     @GetMapping("hide-all-side-nav-options")
     public String hideAllSideNavOptions(){
-        this.assignmentCardClassCss = null;
+        this.assignmentTableCardCss = null;
         this.positionTableCardCss = null;
         this.separateTableCardCss = null;
         return "redirect:/structure";
@@ -258,7 +258,7 @@ public class StructureController {
         //close all Tables
         closeAllTables();
         //open Assignment table
-        this.assignmentTableCardCss = "assignmentTable";
+        this.assignmentTableCardCss = "structureCard";
 
         return "redirect:/structure";
     }
@@ -272,7 +272,7 @@ public class StructureController {
         //close all Tables
         closeAllTables();
         //open Position table
-        this.positionTableCardCss = "positionTable";
+        this.positionTableCardCss = "structureCard";
 
         return "redirect:/structure";
     }
@@ -286,7 +286,7 @@ public class StructureController {
         //close all Tables
         closeAllTables();
         //open Position table
-        this.separateTableCardCss = "separateTable";
+        this.separateTableCardCss = "structureCard";
 
         return "redirect:/structure";
     }

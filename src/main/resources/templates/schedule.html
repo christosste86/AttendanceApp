@@ -64,147 +64,166 @@
             </form>
         </div>
 <!--Schedule table        -->
-        <table class="tableBackground">
-<!--Table Header            -->
-            <thead class="scheduleHeader">
-            <!--menu header-->
-            <tr>
-                <!--button show one week before selected month-->
-                <th class="thMenuHeader" colspan="2">
-                            <div th:if="${startLocalDate.isEqual(selectedMonth)}">
-                                <form th:action="@{/get-last-seven-days-of-previous-selected-month}">
+
+        <div class="scheduleTable">
+            <table class="tableBackground">
+    <!--Table Header            -->
+                <thead class="scheduleHeader">
+                <!--menu header-->
+                <tr>
+                    <!--button show one week before selected month-->
+                    <div class="colStack">
+                        <th class="thMenuHeader" colspan="2">
+                                    <div th:if="${startLocalDate.isEqual(selectedMonth)}">
+                                        <form th:action="@{/get-last-seven-days-of-previous-selected-month}">
+                                            <button type="submit">+ Week</button>
+                                        </form>
+                                    </div>
+                                    <div th:if="${startLocalDate.isBefore(selectedMonth)}">
+                                        <form th:action="@{/get-first-day-of-selected-month}">
+                                            <button type="submit">- Week</button>
+                                        </form>
+                                    </div>
+                        </th>
+                    </div>
+                    <!--marge all th with day -->
+                    <div>
+                        <th class="thMenuHeader" th:colspan="${daysOfMonth.size()}"></th>
+                    </div>
+
+                    <!--button show one week after selected month-->
+                    <div class="colStack">
+                        <th class="thMenuHeader" colspan="2">
+                            <div th:if="${endLocalDate.isEqual(selectedMonth.withDayOfMonth(selectedMonth.lengthOfMonth()))}">
+                                <form th:action="@{/get-first-seven-days-of-next-selected-month}">
                                     <button type="submit">+ Week</button>
                                 </form>
                             </div>
-                            <div th:if="${startLocalDate.isBefore(selectedMonth)}">
-                                <form th:action="@{/get-first-day-of-selected-month}">
+                            <div th:if="${endLocalDate.isAfter(selectedMonth.withDayOfMonth(selectedMonth.lengthOfMonth()))}">
+                                <form th:action="@{/get-last-day-of-selected-month}">
                                     <button type="submit">- Week</button>
                                 </form>
                             </div>
-
-                </th>
-                <!--marge all th with day -->
-                <th class="thMenuHeader" th:colspan="${daysOfMonth.size()}"></th>
-
-                <!--button show one week after selected month-->
-                <th class="thMenuHeader" colspan="2">
-                    <div th:if="${endLocalDate.isEqual(selectedMonth.withDayOfMonth(selectedMonth.lengthOfMonth()))}">
-                        <form th:action="@{/get-first-seven-days-of-next-selected-month}">
-                            <button type="submit">+ Week</button>
-                        </form>
-                    </div>
-                    <div th:if="${endLocalDate.isAfter(selectedMonth.withDayOfMonth(selectedMonth.lengthOfMonth()))}">
-                        <form th:action="@{/get-last-day-of-selected-month}">
-                            <button type="submit">- Week</button>
-                        </form>
-                    </div>
-                </th>
-            </tr>
-
-            <tr>
-                <th class= "thMonth" colspan="2" th:if="${selectedMonth != null}"
-                    th:text="${selectedMonth.getMonth()}">
-                    Month
-                </th>
-<!--                monthly days-->
-<!--            days of selected month-->
-                <div th:if="${!daysOfMonth.isEmpty()}"
-                     th:each="day : ${daysOfMonth}" th:object="${day}">
-                    <th th:classappend= "${day.isBefore(selectedMonth) ||
-                                            day.isAfter(selectedMonth.withDayOfMonth(selectedMonth.lengthOfMonth()))} ?
-                                            'thPreviousDays' :
-                                            'thDays'"
-                        th:text="${day.dayOfMonth}">
-                        1
-                    </th>
-                </div>
-
-                <th colspan="2"></th>
-            </tr>
-
-            <tr>
-                <th class="thFulName">
-                    <a th:href="@{/order-by-firstname}">Employee</a>
-                </th>
-                <th class="thPosition">
-                    <a th:href="@{/order-by-position-title}">Position</a>
-                </th>
-<!--                days of month-->
-
-                <!--            days of selected month-->
-                <div th:each="dayOfWeek : ${selectedMonthDayWeekShort}" th:object="${dayOfWeek}">
-                    <th th:classappend= "${dayOfWeek.key.isBefore(selectedMonth) ||
-                                            dayOfWeek.key.isAfter(selectedMonth.withDayOfMonth(selectedMonth.lengthOfMonth()))} ?
-                                            'thPreviousDays' :
-                                            'thDays'"
-                        th:text="${dayOfWeek.value}">
-                        1
-                    </th>
-                </div>
-
-                <th class ="thDetails">Hours</th>
-                <th class ="thDetails">Shifts</th>
-            </tr>
-<!--Table body-->
-            </thead>
-            <tbody class="scheduleBody">
-
-
-            <div th:each = "employeeSchedule : ${getEmployeesScheduleForPeriod}">
-
-                <tr th:if="${employeeSchedule.key.getFirstName() != null && employeeSchedule.key.getLastName() != null}">
-
-                    <!--column with employee full names-->
-                    <td class="tdFulName" th:text ="${employeeSchedule.key.fullName}">Leonardo Dicaprio</td>
-
-                    <!--column with employee position-->
-                    <td class="tdPosition" th:if ="${employeeSchedule.key.getPosition() != null}"
-                        th:text = "${employeeSchedule.key.getPosition().getSortTitle()}">Manager</td>
-
-                    <td th:if ="${employeeSchedule.key.getPosition() == null}"
-                        th:text = "${'No Set'}"></td>
-
-                    <!--selected month schedule -->
-                    <div th:each="dateSchedule : ${employeeSchedule.value}" th:object="${eSchedule}">
-
-                        <!--days button if is empty-->
-                        <div th:if="${dateSchedule.value.shiftStart != null}">
-                            <td>
-                                <form method="get"
-                                      th:action="@{/select-employee/{employeeUsername}/select-day/{day} (day = ${dateSchedule.key}, employeeUsername =${employeeSchedule.key.getUsername()})}">
-
-                                    <button type="submit"
-                                            th:classappend = "${dateSchedule.value.shiftStart.getHour() >= 5 &&
-                                            dateSchedule.value.shiftEnd.getHour() <= 16} ?
-                                            'tdButtonMorning' : 'tdButtonAfternoon'"
-                                            th:text ="${dateSchedule.value.dailySchedule}">
-                                    </button>
-                                </form>
-                            </td>
-                        </div>
-
-                        <div th:if="${dateSchedule.value.shiftStart == null}">
-                            <td>
-                                <form method="get"
-                                      th:action="@{/select-employee/{employeeUsername}/select-day/{day} (day = ${dateSchedule.key}, employeeUsername =${employeeSchedule.key.getUsername()})}">
-
-                                    <button type="submit"
-                                            class="tdButtonEmpty">
-                                    </button>
-                                </form>
-                            </td>
-                        </div>
-                    </div>
-
-                    <div th:each="detail : ${periodEmployeeDetails}"
-                         th:if="${detail.key == employeeSchedule.key}">
-                        <td class ="tdDetails" th:text ="${detail.value.totalHours} + '/' + ${detail.value.workingHours}"></td>
-                        <td class ="tdDetails" th:text ="${detail.value.shifts}"></td>
+                        </th>
                     </div>
                 </tr>
-            </div>
-            </tbody>
-        </table>
+
+                <tr>
+                    <div class="colStack">
+                        <th class= "thMonth" colspan="2" th:if="${selectedMonth != null}"
+                            th:text="${selectedMonth.getMonth()}">
+                            Month
+                        </th>
+                    </div>
+    <!--                monthly days-->
+    <!--            days of selected month-->
+                    <div th:if="${!daysOfMonth.isEmpty()}"
+                         th:each="day : ${daysOfMonth}" th:object="${day}">
+                        <th th:classappend= "${day.isBefore(selectedMonth) ||
+                                                day.isAfter(selectedMonth.withDayOfMonth(selectedMonth.lengthOfMonth()))} ?
+                                                'thPreviousDays' :
+                                                'thDays'"
+                            th:text="${day.dayOfMonth}">
+                            1
+                        </th>
+                    </div>
+                    <div class="colStack">
+                        <th colspan="2"></th>
+                    </div>
+                </tr>
+
+                <tr>
+                    <div class="colStack">
+                        <th class="thFulName">
+                            <a th:href="@{/order-by-firstname}">Employee</a>
+                        </th>
+                        <th class="thPosition">
+                            <a th:href="@{/order-by-position-title}">Position</a>
+                        </th>
+                    </div>
+    <!--                days of month-->
+
+                    <!--            days of selected month-->
+                    <div>
+                        <div th:each="dayOfWeek : ${selectedMonthDayWeekShort}" th:object="${dayOfWeek}">
+                            <th th:classappend= "${dayOfWeek.key.isBefore(selectedMonth) ||
+                                                    dayOfWeek.key.isAfter(selectedMonth.withDayOfMonth(selectedMonth.lengthOfMonth()))} ?
+                                                    'thPreviousWeeks' :
+                                                    'thWeeks'"
+                                th:text="${dayOfWeek.value}">
+                                1
+                            </th>
+                        </div>
+                    </div>
+                    <div class="colStack">
+                        <th class ="thDetails">Hours</th>
+                        <th class ="thDetails">Shifts</th>
+                    </div>
+                </tr>
+    <!--Table body-->
+                </thead>
+                <tbody class="scheduleBody">
+
+
+                <div th:each = "employeeSchedule : ${getEmployeesScheduleForPeriod}">
+
+                    <tr th:if="${employeeSchedule.key.getFirstName() != null && employeeSchedule.key.getLastName() != null}">
+                        <div class="colStack">
+                            <!--column with employee full names-->
+                            <td class="tdFulName" th:text ="${employeeSchedule.key.fullName}">Leonardo Dicaprio</td>
+
+                            <!--column with employee position-->
+                            <td class="tdPosition" th:if ="${employeeSchedule.key.getPosition() != null}"
+                                th:text = "${employeeSchedule.key.getPosition().getSortTitle()}">Manager</td>
+
+                            <td th:if ="${employeeSchedule.key.getPosition() == null}"
+                                th:text = "${'No Set'}"></td>
+                        </div>
+
+                        <!--selected month schedule -->
+                        <div th:each="dateSchedule : ${employeeSchedule.value}" th:object="${eSchedule}">
+                            <div>
+                                <!--days button if is empty-->
+                                <div th:if="${dateSchedule.value.shiftStart != null}">
+                                    <td>
+                                        <form method="get"
+                                              th:action="@{/select-employee/{employeeUsername}/select-day/{day} (day = ${dateSchedule.key}, employeeUsername =${employeeSchedule.key.getUsername()})}">
+
+                                            <button type="submit"
+                                                    th:classappend = "${dateSchedule.value.shiftStart.getHour() >= 5 &&
+                                                    dateSchedule.value.shiftEnd.getHour() <= 16} ?
+                                                    'tdButtonMorning' : 'tdButtonAfternoon'"
+                                                    th:text ="${dateSchedule.value.dailySchedule}">
+                                            </button>
+                                        </form>
+                                    </td>
+                                </div>
+
+                                <div th:if="${dateSchedule.value.shiftStart == null}">
+                                    <td>
+                                        <form method="get"
+                                              th:action="@{/select-employee/{employeeUsername}/select-day/{day} (day = ${dateSchedule.key}, employeeUsername =${employeeSchedule.key.getUsername()})}">
+
+                                            <button type="submit"
+                                                    class="tdButtonEmpty">
+                                            </button>
+                                        </form>
+                                    </td>
+                                </div>
+                            </div>
+                        </div>
+                        <div class ="colStack">
+                            <div th:each="detail : ${periodEmployeeDetails}"
+                                 th:if="${detail.key == employeeSchedule.key}">
+                                <td class ="tdDetails" th:text ="${detail.value.totalHours} + '/' + ${detail.value.workingHours}"></td>
+                                <td class ="tdDetails" th:text ="${detail.value.shifts}"></td>
+                            </div>
+                        </div>
+                    </tr>
+                </div>
+                </tbody>
+            </table>
+        </div>
     </div>
 
 
@@ -299,7 +318,17 @@
                            checked
                     >
                 </div>
-                <button class="submitButton" type="submit" >Add Schedule</button>
+                    <div>
+                        <label for="note">Note</label>
+                        <textarea id="note"
+                                  name="note"
+                                  rows="4"
+                                  cols="20"
+                                  th:text="${selectedSchedule == null}? '' : ${selectedSchedule.getNotes()}"></textarea>
+                    </div>
+                <button class="submitButton"
+                        type="submit"
+                        th:text="${selectedSchedule == null}? 'Add Schedule' : 'Update Schedule'">Add Schedule</button>
             </form>
             <form th:if="${selectedSchedule != null}"
                     th:action="@{/delete-employee-day-shift}">

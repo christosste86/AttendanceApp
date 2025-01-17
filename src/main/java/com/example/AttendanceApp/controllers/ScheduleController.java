@@ -32,6 +32,8 @@ public class ScheduleController {
     private LocalDate selectedDay;
     private Employee selectedEmployee;
     private Schedule selectedSchedule;
+    private boolean isPresent;
+    private String note;
 
     //list of days and Employees
     private List<Employee> employeesList = new ArrayList<>();
@@ -84,7 +86,8 @@ public class ScheduleController {
         return scheduleService.getEmployeesScheduleForPeriod(
                 this.employeesList,
                 this.startLocalDate,
-                this.endLocalDate);
+                this.endLocalDate
+                );
     }
 
     private LinkedHashMap<LocalDate, String> getDayOfWeek(LocalDate startLocalDate, LocalDate endLocalDate) {
@@ -108,7 +111,8 @@ public class ScheduleController {
                                  @RequestParam Integer shiftStartMinutes,
                                  @RequestParam Integer shiftEndHour,
                                  @RequestParam Integer shiftEndMinutes,
-                                 @RequestParam boolean isPresent,
+                                 @RequestParam (required = false, defaultValue = "true") boolean isPresent,
+                                 @RequestParam String note,
                                  Model model) {
         model.addAttribute("addScheduleClass", "openAddSchedule" );
         if(shiftStartMinutes == null){
@@ -120,11 +124,11 @@ public class ScheduleController {
         LocalDateTime shiftStart = this.selectedDay.atTime(shiftStartHour, shiftStartMinutes);
         LocalDateTime shiftEnd = this.selectedDay.atTime(shiftEndHour, shiftEndMinutes);
         Employee employee = employeesService.getEmployeeByUsername(this.selectedEmployee.getUsername());
-        Schedule schedule = new Schedule(shiftStart, shiftEnd, isPresent);
+        Schedule schedule = new Schedule(shiftStart, shiftEnd, isPresent, note);
         schedule.setEmployee(employee);
         if(scheduleService.isEmployeeDayExist(employee,shiftStart.toLocalDate())){
             Schedule existedSchedule = scheduleService.getScheduleByEmployeeDate(employee,shiftStart.toLocalDate());
-            scheduleService.updateScheduleById(existedSchedule.getId(), shiftStart, shiftEnd);
+            scheduleService.updateScheduleById(existedSchedule.getId(), shiftStart, shiftEnd, note);
         }else{
             scheduleService.saveSchedule(schedule);
         }
@@ -156,11 +160,12 @@ public class ScheduleController {
         Schedule schedule = new Schedule(
                 this.selectedDay.atTime(favoriteShift.getShiftStart()),
                 this.selectedDay.atTime(favoriteShift.getShiftEnd()),
-                true);
+                true,
+                null);
         schedule.setEmployee(employee);
         if(scheduleService.isEmployeeDayExist(employee, this.selectedMonth)){
             Schedule existedSchedule = scheduleService.getScheduleByEmployeeDate(employee,schedule.getShiftStart().toLocalDate());
-            scheduleService.updateScheduleById(existedSchedule.getId(), schedule.getShiftStart(), schedule.getShiftStart());
+            scheduleService.updateScheduleById(existedSchedule.getId(), schedule.getShiftStart(), schedule.getShiftStart(), schedule.getNotes());
         }else{
             scheduleService.saveSchedule(schedule);
         }
