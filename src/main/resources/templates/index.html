@@ -32,7 +32,9 @@
                 </tr>
                 <tr>
                     <th>Separate: </th>
-                    <td th:text="${loginUser.getSeparate()}">Separate name</td>
+                    <div th:if="${loginUser.getSeparate() != null}">
+                        <td th:text="${loginUser.getSeparate().getTitle()}">Separate name</td>
+                    </div>
                 </tr>
                 <tr>
                     <th>Assignment: </th>

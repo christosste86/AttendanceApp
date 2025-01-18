@@ -270,24 +270,10 @@ public class ScheduleController {
                                       @RequestParam (required = false) String employeeLastName,
                                       @RequestParam (required = false) Separate employeeSeparate,
                                       @RequestParam (required = false) Position employeePosition) {
-        List<Employee> filteredEmpolyeeList = new ArrayList<>();
-        if(employeeSeparate == null && employeePosition != null){
-            filteredEmpolyeeList = employeesService.getFilteredEmployeesListByFirstNameLastNamePosition(
-                    employeeFirstName, employeeLastName, employeePosition);
-            employeesService.setEmployeesList(filteredEmpolyeeList);
-        }else if(employeePosition == null && employeeSeparate != null){
-            filteredEmpolyeeList = employeesService.getFilteredEmployeesListByFirstNameLastNameSeparate(
-                    employeeFirstName, employeeLastName, employeeSeparate);
-            employeesService.setEmployeesList(filteredEmpolyeeList);
-        }else if(employeeSeparate == null && employeePosition == null){
-            filteredEmpolyeeList = employeesService.getFilteredEmployeesListByFirstNameLastName(
-                    employeeFirstName, employeeLastName);
-            employeesService.setEmployeesList(filteredEmpolyeeList);
-        }else{
-            filteredEmpolyeeList = employeesService.getFilteredEmployeesListByFirstNameLastNameSeparatePosition(
+            List<Employee>filteredEmpolyeeList =
+                    employeesService.getFilteredEmployeesListByFirstNameLastNameSeparatePosition(
                     employeeFirstName, employeeLastName, employeeSeparate, employeePosition);
             employeesService.setEmployeesList(filteredEmpolyeeList);
-        }
 
         return "redirect:/schedule";
     }

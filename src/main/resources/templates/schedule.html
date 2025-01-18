@@ -36,8 +36,8 @@
                 <label for="separateSelect">Seperated name:</label>
                 <select name="employeeSeparate" id="separateSelect" required>
                     <!--Option if no selected-->
-                    <option th:value = "${null}"
-                            th:text="${'All Separates'}">
+                    <option value = ""
+                            disabled selected>
                         All Separates
                     </option>
                     <option th:each="separate :${separatedList}"
@@ -48,8 +48,8 @@
                 <label for="positionSelect">Position name:</label>
                 <select name="employeePosition" id="positionSelect" required>
                     <!--                Option if no selected-->
-                    <option th:value="${null}"
-                            th:text="${'All Positions'}">
+                    <option value=""
+                            disabled selected>
                         All Positions
                     </option>
                     <option th:each="position :${positionsList}"

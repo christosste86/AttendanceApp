@@ -21,7 +21,7 @@ public class RoleService {
             if(this.roles.get(i) == role) {
                 index = i ;
             }
-            employee.getRoles().add(this.roles.get(index));
+            employee.addRole(this.roles.get(index));
             index = index + 1;
         }
     }

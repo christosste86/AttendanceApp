@@ -16,12 +16,6 @@ public interface EmployeesService {
 
     List<Employee> getFilteredEmployeesListByFirstNameLastNameSeparatePosition(String firstName, String lastName, Separate separate, Position position);
 
-    List<Employee> getFilteredEmployeesListByFirstNameLastNameSeparate(String firstName, String lastName, Separate separate);
-
-    List<Employee> getFilteredEmployeesListByFirstNameLastNamePosition(String firstName, String lastName, Position position);
-
-    List<Employee> getFilteredEmployeesListByFirstNameLastName(String firstName, String lastName);
-
     Employee getEmployeeByUsername(String username);
 
     Employee getEmployeeById(long id);
