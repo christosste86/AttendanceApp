@@ -5,6 +5,7 @@ import com.example.AttendanceApp.repositaries.AssignmentRepository;
 import com.example.AttendanceApp.repositaries.EmployeeRepository;
 import com.example.AttendanceApp.repositaries.FavoriteShiftRepository;
 import com.example.AttendanceApp.repositaries.PositionRepository;
+import com.example.AttendanceApp.services.RoleService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -44,8 +45,14 @@ public class AttendanceAppApplication implements CommandLineRunner {
 		}
 
 		//create role
-		Role adminRole = new Role();
-		adminRole.setName("ROLE_ADMIN");
+//		Role adminRole = new Role();
+//		adminRole.setName("ROLE_ADMIN");
+//		Role level1 = new Role();
+//		level1.setName("ROLE_LEVEL_1");
+//		Role level2 = new Role();
+//		level1.setName("ROLE_LEVEL_2");
+//		Role level3 = new Role();
+//		level1.setName("ROLE_LEVEL_3");
 
 		//create position
 		Position adminPosition = new Position();
@@ -64,7 +71,8 @@ public class AttendanceAppApplication implements CommandLineRunner {
 		administrator.setUsername("admin");
 		administrator.setPassword(passwordEncoder.encode("admin"));
 		administrator.setPosition(positionRepository.findByTitle(adminPosition.getTitle()).get());
-		administrator.addRole(adminRole);
+		RoleService roleService = new RoleService();
+		roleService.addRole(administrator, new Role("ROLE_ADMIN"));
 		administrator.setAssignment(assignmentRepository.findByHoursPerWeek(fullTime.getHoursPerWeek()).get());
 
 		//check if Administrator not exist and save it

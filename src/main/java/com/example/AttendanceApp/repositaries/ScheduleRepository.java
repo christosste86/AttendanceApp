@@ -14,13 +14,6 @@ import java.util.Optional;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-
-    @Query("select s from Schedules s where s.employee = :employee and s.shiftStart >= :shiftStar and s.shiftEnd <= :shiftEnd")
-    List<Schedule> findByEmployeeWorkingShiftDateAndTime(@Param("employee") Employee employee,
-                                                         @Param("shiftStar") LocalDateTime shiftStar,
-                                                         @Param("shiftEnd") LocalDateTime shiftEnd);
-
-
     @Query("select s from Schedules s where s.employee = :employee and s.shiftEnd between :startLocalDay and :endLocalDay")
     List<Schedule> findScheduleByEmployeeAndPeriod(@Param("employee") Employee employee,
                                                           @Param("startLocalDay") LocalDateTime startLocalDay,
@@ -32,11 +25,20 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
                                                           @Param("monthValue") int monthValue,
                                                         @Param("dayValue") int dayValue);
 
-//    @Query("select sum(timestamp (minute, s.shiftStart, s.shiftEnd)) " +
-//            "from Schedules s " +
-//            "where s.employee = :employee " +
-//            "and s.shiftEnd between :startLocalDay and :endLocalDay")
-//    Double getEmployeePeriodTotalHours(@Param("employee") Employee employee,
-//                                       @Param("startLocalDay") LocalDateTime startLocalDay,
-//                                       @Param("endLocalDay") LocalDateTime endLocalDay);
+    @Query("select s from Schedules s where s.employee = :employee and s.shiftStart between :startDay and :endDay")
+    List<Schedule> findScheduleByEmployeeBetweenDays(@Param("employee") Employee employee,
+                                                     @Param ("startDay") LocalDateTime startDay,
+                                                     @Param ("endDay") LocalDateTime endDay);
+
+    @Query(value = "SELECT SUM(TIMESTAMPDIFF(MINUTE, s.shiftStart, s.shiftEnd)) " +
+            "FROM Schedules s " +
+            "WHERE s.employee_id = :employeeId " +
+            "AND s.shiftStart >= :startLocalDay " +
+            "AND s.shiftEnd <= :endLocalDay",
+            nativeQuery = true)
+    Double getEmployeePeriodTotalHours(@Param("employeeId") Long employeeId,
+                                       @Param("startLocalDay") LocalDateTime startLocalDay,
+                                       @Param("endLocalDay") LocalDateTime endLocalDay);
+
+
 }

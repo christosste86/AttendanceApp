@@ -43,12 +43,6 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public boolean scheduleExists(Employee employee, LocalDateTime shiftStart, LocalDateTime shiftEnd) {
-        List<Schedule> schedules = scheduleRepository.findByEmployeeWorkingShiftDateAndTime(employee, shiftStart, shiftEnd);
-        return !schedules.isEmpty();
-    }
-
-    @Override
     public void saveSchedule(Schedule schedule) {
         double workedHours = Duration.between(schedule.getShiftStart(), schedule.getShiftEnd()).toMinutes()/60.0;
         schedule.setWorkedHours(workedHours);
@@ -71,16 +65,6 @@ public class ScheduleServiceImpl implements ScheduleService{
             double workedHours = Duration.between(shiftStart, shiftEnd).toMinutes()/60.0;
             s.setWorkedHours(workedHours);
         }
-    }
-
-
-    private void addEmptySchedule(LinkedHashMap<LocalDate, Schedule> schedule, LocalDate startLocalDate, LocalDate endLocalDate){
-        if(schedule.isEmpty()){
-            for (LocalDate day = startLocalDate; !day.isAfter(endLocalDate); day = day.plusDays(1)) {
-                schedule.put(day, new Schedule());
-            }
-        }
-        System.out.println("EmptySchedule: " + schedule.size());
     }
 
     @Override
@@ -155,6 +139,14 @@ public class ScheduleServiceImpl implements ScheduleService{
                 weekendDays = weekendDays + 1;
             }
         }return (periodWorkingDays - weekendDays) * (employee.getAssignment().getHoursPerWeek() / 5);
+    }
+
+    @Override
+    public List<Schedule> getScheduleByEmployeeBetweenDays(Employee employee, LocalDate startDate, LocalDate endDate){
+        return scheduleRepository.findScheduleByEmployeeBetweenDays(
+                employee,
+                startDate.atStartOfDay(),
+                endDate.atTime(23,59,59));
     }
 
 }

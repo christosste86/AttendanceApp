@@ -119,7 +119,7 @@
     <!--            days of selected month-->
                     <div th:if="${!daysOfMonth.isEmpty()}"
                          th:each="day : ${daysOfMonth}" th:object="${day}">
-                        <th th:classappend= "${day.isBefore(selectedMonth) ||
+                        <th th:class= "${day.isBefore(selectedMonth) ||
                                                 day.isAfter(selectedMonth.withDayOfMonth(selectedMonth.lengthOfMonth()))} ?
                                                 'thPreviousDays' :
                                                 'thDays'"
@@ -194,7 +194,15 @@
                                                     dateSchedule.value.shiftEnd.getHour() <= 16} ?
                                                     'tdButtonMorning' : 'tdButtonAfternoon'"
                                                     th:text ="${dateSchedule.value.dailySchedule}">
+
+<!--                                                <div th:class="'tdButtonEmpty'-->
+<!--                                                 + (dateSchedule.value.shiftStart.getHour() >= 5 && dateSchedule.value.shiftEnd.getHour() <= 16) ? 'tdButtonMorning' : '')-->
+<!--                                                 + (dateSchedule.value.shiftStart.getHour() >= 11 && dateSchedule.value.shiftEnd.getHour() <= 23) ? 'tdButtonAfternoon' : 'tdButtonNight')">-->
+<!--                                                    <p>Content with multiple dynamic classes</p>-->
+<!--                                                </div>-->
+
                                             </button>
+
                                         </form>
                                     </td>
                                 </div>
@@ -338,6 +346,30 @@
         </div>
     </div>
     <!--                            End Add Schedule-->
+
+    <!--Notes last week-->
+    <div>
+        <div th:each="schift : ${getScheduleByEmployeeLastWeek}" th:object="${schift}">
+            <!--note Card-->
+            <div th:if="${schift.getNotes() != null}"
+                 class="noteCard">
+                <!--Date of Note-->
+                <div class="noteCardDate">
+                    <div class="noteCardDateDay"
+                         th:text="${schift.getShiftStart().toLocalDate()}">05.05.2024</div>
+                    <div class="noteCardDateTime"
+                         th:text="${schift.getDailySchedule()}">05:30 - 14:00</div>
+                </div>
+                <!--Employee title-->
+                <div class="noteCardFullName"
+                     th:text="${schift.getEmployee().getFullName()}">Leonardo Dicaprio</div>
+                <!--note-->
+                <div class="noteCardNote"
+                     th:text="${schift.getNotes()}">He mast go home at 14:00</div>
+            </div>
+        </div>
+    </div>
+
 </main>
 <script>
     // Get the current month

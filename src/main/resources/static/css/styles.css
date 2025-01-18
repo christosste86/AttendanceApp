@@ -342,10 +342,10 @@ button{
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   position: sticky;
-  top: 30px;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 2;
+  z-index: 9999;
 }
 
 .topLine{
@@ -427,7 +427,6 @@ button{
 }
 .favoriteShiftAfternoonButton:hover{
   background: #1450a3;
-  color: #efe2e2;
 }
 
 .favoriteShiftNightButton{
@@ -445,11 +444,54 @@ button{
 }
 .favoriteShiftNightButton:hover{
   background: #000000;
-  color: #efe2e2;
 }
 
 textarea {
   resize: none;
+}
+
+.notes{
+  width:1200px;
+  display: flex;
+}
+
+.noteCard{
+
+  background: #ffd800;
+  width:150px;
+  height: 200px;
+  margin: 5px;
+  border: 1px solid #fbbe00;
+  padding: 3px;
+  display: inline-block;
+  box-shadow: 4px 10px 7px -1px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 4px 10px 7px -1px rgba(0,0,0,0.75);
+  -moz-box-shadow: 4px 10px 7px -1px rgba(0,0,0,0.75);
+
+  clip-path: polygon(0 1%, 99% 0, 100% 98%, 0 100%);
+  float:left;
+}
+.noteCardDate{
+  display: flex;
+}
+
+.noteCardDateDay{
+  font-size: 11px;
+  text-align: left;
+  margin-right: 5px;
+}
+
+.noteCardDateTime{
+  font-size: 9px;
+
+}
+
+.noteCardFullName{
+  border-bottom: 1px solid black;
+}
+
+.noteCardNote{
+  margin-top: 5px;
 }
 
 /*And of Schedule*/

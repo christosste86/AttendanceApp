@@ -72,7 +72,19 @@ public class ScheduleController {
         model.addAttribute("favoriteShiftList", favoriteShiftService.getFavoriteShifts());
         model.addAttribute("scheduleFormClass", scheduleFormClass);
         model.addAttribute("selectedDayClass", this.selectedDayClass);
+        model.addAttribute("getScheduleByEmployeeLastWeek", getScheduleByEmployeeLastWeek());
         return "schedule";
+    }
+
+    private List<Schedule> getScheduleByEmployeeLastWeek(){
+        List<Schedule> scheduleList = new ArrayList<>();
+        this.employeesList.forEach(employee -> {
+            scheduleService.getScheduleByEmployeeBetweenDays(employee, LocalDate.now().minusDays(7), LocalDate.now()).forEach(scheduleList::add);
+        });
+        return scheduleList
+                .stream()
+                .sorted(Comparator.comparing(Schedule::getShiftStart))
+                .toList();
     }
 
     private LinkedHashMap<Employee, Details> getPeriodEmployeeDetails(){
@@ -111,7 +123,7 @@ public class ScheduleController {
                                  @RequestParam Integer shiftStartMinutes,
                                  @RequestParam Integer shiftEndHour,
                                  @RequestParam Integer shiftEndMinutes,
-                                 @RequestParam (required = false, defaultValue = "true") boolean isPresent,
+                                 @RequestParam (defaultValue = "false", required = false) boolean isPresent,
                                  @RequestParam String note,
                                  Model model) {
         model.addAttribute("addScheduleClass", "openAddSchedule" );
@@ -124,6 +136,9 @@ public class ScheduleController {
         LocalDateTime shiftStart = this.selectedDay.atTime(shiftStartHour, shiftStartMinutes);
         LocalDateTime shiftEnd = this.selectedDay.atTime(shiftEndHour, shiftEndMinutes);
         Employee employee = employeesService.getEmployeeByUsername(this.selectedEmployee.getUsername());
+        if(note.equals("")){
+            note=null;
+        }
         Schedule schedule = new Schedule(shiftStart, shiftEnd, isPresent, note);
         schedule.setEmployee(employee);
         if(scheduleService.isEmployeeDayExist(employee,shiftStart.toLocalDate())){
@@ -132,6 +147,7 @@ public class ScheduleController {
         }else{
             scheduleService.saveSchedule(schedule);
         }
+
         if(shiftStartHour >= 5 && shiftEndHour <= 16){
             favoriteShiftService.updateFavoriteShift(1, shiftStart, shiftEnd);
         }
@@ -176,8 +192,8 @@ public class ScheduleController {
     @GetMapping("/delete-employee-day-shift")
     public String deleteEmployeeDayShift() {
         Employee employee = employeesService.getEmployeeByUsername(this.selectedEmployee.getUsername());
-        Schedule schedule = scheduleService.getScheduleByEmployeeDate(employee, this.selectedMonth);
-        if(schedule.getShiftStart() != null && schedule.getShiftEnd() != null){
+        Schedule schedule = scheduleService.getScheduleByEmployeeDate(employee, this.selectedDay);
+        if(schedule.getShiftStart() != null || schedule.getShiftEnd() != null){
             scheduleService.deleteSchedule(schedule);
         }
         this.scheduleFormClass = "hide";
@@ -250,10 +266,10 @@ public class ScheduleController {
 
     //Filters
     @GetMapping("/filter-employee-list")
-    public String getScheduleFiltered(@RequestParam String employeeFirstName,
-                                      @RequestParam String employeeLastName,
-                                      @RequestParam Separate employeeSeparate,
-                                      @RequestParam Position employeePosition) {
+    public String getScheduleFiltered(@RequestParam (required = false) String employeeFirstName,
+                                      @RequestParam (required = false) String employeeLastName,
+                                      @RequestParam (required = false) Separate employeeSeparate,
+                                      @RequestParam (required = false) Position employeePosition) {
         List<Employee> filteredEmpolyeeList = new ArrayList<>();
         if(employeeSeparate == null && employeePosition != null){
             filteredEmpolyeeList = employeesService.getFilteredEmployeesListByFirstNameLastNamePosition(

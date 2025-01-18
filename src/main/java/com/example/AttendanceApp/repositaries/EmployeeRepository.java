@@ -34,10 +34,10 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             "e.separate = :separate and " +
             "e.position = :position")
     List<Employee> filterEmployeesByFirstNameLastNameSeparatePosition(
-            String firstName,
-            String lastName,
-            Separate separate,
-            Position position);
+            @Param("firstName") String firstName,
+            @Param("lastName") String lastName,
+            @Param("separate") Separate separate,
+            @Param("position") Position position);
 
     @Query("select e from Employee e where " +
             "e.firstName like :firstName and " +

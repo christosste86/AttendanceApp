@@ -110,7 +110,8 @@ public class EmployeesController {
                 this.isExistUserNameCssClass = "isExistUserName";
             }
             employee.setPosition(position);
-            employee.addRole(new Role(position.getRole()));
+            RoleService roleService = new RoleService();
+            roleService.addRole(employee, new Role(position.getRole()));
             employee.setAssignment(assignment);
             employee.setSeparate(separate);
             employee.setBenefitCard(benefitCard);

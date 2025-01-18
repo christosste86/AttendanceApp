@@ -1,5 +1,6 @@
 package com.example.AttendanceApp.security.configuration;
 
+import com.example.AttendanceApp.services.RoleService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,7 +24,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/logout").permitAll()
-                        .anyRequest().hasRole("ADMIN")
+//                        .requestMatchers("/delete-employee-day-shift").hasRole("LEVEL1")
+//                        .requestMatchers("/delete-employee-day-shift").hasRole("LEVEL2")
+//                        .requestMatchers("/delete-employee-day-shift").hasRole("ADMIN")
+
+                                .anyRequest().hasRole("LEVEL3")
                 )
                 .formLogin(form ->form
                         .defaultSuccessUrl("/", true))
