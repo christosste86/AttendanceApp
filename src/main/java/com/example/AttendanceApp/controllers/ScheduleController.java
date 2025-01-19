@@ -53,7 +53,7 @@ public class ScheduleController {
 
     @GetMapping("/schedule")
     public String getMainPage(Model model){
-        model.addAttribute("schedule", scheduleService.getSchedule());
+        model.addAttribute("schedule", scheduleService.getSchedules());
         model.addAttribute("daysOfMonth", getDaysOfPeriod());
         model.addAttribute("selectedMonth", this.selectedMonth);
         model.addAttribute("selectedDay", this.selectedDay);
@@ -70,9 +70,11 @@ public class ScheduleController {
         model.addAttribute("periodEmployeeDetails", getPeriodEmployeeDetails());
         model.addAttribute("loginUser", employeesService.getLoginEmployee());
         model.addAttribute("favoriteShiftList", favoriteShiftService.getFavoriteShifts());
+        model.addAttribute("getScheduleByEmployeeLastWeek", getScheduleByEmployeeLastWeek());
+        model.addAttribute("loginUser", employeesService.getLoginEmployee());
+        //css clases
         model.addAttribute("scheduleFormClass", scheduleFormClass);
         model.addAttribute("selectedDayClass", this.selectedDayClass);
-        model.addAttribute("getScheduleByEmployeeLastWeek", getScheduleByEmployeeLastWeek());
         return "schedule";
     }
 
@@ -88,7 +90,7 @@ public class ScheduleController {
     }
 
     private LinkedHashMap<Employee, Details> getPeriodEmployeeDetails(){
-        return scheduleService.getPeriodDetailsPerEmployee(
+        return scheduleService.getPeriodDetailsForEmployees(
                 this.employeesList,
                 this.selectedMonth,
                 this.selectedMonth.withDayOfMonth(selectedMonth.lengthOfMonth()));

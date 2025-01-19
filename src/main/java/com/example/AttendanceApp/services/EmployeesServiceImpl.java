@@ -2,11 +2,6 @@ package com.example.AttendanceApp.services;
 
 import com.example.AttendanceApp.models.*;
 import com.example.AttendanceApp.repositaries.EmployeeRepository;
-import com.example.AttendanceApp.repositaries.RoleRepository;
-import com.example.AttendanceApp.security.util.SecurityUtil;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -55,6 +49,11 @@ public class EmployeesServiceImpl implements EmployeesService, UserDetailsServic
         if(role.equals("ROLE_ADMIN") || role.equals("ROLE_LEVEL1")){
             return employeesRepository.findEmployeesOrderByPositionTitle();
         }return new ArrayList<>();
+    }
+
+    @Override
+    public List<Employee> getAllEmployees() {
+        return employeesRepository.findAll();
     }
 
     @Override

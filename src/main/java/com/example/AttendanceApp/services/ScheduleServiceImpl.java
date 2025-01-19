@@ -6,8 +6,6 @@ import com.example.AttendanceApp.models.Schedule;
 import com.example.AttendanceApp.repositaries.ScheduleRepository;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -24,8 +22,13 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public List<Schedule> getSchedule() {
+    public List<Schedule> getSchedules() {
         return scheduleRepository.findAll();
+    }
+
+    @Override
+    public Schedule getScheduleById(Long id) {
+        return scheduleRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -102,7 +105,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public LinkedHashMap<Employee, Details> getPeriodDetailsPerEmployee(List <Employee> employees, LocalDate startPeriod, LocalDate endPeriod){
+    public LinkedHashMap<Employee, Details> getPeriodDetailsForEmployees(List <Employee> employees, LocalDate startPeriod, LocalDate endPeriod){
         LinkedHashMap<Employee, Details> employeesDetails = new LinkedHashMap<>();
         for(Employee e: employees){
             Details employeePeriodDetails = new Details();
@@ -118,6 +121,8 @@ public class ScheduleServiceImpl implements ScheduleService{
         }
         return employeesDetails;
     }
+
+
 
     private Double totalPeriodHours(List<Schedule> employeePeriodSchedule){
         return employeePeriodSchedule

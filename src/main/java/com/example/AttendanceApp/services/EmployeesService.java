@@ -10,6 +10,8 @@ public interface EmployeesService {
 
     List<Employee> employeesListByRole();
 
+    List<Employee> getAllEmployees();
+
     List<Employee> getEmployeesList();
 
     void setEmployeesList(List<Employee> employeesList);

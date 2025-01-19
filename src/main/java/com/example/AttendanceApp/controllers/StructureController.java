@@ -5,6 +5,7 @@ import com.example.AttendanceApp.models.Position;
 import com.example.AttendanceApp.models.Role;
 import com.example.AttendanceApp.models.Separate;
 import com.example.AttendanceApp.services.AssignmentService;
+import com.example.AttendanceApp.services.EmployeesService;
 import com.example.AttendanceApp.services.PositionService;
 import com.example.AttendanceApp.services.SeparateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class StructureController {
     private final AssignmentService assignmentService;
     private final PositionService positionService;
     private final SeparateService separateService;
+    private final EmployeesService employeesService;
 
     //Change to Update or Add
     private boolean isAssignmentUpdate = false;
@@ -48,10 +50,11 @@ public class StructureController {
     private String separateNavigationOption = null;
 
     @Autowired
-    public StructureController(AssignmentService assignmentService, PositionService positionService, SeparateService separateService) {
+    public StructureController(AssignmentService assignmentService, PositionService positionService, SeparateService separateService, EmployeesService employeesService) {
         this.assignmentService = assignmentService;
         this.positionService = positionService;
         this.separateService = separateService;
+        this.employeesService = employeesService;
     }
 
     @GetMapping("structure")
@@ -69,6 +72,7 @@ public class StructureController {
         model.addAttribute("position", this.position);
         model.addAttribute("separate", this.separate);
         model.addAttribute("roles", positionService.getRoles());
+        model.addAttribute("loginUser", employeesService.getLoginEmployee());
         //css style
         //Form
         model.addAttribute("assignmentFormCardCss", this.assignmentFormCardCss);

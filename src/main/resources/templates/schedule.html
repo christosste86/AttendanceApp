@@ -195,11 +195,16 @@
                                                     'tdButtonMorning' : 'tdButtonAfternoon'"
                                                     th:text ="${dateSchedule.value.dailySchedule}">
 
-<!--                                                <div th:class="'tdButtonEmpty'-->
-<!--                                                 + (dateSchedule.value.shiftStart.getHour() >= 5 && dateSchedule.value.shiftEnd.getHour() <= 16) ? 'tdButtonMorning' : '')-->
-<!--                                                 + (dateSchedule.value.shiftStart.getHour() >= 11 && dateSchedule.value.shiftEnd.getHour() <= 23) ? 'tdButtonAfternoon' : 'tdButtonNight')">-->
-<!--                                                    <p>Content with multiple dynamic classes</p>-->
-<!--                                                </div>-->
+                                                <div th:class="'tdButtonEmpty'
+                                                 + (dateSchedule.value.shiftStart.getHour() >= 5 && dateSchedule.value.shiftEnd.getHour() <= 16) ? 'tdButtonMorning' : '')
+                                                 + (dateSchedule.value.shiftStart.getHour() >= 11 && dateSchedule.value.shiftEnd.getHour() <= 23) ? 'tdButtonAfternoon' : 'tdButtonNight')">
+                                                    <p>Content with multiple dynamic classes</p>
+                                                </div>
+
+                                                <div th:class="${dateSchedule.value.shiftStart.getHour() >= 5 && dateSchedule.value.shiftEnd.getHour() <= 16} ? 'tdButtonMorning' :
+                                                 (dateSchedule.value.shiftStart.getHour() >= 11 && dateSchedule.value.shiftEnd.getHour() <= 23) ? 'tdButtonAfternoon' : 'tdButtonNight')">
+                                                    <p>Content with multiple dynamic classes</p>
+                                                </div>
 
                                             </button>
 

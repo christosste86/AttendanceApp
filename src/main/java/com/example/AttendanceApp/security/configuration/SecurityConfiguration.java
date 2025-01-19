@@ -20,10 +20,11 @@ public class SecurityConfiguration {
 
     @Bean
    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        http.csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/logout").permitAll()
+                                .requestMatchers("/api/**").permitAll()
 //                        .requestMatchers("/delete-employee-day-shift").hasRole("LEVEL1")
 //                        .requestMatchers("/delete-employee-day-shift").hasRole("LEVEL2")
 //                        .requestMatchers("/delete-employee-day-shift").hasRole("ADMIN")

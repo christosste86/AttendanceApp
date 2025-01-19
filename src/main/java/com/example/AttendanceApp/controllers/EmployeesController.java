@@ -42,6 +42,7 @@ public class EmployeesController {
     private String username;
     private String password;
 
+
     //css classes
     private String employeeFormCssClass = "hide";
     private String isExistBenefitCardSnCssClass = "";
@@ -83,6 +84,7 @@ public class EmployeesController {
         model.addAttribute("employeeFormCssClass" , this.employeeFormCssClass);
         model.addAttribute("isExistBenefitCardSnCssClass", this.isExistBenefitCardSnCssClass);
         model.addAttribute("isExistUserNameCssClass", this.isExistUserNameCssClass);
+        model.addAttribute("loginUser", employeesService.getLoginEmployee());
         return "employees";
     }
 

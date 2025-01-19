@@ -23,6 +23,7 @@ public class BenefitCardController {
         Employee employee = employeesService.getEmployeeById(employeeOrder);
         model.addAttribute("employee", employee);
         model.addAttribute("employeeBenefitCard", employee.getBenefitCard());
+        model.addAttribute("loginUser", employeesService.getLoginEmployee());
         return "benefit-card";
     }
 

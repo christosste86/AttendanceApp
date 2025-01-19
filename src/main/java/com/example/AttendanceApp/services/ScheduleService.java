@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface ScheduleService {
-    List<Schedule> getSchedule();
+    List<Schedule> getSchedules();
+
+    Schedule getScheduleById(Long id);
 
     Schedule getScheduleByEmployeeDate(Employee employee, LocalDate shiftDay);
 
@@ -27,7 +29,7 @@ public interface ScheduleService {
 
     LinkedHashMap<Employee, LinkedHashMap<LocalDate, Schedule>> getEmployeesScheduleForPeriod(List<Employee> employees, LocalDate startLocalDate, LocalDate endLocalDate);
 
-    LinkedHashMap<Employee, Details> getPeriodDetailsPerEmployee(List<Employee> employees, LocalDate startPeriod, LocalDate endPeriod);
+    LinkedHashMap<Employee, Details> getPeriodDetailsForEmployees(List<Employee> employees, LocalDate startPeriod, LocalDate endPeriod);
 
     List<Schedule> getScheduleByEmployeeBetweenDays(Employee employee, LocalDate startDate, LocalDate endDate);
 

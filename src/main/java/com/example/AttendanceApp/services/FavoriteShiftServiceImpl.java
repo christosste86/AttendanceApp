@@ -1,6 +1,7 @@
 package com.example.AttendanceApp.services;
 
 import com.example.AttendanceApp.models.FavoriteShift;
+import com.example.AttendanceApp.models.Schedule;
 import com.example.AttendanceApp.repositaries.FavoriteShiftRepository;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,22 @@ public class FavoriteShiftServiceImpl implements FavoriteShiftService {
         if(favoriteShift.isPresent()) {
             return favoriteShift.get();
         }return null;
+    }
+
+    @Override
+    public void createFavoriteByTimesShift(Schedule schedule) {
+        if(schedule.getShiftStart().getHour() >= 5 && schedule.getShiftEnd().getHour() <= 16){
+            deleteFavoriteShift(1);
+            createFavoriteShift(getFavoriteShiftById(1));
+        }
+        else if (schedule.getShiftStart().getHour() >= 11 && schedule.getShiftEnd().getHour() <= 23){
+            deleteFavoriteShift(2);
+            createFavoriteShift(getFavoriteShiftById(2));
+        }
+        else {
+            deleteFavoriteShift(3);
+            createFavoriteShift(getFavoriteShiftById(3));
+        }
     }
 
 
