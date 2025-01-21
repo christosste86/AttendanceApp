@@ -1,5 +1,6 @@
 package com.example.AttendanceApp.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,21 +20,26 @@ public class Employee extends BaseEntity implements UserDetails {
 
     @ManyToOne
     @JoinColumn(name = "Separate_id", referencedColumnName = "id")
+    @JsonManagedReference
     Separate separate;
 
     @ManyToOne
     @JoinColumn(name = "position_id", referencedColumnName = "id")
+    @JsonManagedReference
     Position position;
 
     @ManyToOne
     @JoinColumn(name = "assignment_id", referencedColumnName = "id")
+    @JsonManagedReference
     Assignment assignment;
 
     @OneToMany(mappedBy = "employee")
+    @JsonManagedReference
     private List<Schedule> schedules = new ArrayList<>();
 
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name= "benefid_card_id")
+    @JsonManagedReference
     private BenefitCard benefitCard;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -42,6 +48,7 @@ public class Employee extends BaseEntity implements UserDetails {
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+    @JsonManagedReference
     private Set<Role> roles = new HashSet<>();
 
     public Employee(String firstName, String lastName, String username, String password, Double paymentPerHour) {
